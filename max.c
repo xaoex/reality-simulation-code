@@ -1,0 +1,1 @@
+int max_everything_this_era(int[] c) {}
