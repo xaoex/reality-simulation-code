@@ -3,6 +3,6 @@ SimSim Code & Contributions
 
 linktr.ee/krafttek
 
-beta v0.911
+beta v0.912
 
 Mozilla situation 
