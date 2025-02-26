@@ -3,6 +3,4 @@ SimSim Code & Contributions
 
 linktr.ee/krafttek
 
-beta v0.914
-
-Mozilla situation
+beta v0.915
