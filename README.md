@@ -3,5 +3,7 @@ SimSim Code & Contributions
 
 linktr.ee/krafttek
 
+
+------------
 oakOS/ubuntu/debbian/macOS/winodws @ simsim
-beta v0.936
+OS Days beta v0.940
