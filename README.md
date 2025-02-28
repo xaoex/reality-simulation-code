@@ -3,5 +3,5 @@ SimSim Code & Contributions
 
 linktr.ee/krafttek
 
-oakOS
+oakOS/otherOS:es 
 beta v0.935
