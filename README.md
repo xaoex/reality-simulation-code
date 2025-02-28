@@ -25,7 +25,9 @@ CAD Blueprint for AI
 CAD Blueprint for Psychadelics
 CAD Blueprint for Entities
 
-Lawbook OS + Ethics
+Lawbook OS + Ethics + Vettig + Orka
+
+Habits + Daylio + Habitica + DayOne + Notion + Authy + Bitwarden + ChatGPT + Github
 
 
 OS Days beta v0.946
