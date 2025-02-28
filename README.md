@@ -25,5 +25,7 @@ CAD Blueprint for AI
 CAD Blueprint for Psychadelics
 CAD Blueprint for Entities
 
+Lawbook OS + Ethics
+
 
 OS Days beta v0.945
