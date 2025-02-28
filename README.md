@@ -17,4 +17,4 @@ AI Situation
 
 AI Defender Antivirus / Cleaner / Protection
 
-OS Days beta v0.941
+OS Days beta v0.942
