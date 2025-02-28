@@ -29,5 +29,7 @@ Lawbook OS + Ethics + Vettig + Orka
 
 Habits + Daylio + Habitica + DayOne + Notion + Authy + Bitwarden + ChatGPT + Github
 
+CAD Blueprint Home Keyboard Hologram / Screen
+
 
 OS Days beta v0.946
