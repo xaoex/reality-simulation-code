@@ -28,4 +28,4 @@ CAD Blueprint for Entities
 Lawbook OS + Ethics
 
 
-OS Days beta v0.945
+OS Days beta v0.946
