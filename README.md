@@ -18,5 +18,6 @@ AI Situation
 AI Defender Antivirus / Cleaner / Protection
 
 As CAD drawing on wall + rest of wall.
+CAD MAX
 
-OS Days beta v0.944
+OS Days beta v0.945
