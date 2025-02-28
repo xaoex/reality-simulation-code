@@ -32,4 +32,4 @@ Habits + Daylio + Habitica + DayOne + Notion + Authy + Bitwarden + ChatGPT + Git
 CAD Blueprint Home Keyboard Hologram / Screen
 
 
-OS Days beta v0.946
+Update OS Days beta v0.946
