@@ -3,4 +3,4 @@ SimSim Code & Contributions
 
 linktr.ee/krafttek
 
-beta v0.9230
+beta v0.930
