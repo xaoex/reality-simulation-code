@@ -15,4 +15,6 @@ Distributed Situation
 
 AI Situation
 
-OS Days beta v0.940
+AI Defender Antivirus / Cleaner / Protection
+
+OS Days beta v0.941
