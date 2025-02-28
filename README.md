@@ -22,6 +22,8 @@ CAD MAX Blueprint
 CAD Blueprint for maths and definitions
 CAD Blueprint for benovolence
 CAD Blueprint for AI
+CAD Blueprint for Psychadelics
+CAD Blueprint for Entities
 
 
 OS Days beta v0.945
