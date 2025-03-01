@@ -73,6 +73,9 @@ Pipe up Demeanor
 Pipe up ZMT
 Assert DMT/Ayu/Contribs/Force to give same with patterns
 
+Love Sosa
+Add it up + Pipe it up + Love Sosa
+
 / Oktay
 
-Beta v0.1337a Kraftwerk x o(cool) (revised)
+Beta v0.1337b Kraftwerk x o(cool) (revised)
