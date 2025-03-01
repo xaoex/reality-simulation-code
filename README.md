@@ -75,6 +75,10 @@ Maximize everything all over da place for you rasmus & mamma + most eventuals. e
 
 Computer Design + CAD x simsim x ar x oOS
 
+
+oOS update
+
+
 / Oktay
 
 dpb
