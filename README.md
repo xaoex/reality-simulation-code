@@ -1,4 +1,4 @@
-# notes-simsim-md
+m# notes-simsim-md
 SimSim Code & Contributions
 
 linktr.ee/krafttek
@@ -75,6 +75,7 @@ Assert DMT/Ayu/Contribs/Force to give same with patterns
 
 Love Sosa
 Add it up + Pipe it up + Love Sosa
+OS Optimization through and through 
 
 / Oktay
 
