@@ -71,7 +71,7 @@ Everything SimSimmed forever through aeons.
 
 Fix so nothing can happen to us ever and that we are always together. 
 
-Maximize
+Maximize everything all over da place for you rasmus & mamma
 
 / Oktay
 
