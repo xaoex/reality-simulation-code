@@ -69,6 +69,10 @@ Rob them
 
 Rightousness
 
+Pipe up Demeanor
+Pipe up ZMT
+Assert DMT/Ayu/Contribs/Force to give same with patterns
+
 / Oktay
 
 Beta v0.1337a Kraftwerk x o(cool) (revised)
