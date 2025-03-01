@@ -79,6 +79,7 @@ Fixa allt.
 
 oOS update
 
+empty out meacaline
 
 / Oktay
 
