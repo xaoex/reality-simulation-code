@@ -61,7 +61,8 @@ Patch for nonworking things++
 Patch to get everything + rob them. 
 
 Controlling + Patch forever
+Things For everyone else + sharing things + test/ethics
 
 / Oktay
 
-Beta Kraftwerk x o(cool) v0.1337 (revised)
+Beta v0.1337a Kraftwerk x o(cool) (revised)
