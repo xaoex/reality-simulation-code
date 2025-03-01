@@ -71,9 +71,10 @@ Everything SimSimmed forever through aeons.
 
 Fix so nothing can happen to us ever and that we are always together. 
 
-Maximize everything all over da place for you rasmus & mamma
+Maximize everything all over da place for you rasmus & mamma. 
 
 / Oktay
 
-Deb
+
+dpb
 Beta v0.1337dbp dbp Kraftwerk x o(cool) (revised)
