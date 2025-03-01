@@ -64,4 +64,4 @@ Controlling + Patch forever
 
 / Oktay
 
-Beta o(cool) v0.313377
+Beta Kraftwerk x o(cool) v0.1337 (revised)
