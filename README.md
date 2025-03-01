@@ -75,6 +75,7 @@ Maximize everything all over da place for u rasmus & mamma + most eventuals. eve
 
 Computer Design + CAD x simsim x ar x oOS
 
+Fixa allt.
 
 oOS update
 
