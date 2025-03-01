@@ -49,6 +49,8 @@ Add up for others
 +Fix so nothing can negate me or mom ever.
 
 Fixes bug fixes
-
 Fixes everything
-Beta o(cool) v0.13377
+
+Patch for nonworking things
+
+Beta o(cool) v0.313377
