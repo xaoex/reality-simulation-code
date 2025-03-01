@@ -69,7 +69,7 @@ Rightousness
 
 Everything SimSimmed forever through aeons.
 
-Fix so nothing can happen to us. 
+Fix so nothing can happen to us ever and that we are always together. 
 
 / Oktay
 
