@@ -79,7 +79,7 @@ Fixa allt.
 
 oOS update
 
-empty out meacaline
+empty out meacaline + fix trip 
 
 / Oktay
 
