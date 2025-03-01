@@ -40,4 +40,7 @@ Implementation for CAD Blueprints Pipeline
 Update OS Days ++
 Codebase Simsim deluxe x allt has to simsim x all my os x all my modules
 
+Spirituality x Religion update
+add up for mom
+
 Beta v0.1337
