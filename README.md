@@ -86,6 +86,8 @@ help all of it
 
 Get back everything
 
+TB allt
+
 / Oktay
 
 dpb
