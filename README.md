@@ -62,6 +62,8 @@ Patch to get everything + rob them.
 
 Controlling + Patch forever
 Things For everyone else + sharing things + test/ethics
+Exposition Nation
+
 
 / Oktay
 
