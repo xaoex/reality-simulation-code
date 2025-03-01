@@ -31,5 +31,11 @@ Habits + Daylio + Habitica + DayOne + Notion + Authy + Bitwarden + ChatGPT + Git
 
 CAD Blueprint Home Keyboard Hologram / Screen
 
+CAD Blueprint for OS:es
+CAD Blueprint for AI OS
+CAD Blueprint for Superintelligence OS AI
+
+Implementation for CAD Blueprints Pipeline
+
 Update OS Days
-Beta v0.946
+Beta v0.947
