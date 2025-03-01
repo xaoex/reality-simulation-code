@@ -84,7 +84,7 @@ ergot fix max
 help everyone
 help all of it
 
-go getta everything
+Get back everything
 
 / Oktay
 
