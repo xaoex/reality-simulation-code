@@ -82,8 +82,9 @@ oOS update
 empty out meacaline + fix trip
 ergot fix max
 help everne
+help all of it
 
-go getta everything 
+go getta everything
 
 / Oktay
 
