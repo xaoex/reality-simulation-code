@@ -1,10 +1,8 @@
 # notes-simsim-md
 SimSim Code & Contributions
 
-linktr.ee/krafttek
+linktr.ee/kraftwerk
 
-
-------------
 oakOS/ubuntu/debbian/macOS/winodws @ simsim
 
 emulator situation
@@ -69,8 +67,9 @@ Rob them
 
 Rightousness
 
+Everything SimSimmed forever through aeons.
 
 / Oktay
 
 Deb
-Beta v0.1337d dbp Kraftwerk x o(cool) (revised)
+Beta v0.1337dbp dbp Kraftwerk x o(cool) (revised)
