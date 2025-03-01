@@ -51,6 +51,8 @@ Add up for others
 Fixes bug fixes
 Fixes everything
 
-Patch for nonworking things
+Patch for nonworking things++
+
+/ Oktay
 
 Beta o(cool) v0.313377
