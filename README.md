@@ -1,4 +1,4 @@
-# notes-simsim-md
+q# notes-simsim-md
 SimSim Code & Contributions
 
 linktr.ee/kraftwerk
@@ -80,7 +80,8 @@ Fixa allt.
 oOS update
 
 empty out meacaline + fix trip
-ergot
+ergot fix max
+help everyone
 
 / Oktay
 
