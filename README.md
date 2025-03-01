@@ -35,6 +35,12 @@ CAD Blueprint for OS:es
 CAD Blueprint for AI OS
 CAD Blueprint for Superintelligence OS AI
 
+Autodesk 3D CAD Models for everything I’ve created.
+
+Notion for everything I’ve created.
+
+Log for everything I’ve created.
+
 Implementation for CAD Blueprints Pipeline
 
 Update OS Days ++
