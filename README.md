@@ -40,6 +40,9 @@ Implementation for CAD Blueprints Pipeline
 Update OS Days ++
 Codebase Simsim deluxe x allt has to simsim x all my os x all my modules
 
+
 Recognize + Kapa alla from quest in simsim
+Spirituality x Religion update
+Add up for mom same things
 
 Beta v0.1337
