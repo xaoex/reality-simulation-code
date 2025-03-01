@@ -46,6 +46,7 @@ Spirituality x Religion update
 Add up for mom same things
 Add up for others
 
++Fix so nothing can negate me or mom ever.
 
 Fixes bug fixes
 Beta v0.13373
