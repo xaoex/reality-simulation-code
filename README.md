@@ -46,4 +46,6 @@ Spirituality x Religion update
 Add up for mom same things
 Add up for others
 
-Beta v0.1337
+
+Fixes bug fixes
+Beta v0.13373
