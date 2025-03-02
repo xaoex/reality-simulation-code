@@ -93,6 +93,7 @@ log everything
 oOS GUI update
 update so everything goes my way
 update so nothing can take deluxe 
+soulmate stuff
 
 / Oktay
 
