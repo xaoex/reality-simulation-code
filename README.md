@@ -91,6 +91,7 @@ SV
 log everything
 
 oOS GUI update
+update so everything goes my way
 
 / Oktay
 
