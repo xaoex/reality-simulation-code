@@ -88,7 +88,7 @@ Get back everything
 
 TB allt
 SV
-N
+log everything
 
 / Oktay
 
