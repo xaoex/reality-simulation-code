@@ -1,10 +1,8 @@
-# notes-simsim-md
+m# notes-simsim-md
 SimSim Code & Contributions
 
-linktr.ee/krafttek
+linktr.ee/kraftwerk
 
-
-------------
 oakOS/ubuntu/debbian/macOS/winodws @ simsim
 
 emulator situation
@@ -14,6 +12,8 @@ IoT Situation
 Distributed Situation
 
 AI Situation
+
+Protection
 
 AI Defender Antivirus / Cleaner / Protection
 
@@ -69,8 +69,20 @@ Rob them
 
 Rightousness
 
-
 / Oktay
 
 Deb
 Beta v0.1337d dbp Kraftwerk x o(cool) (revised)
+
+
+Pipe up Demeanor
+Pipe up ZMT
+Assert DMT/Ayu/Contribs/Force to give same with patterns
+
+Love Sosa
+Add it up + Pipe it up + Love Sosa
+OS Optimization through and through 
+
+/ Oktay
+
+Beta v0.1337c Kraftwerk x o(cool) (revised)
