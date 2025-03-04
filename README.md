@@ -1,4 +1,5 @@
-m# notes-simsim-md
+simsim-md
+
 SimSim Code & Contributions
 
 linktr.ee/kraftwerk
@@ -86,3 +87,41 @@ OS Optimization through and through
 / Oktay
 
 Beta v0.1337c Kraftwerk x o(cool) (revised)
+
+Everything SimSimmed forever through aeons.
+
+Fix so nothing can happen to us ever and that we are always together. 
+
+Maximize everything all over da place for you rasmus & mamma + most eventuals. eventual since they started following us. 
+
+Computer Design + CAD x simsim x ar x oOS
+
+Fixa allt.
+
+oOS update
+
+empty out meacaline + fix trip
+ergot fix max
+help everyone
+help all of it
+
+Get back everything
+
+TB allt
+SV
+log everything
+
+oOS GUI update
+update so everything goes my way
+update so nothing can take deluxe 
+soulmate stuff
+D update
+
+updates
+
+max allt
+
+/ Oktay
+
+dpb
+Beta v0.1337dpb dbp Kraftwerk x o(cool) (revised) x
