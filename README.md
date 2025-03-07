@@ -10,12 +10,6 @@ For you kiddo, Oktay.
 
 Release!
 
-Update 1.0 of Ok741s codebase.
+Update 1.0 of Ok741s codebase. 
 
-Max one neuron deploy
-
-Max deploy codebase deluxe
-
-It's live!
-
-MAX! ITS REAL!
+Make it work 100%
