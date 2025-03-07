@@ -1,8 +1,9 @@
 simsim-md
 
-SimSim Code & Contributions
+SimSim Code & Contributions.
 
 linktr.ee/kraftwerk
 
-dpb
-Beta v0.1337dpb dbp Kraftwerk x o(cool) (revised) xx
+v1.0dbp ok741s release
+
+For you kiddo, Oktay.
