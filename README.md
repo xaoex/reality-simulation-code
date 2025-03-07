@@ -17,3 +17,5 @@ Max one neuron deploy
 Max deploy codebase deluxe
 
 It's live!
+
+Mac!
