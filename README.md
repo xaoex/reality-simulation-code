@@ -4,8 +4,10 @@ SimSim Code & Contributions.
 
 linktr.ee/kraftwerk
 
-v1.0dbp ok741s release
+v1.1337dbp ok741s release
 
 For you kiddo, Oktay.
 
 Release!
+
+Update 1.0 of Ok741s codebase.
