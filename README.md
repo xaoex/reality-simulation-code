@@ -14,4 +14,6 @@ Update 1.0 of Ok741s codebase.
 
 Max one neuron deploy
 
+Max deploy codebase deluxe
+
 It's live!
