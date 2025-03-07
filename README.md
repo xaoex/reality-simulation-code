@@ -122,6 +122,8 @@ updates
 max allt
 Max codebase
 update codebase for os
+update UI/terminals for OS:es some
+update oakOS oOS
 
 / Oktay
 
