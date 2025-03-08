@@ -23,3 +23,4 @@ Release Notes
 * Updates, all codebases refactor + fixed, refactor all codebases + optimize, max out eventuals
 * Oktay AI
 * New ideas for qaep (oOS)
+* Let brain fix everything else
