@@ -19,3 +19,5 @@ LETS GO!
 MAX BEST EVER!
 
 My Awesome Brain just fixes everything
+
+Make sure u're taking care of oakOS and putting urself on + on call/devops situation deluxe.
