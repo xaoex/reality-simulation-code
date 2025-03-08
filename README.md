@@ -12,12 +12,4 @@ Release!
 
 Update 1.0 of Ok741s codebase. 
 
-100% Success. FUCK YES! MAX ALLT BABY!
-
-LETS GO!
-
-MAX BEST EVER!
-
-My Awesome Brain just fixes everything
-
-Make sure you're taking care of oakOS and putting yourself on + on call/devops situation deluxe.
+God breathed all over da place. #Litty
