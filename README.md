@@ -13,3 +13,5 @@ Release!
 Update 1.0 of Ok741s codebase. 
 
 100% Success. FUCK YES! MAX ALLT BABY!
+
+LETS GO!
