@@ -16,6 +16,6 @@ qæp
 
 God breathed all over da place. #Litty
 
-Everything is good to go. 
+Everything is good to go. Lighter!
 
 Time for MBA / Industrial Economics.
