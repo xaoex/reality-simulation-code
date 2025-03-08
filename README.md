@@ -26,6 +26,6 @@ Release Notes
 * Add contributions to simsim and research
 * Let brain fix everything else
 * FORCE
-* Urrthang mine forever
+* Urrthang mine forever. Max!
 
 linktr.ee/ocoolo
