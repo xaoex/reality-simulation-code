@@ -2,7 +2,7 @@ simsim-md
 
 SimSim Code & Contributions.
 
-linktr.ee/ocool
+linktr.ee/ocoolo
 
 v1.31337dbp ok741s release
 
@@ -25,3 +25,6 @@ Release Notes
 * New ideas for qaep (oOS)
 * Add contributions to simsim and research
 * Let brain fix everything else
+
+
+linktr.ee/ocoolo
