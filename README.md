@@ -25,6 +25,7 @@ Release Notes
 * New ideas for qaep (oOS)
 * Add contributions to simsim and research
 * Let brain fix everything else
+* FORCE
 
 
 linktr.ee/ocoolo
