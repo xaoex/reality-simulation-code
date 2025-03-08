@@ -2,7 +2,7 @@ simsim-md
 
 SimSim Code & Contributions.
 
-linktr.ee/kraftwerk
+linktr.ee/ocool
 
 v1.31337dbp ok741s release
 
@@ -12,10 +12,11 @@ Release!
 
 Update 1.0 of Ok741s codebase (qæp)
 
-qæp
-
-God breathed all over da place. #Litty
-
-Everything is good to go. Lighter!
+Everything is good to go. 
 
 Time for MBA / Industrial Economics.
+
+-----------
+Release Notes
+-----------
+* Updates, processor situation for os (?)
