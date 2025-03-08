@@ -10,7 +10,9 @@ For you kiddo, Oktay.
 
 Release!
 
-Update 1.0 of Ok741s codebase. 
+Update 1.0 of Ok741s codebase (qæp)
+
+qæp
 
 God breathed all over da place. #Litty
 
