@@ -20,3 +20,4 @@ Time for MBA / Industrial Economics.
 Release Notes
 -----------
 * Updates, processor situation for os (?)
+* Updates, all codebases refactor + fixed
