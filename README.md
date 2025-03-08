@@ -16,11 +16,12 @@ Everything is good to go.
 
 Time for MBA / Industrial Economics.
 
------------
+--------------------
 Release Notes
------------
+--------------------
 * Updates, processor situation for os (?)
 * Updates, all codebases refactor + fixed, refactor all codebases + optimize, max out eventuals
 * Oktay AI
 * New ideas for qaep (oOS)
 * Add contributions to simsim and research
+* Let brain fix everything else
