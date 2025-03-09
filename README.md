@@ -30,5 +30,6 @@ Release Notes
 * Update hand edit Mad & Aeon (aka Teal)
 * Dev mode max 
 * Make everything 100% and work completely through 1P-LSD + Amph
+* NFTs incoming + pushing for the fuck of it
 
 linktr.ee/ocoolo
