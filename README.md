@@ -29,5 +29,6 @@ Release Notes
 * Urrthang mine forever. Max! Max out brain deluxe
 * Update hand edit Mad & Aeon (aka Teal)
 * Dev mode max 
+* Make everything 100% and work completely through 1P-LSD + Amph
 
 linktr.ee/ocoolo
