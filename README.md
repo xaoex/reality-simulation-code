@@ -28,5 +28,6 @@ Release Notes
 * FORCE
 * Urrthang mine forever. Max! Max out brain deluxe
 * Update hand edit Mad & Aeon (aka Teal)
+* Dev mode max 
 
 linktr.ee/ocoolo
