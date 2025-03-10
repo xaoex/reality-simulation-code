@@ -31,6 +31,7 @@ Release Notes
 * Dev mode max 
 * Make everything 100% and work completely through 1P-LSD + Amph
 * NFTs incoming + pushing for the fuck of it
-* Medium
+* Medium Blog Additions
+* Requirements for employers. 
 
 linktr.ee/ocoolo
