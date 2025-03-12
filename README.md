@@ -33,5 +33,7 @@ Release Notes
 * NFTs incoming + pushing for the fuck of it
 * Medium Blog Additions
 * Requirements for employers. 
+* Healthcare things for saved ones
 
-linktr.ee/ocoolo
+linktr.ee/madaeon
+iinktr.ee/xaoex
