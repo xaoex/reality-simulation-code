@@ -28,18 +28,13 @@ Release Notes
 * FORCE
 * Urrthang mine forever. Max! Max out brain deluxe
 * Update hand edit Mad & Aeon (aka Teal)
-<<<<<<< HEAD
-* Add own Psychadelic Realm / Representative Entity that is represented through Mad + Aeon (xaeox, XA o EX)
-
-linktr.ee/xaoex
-=======
 * Dev mode max 
 * Make everything 100% and work completely through 1P-LSD + Amph
 * NFTs incoming + pushing for the fuck of it
 * Medium Blog Additions
 * Requirements for employers. 
 * Healthcare things for saved ones
+* OS:es additions.
 
 linktr.ee/madaeon
 iinktr.ee/xaoex
->>>>>>> 9d150773729d490fe55150bb41dcead6048238ed
