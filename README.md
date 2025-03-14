@@ -38,6 +38,7 @@ Release Notes
 * Requirements for employers. 
 * Healthcare things for saved ones
 * Restore. Most important commits removed by cunts.
+* Make sure everything 100% no matter what forever for all futures.
 
 linktr.ee/madaeon
 linktr.ee/xaoex
