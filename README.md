@@ -28,5 +28,6 @@ Release Notes
 * FORCE
 * Urrthang mine forever. Max! Max out brain deluxe
 * Update hand edit Mad & Aeon (aka Teal)
+* Add own Psychadelic Realm / Representative Entity that is represented through Mad + Aeon (xaeox, XA o EX)
 
-linktr.ee/ocoolo
+linktr.ee/xaoex
