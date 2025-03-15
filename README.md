@@ -42,6 +42,7 @@ Release Notes
 * OS:es additions.
 * New Release + Deploy (MAX) +fixes all bullshit problems.
 * Introducing "young ring" an abstract mathematical ring that is defined for the first time by me (Oktay) for the purpose of creating a dynamic enterprise: entities/organizations/projects. young rings are defined by formation: combining relational algebra with the foundational definitions from group + ring theory.
+* General AI updates for psychs etc.
+* Make everything 100% Maxed out again.
 
-linktr.ee/madaeon
-iinktr.ee/xaoe
+linktr.ee/xaoex
