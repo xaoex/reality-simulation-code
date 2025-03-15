@@ -41,7 +41,7 @@ Release Notes
 * Make sure everything 100% no matter what forever for all futures.
 * OS:es additions.
 * New Release + Deploy (MAX) +fixes all bullshit problems.
-
+* Introducing "young ring" an abstract mathematical ring that is defined for the first time by me (Oktay) for the purpose of creating a dynamic enterprise: entities/organizations/projects. young rings are defined by formation: combining relational algebra with the foundational definitions from group + ring theory.
 
 linktr.ee/madaeon
 iinktr.ee/xaoe
