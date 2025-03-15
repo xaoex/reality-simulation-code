@@ -39,10 +39,9 @@ Release Notes
 * Healthcare things for saved ones
 * Restore. Most important commits removed by cunts.
 * Make sure everything 100% no matter what forever for all futures.
-
-linktr.ee/madaeon
-linktr.ee/xaoex
 * OS:es additions.
+* New Release + Deploy (MAX) +fixes all bullshit problems.
+
 
 linktr.ee/madaeon
 iinktr.ee/xaoe
