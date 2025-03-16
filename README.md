@@ -44,5 +44,6 @@ Release Notes
 * Introducing "young ring" an abstract mathematical ring that is defined for the first time by me (Oktay) for the purpose of creating a dynamic enterprise: entities/organizations/projects. young rings are defined by formation: combining relational algebra with the foundational definitions from group + ring theory.
 * General AI updates for psychs etc.
 * Make everything 100% Maxed out again.
+* P =! or == NP things from before + new finds.
 
 linktr.ee/xaoex
