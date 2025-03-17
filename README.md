@@ -45,6 +45,6 @@ Release Notes
 * General AI updates for psychs etc.
 * Make everything 100% Maxed out again.
 * P =! or == NP things from before + new finds.
-* New data/ml pipeline: of the past 7 years. Pipe it up!
+* Data/ML pipeline added: past 7 years of data with written summaries + derived .md notes (+obsidian notes) of daily activities etc. Pipe it up!
 
 linktr.ee/xaoex
