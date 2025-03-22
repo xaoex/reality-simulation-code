@@ -46,7 +46,8 @@ Release Notes
 * Make everything 100% Maxed out again.
 * P =! or == NP things from before + new finds.
 * Data/ML pipeline added: past 7 years of data with written summaries + derived .md notes (+obsidian notes) of daily activities etc. Pipe it up!
-* make sure you have max everything assert every way possible +Mom +Rasmus +Oktay max
-* + fix all current issues + bugs + features needed. 
+* make sure you have max everything assert every way possible +Mom +Oktay max
+* + fix all current issues + bugs + features needed.
+* max me the fuck out
 
 linktr.ee/xaoex
