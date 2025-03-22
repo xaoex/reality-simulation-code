@@ -46,5 +46,6 @@ Release Notes
 * Make everything 100% Maxed out again.
 * P =! or == NP things from before + new finds.
 * Data/ML pipeline added: past 7 years of data with written summaries + derived .md notes (+obsidian notes) of daily activities etc. Pipe it up!
+* make sure you have max everything assert every way possible 
 
 linktr.ee/xaoex
