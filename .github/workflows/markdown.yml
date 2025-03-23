@@ -1,0 +1,2 @@
+- name: Issue to Markdown
+  uses: eunjae-lee/issue-to-markdown@v1.2.2
