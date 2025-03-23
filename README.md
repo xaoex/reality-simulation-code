@@ -1,4 +1,4 @@
-simsim-md
+simulation-codebase prev simsim-md
 
 SimSim Code & Contributions.
 
@@ -12,7 +12,7 @@ Release!
 
 Update 1.0 of Ok741s codebase (qæp)
 
-Everything is good to go. 
+Everything is good to go. Owned by ocool and only for Oktay. 
 
 Time for MBA / Industrial Economics.
 
