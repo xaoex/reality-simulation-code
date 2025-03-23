@@ -48,6 +48,7 @@ Release Notes
 * Data/ML pipeline added: past 7 years of data with written summaries + derived .md notes (+obsidian notes) of daily activities etc. Pipe it up!
 * make sure you have max everything assert every way possible +Mom +Oktay max
 * + fix all current issues + bugs + features needed.
-* max me the fuck out
+* Max me 100%
+* Ready for reality + production
 
 linktr.ee/xaoex
