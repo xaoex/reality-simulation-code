@@ -1,0 +1,19 @@
+name: Run Workflow
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    if: github.actor == 'professoroakz' # Only runs if triggered by ur username
+    runs-on: reality-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Run ur script
+        run: echo "Running script..."
