@@ -50,5 +50,6 @@ Release Notes
 * + fix all current issues + bugs + features needed.
 * Max me 100%
 * Ready for reality + production
+* Help mom and code her simulation 
 
 linktr.ee/xaoex
