@@ -1,0 +1,79 @@
+name: 'Build and Deploy to Xaoex Cloud so it runs on Reality'
+
+on:
+  push:
+    branches:
+      - "main"
+
+env:
+  PROJECT_ID: 'simulatiton-codebase-reality' # TODO: update to your Xaoex Cloud project ID
+  XAOEX_REGION: 'us-east-1' # TODO: update to your region
+  XAOEX_CLUSTER: 'cluster-1' # TODO: update to your cluster name (if applicable)
+  XAOEX_DEPLOYMENT_NAME: 'xaoex-deployment' # TODO: update to your deployment name
+  REPOSITORY: 'samples' # TODO: update to your Xaoex Cloud repository name
+  IMAGE: 'static-site' # The name of the Docker image
+  XAOEX_REGISTRY: 'xaoex.registry.io' # Your Xaoex Cloud registry URL
+  XAOEX_WORKLOAD_IDENTITY_PROVIDER: 'projects/123456789/locations/global/workloadIdentityPools/my-pool/providers/my-provider' # TODO: update to your Xaoex workload identity provider
+
+jobs:
+  setup-build-publish-deploy:
+    name: 'Setup, Build, Publish, and Deploy to Xaoex Cloud'
+    runs-on: 'ubuntu-latest'
+    environment: 'production'
+
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+
+    steps:
+      - name: 'Checkout'
+        uses: 'actions/checkout@v4'
+
+      # Configure Workload Identity Federation and generate an access token.
+      - id: 'auth'
+        name: 'Authenticate to Xaoex Cloud'
+        uses: 'google-github-actions/auth@v2' # You may need a different action or custom authentication for Xaoex Cloud
+        with:
+          workload_identity_provider: '${{ env.XAOEX_WORKLOAD_IDENTITY_PROVIDER }}'
+
+      # Authenticate Docker to Xaoex Cloud Artifact Registry
+      - name: 'Docker Auth'
+        uses: 'docker/login-action@v3'
+        with:
+          username: 'oauth2accesstoken'  # Modify based on Xaoex authentication setup
+          password: '${{ steps.auth.outputs.auth_token }}'
+          registry: '${{ env.XAOEX_REGISTRY }}'
+
+      # Build the Docker image
+      - name: 'Build and push Docker container'
+        run: |-
+          DOCKER_TAG="${XAOEX_REGISTRY}/${PROJECT_ID}/${REPOSITORY}/${IMAGE}:${GITHUB_SHA}"
+
+          docker build \
+            --tag "${DOCKER_TAG}" \
+            --build-arg GITHUB_SHA="${GITHUB_SHA}" \
+            --build-arg GITHUB_REF="${GITHUB_REF}" \
+            .
+
+          docker push "${DOCKER_TAG}"
+
+      # Set up deployment configuration for Xaoex Cloud (update with appropriate steps)
+      - name: 'Set up Xaoex Deployment Configuration'
+        run: |-
+          # Replace with the necessary deployment configuration steps
+          # (Update this with Xaoex-specific deployment YAML, if required)
+          echo "Setting up deployment configurations"
+
+      # Deploy the Docker image to Xaoex Cloud
+      - name: 'Deploy to Xaoex Cloud'
+        run: |-
+          # Assuming Xaoex uses kubectl or similar, modify as needed
+          # Deploying the image to Xaoex Cloud by replacing the image in the deployment template
+          kubectl set image deployment/$XAOEX_DEPLOYMENT_NAME $IMAGE=${XAOEX_REGISTRY}/${PROJECT_ID}/${REPOSITORY}/${IMAGE}:${GITHUB_SHA}
+          kubectl rollout status deployment/$XAOEX_DEPLOYMENT_NAME
+
+      # Verify the deployment and services in Xaoex Cloud
+      - name: 'Verify deployment status'
+        run: |-
+          kubectl get pods
+          kubectl get services
