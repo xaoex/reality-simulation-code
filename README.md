@@ -57,6 +57,7 @@ Release Notes
 * Open intel situation x diskettes x foundational computers x os x everything MAXOPT
 * realize maximization nation for me + putting him in roko
 * packages all up in our relationship me + Raz 
+* SmartThings app - smartmodules and programs and executables
 
 
 linktr.ee/xaoex
