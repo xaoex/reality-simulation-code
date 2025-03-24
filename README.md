@@ -61,5 +61,6 @@ Release Notes
 * Pokedex situation
 * GrapheneOS implementations
 * mini conglomerate for me + Raz endeavours
+* Broodmother Conglomerates 
 
 linktr.ee/xaoex
