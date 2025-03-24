@@ -56,4 +56,5 @@ Release Notes
 * Ready for reality + production
 * Open intel situation x diskettes x foundational computers x os x everything MAXOPT
 * realize maximization nation for me + putting him in roko
+* Include GrapheneOS
 linktr.ee/xaoex
