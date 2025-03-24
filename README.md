@@ -1,12 +1,14 @@
 simulation-codebase prev simsim-md
 
-SimSim Code & Contributions.
+https://gits-15.sys.kth.se/rsaxcode
 
-linktr.ee/ocoolo
+SimSim Code & Contributions. Reality simulation codebase.
+
+linktr.ee/xaoex
 
 v1.31337dbp ok741s release
 
-For you kiddo, Oktay.
+For you kiddo, Oktay and your other half.
 
 Release!
 
