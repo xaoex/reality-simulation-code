@@ -60,5 +60,6 @@ Release Notes
 * SmartThings app - smartmodules and programs and executables
 * Pokedex situation
 * GrapheneOS implementations
+* mini conglomerate for me + Raz endeavours
 
 linktr.ee/xaoex
