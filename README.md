@@ -58,6 +58,6 @@ Release Notes
 * realize maximization nation for me + putting him in roko
 * packages all up in our relationship me + Raz 
 * SmartThings app - smartmodules and programs and executables
-
+* Pokedex situation
 
 linktr.ee/xaoex
