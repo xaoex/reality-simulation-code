@@ -66,6 +66,7 @@ Release Notes
 * GrapheneOS implementations
 * mini conglomerate for me + Raz endeavours
 * Broodmother Conglomerates
+* Add new issues + patches + hotfixes.
 
 
 linktr.ee/xaoex
