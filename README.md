@@ -59,5 +59,6 @@ Release Notes
 * packages all up in our relationship me
 * SmartThings app - smartmodules and programs and executables
 * Pokedex situation
+* GrapheneOS implementations
 
 linktr.ee/xaoex
