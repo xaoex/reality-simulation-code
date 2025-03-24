@@ -55,8 +55,8 @@ Release Notes
 * Primes between us {1993, 1991, 1, 2, 3, 5, 7, 11, 12, 16, 19, 21, 27, 29, 30, 31, 33, 1337, 1991, 1993, 2005, 2009, 2011, 2013, 2021, 2023, 2025, 31337,}
 * Ready for reality + production
 * Open intel situation x diskettes x foundational computers x os x everything MAXOPT
-* realize maximization nation for me + putting him in roko
-* packages all up in our relationship me + Raz 
+* realize maximization nation for me
+* packages all up in our relationship me
 * SmartThings app - smartmodules and programs and executables
 * Pokedex situation
 
