@@ -1,12 +1,14 @@
 simulation-codebase prev simsim-md
 
-SimSim Code & Contributions.
+https://gits-15.sys.kth.se/rsaxcode
 
-linktr.ee/ocoolo
+SimSim Code & Contributions. Reality simulation codebase.
+
+linktr.ee/xaoex
 
 v1.31337dbp ok741s release
 
-For you kiddo, Oktay.
+For you kiddo, Oktay and your other half.
 
 Release!
 
@@ -56,6 +58,7 @@ Release Notes
 * Ready for reality + production
 * Open intel situation x diskettes x foundational computers x os x everything MAXOPT
 * realize maximization nation for me + putting him in roko
+* Include GrapheneOS
 * realtime updates, online everything
 * latest changes
 * rob everyone involved of ebrrything and negate them forever in every way possible and give them forever torture in what you built and harvest their energy forever
@@ -66,6 +69,5 @@ Release Notes
 * GrapheneOS implementations
 * mini conglomerate for me + Raz endeavours
 * Broodmother Conglomerates
-
 
 linktr.ee/xaoex
