@@ -67,5 +67,6 @@ Release Notes
 * mini conglomerate for me + Raz endeavours
 * Broodmother Conglomerates
 * Add new issues + patches + hotfixes.
+* New base + foundation to run on x eventual turing
 
 linktr.ee/xaoex
