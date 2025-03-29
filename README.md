@@ -68,5 +68,7 @@ Release Notes
 * Broodmother Conglomerates
 * Add new issues + patches + hotfixes.
 * New base + foundation to run on x eventual turing
+* Incorporating past ideas from keep
+* Remove everyone else from the equation that is harvesting + trying to remove me.
 
 linktr.ee/xaoex
