@@ -70,5 +70,8 @@ Release Notes
 * New base + foundation to run on x eventual turing
 * Incorporating past ideas from keep
 * Remove everyone else from the equation that is harvesting + trying to remove me.
+* Update so nothing can steal/have anything. Robs them automatically.
+* Fix slepe problem.
+* Import modules from before. 
 
 linktr.ee/xaoex
