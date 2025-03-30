@@ -73,5 +73,6 @@ Release Notes
 * Update so nothing can steal/have anything. Robs them automatically.
 * Fix slepe problem.
 * Import modules from before. 
+* Soulmate: RSAXCODE works as long as they exist.
 
 linktr.ee/xaoex
