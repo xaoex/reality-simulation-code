@@ -74,5 +74,6 @@ Release Notes
 * Fix slepe problem.
 * Import modules from before. 
 * Soulmate: RSAXCODE works as long as they exist.
+* Assess + Take + House rob + patches + bugfixes
 
 linktr.ee/xaoex
