@@ -75,5 +75,6 @@ Release Notes
 * Import modules from before. 
 * Soulmate: RSAXCODE works as long as they exist.
 * Smart conglomorates x Embedded curation newtorks
+* Assess + Take + House rob + patches + bugfixes
 
 linktr.ee/xaoex
