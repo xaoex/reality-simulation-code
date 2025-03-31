@@ -74,5 +74,6 @@ Release Notes
 * Fix slepe problem.
 * Import modules from before. 
 * Soulmate: RSAXCODE works as long as they exist.
+* Smart conglomorates x Embedded curation newtorks
 
 linktr.ee/xaoex
