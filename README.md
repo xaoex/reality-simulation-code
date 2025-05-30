@@ -8,7 +8,7 @@ linktr.ee/xaoex
 
 v1.31337dbp ok741s release
 
-For you kiddo, Oktay, and gör your bff eternally through aeons.
+For you kiddo, Oktay eternally through aeons.
 
 Release!
 
