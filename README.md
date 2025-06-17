@@ -22,5 +22,7 @@ Time for MBA / Industrial Economics.
 --------------------
 Release Notes
 --------------------
-
+Links + Online Websites
+--------------------
+linktr.ee/oktays
 linktr.ee/xaoex
