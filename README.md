@@ -1,24 +1,28 @@
+😍❤️💻
+
 simulation-codebase prev simsim-md
 
 SimSim Code & Contributions.
 
 linktr.ee/xaoex
+linktr.ee/oktays
 
 v1.31337dbp ok741s release
 
-For u kiddo, Oktay.
+For u kiddo, Oktay and ur best friend eternally through aeons.
 
 Release!
 
 Update 1.0 of Ok741s codebase (qæp)
 
-Everything is good to go. Owned by ocool and only for Oktay. 
+Everything is good to go. Owned by ocool and only for Oktay & his bff. 
 
 Time for MBA / Industrial Economics.
 
 --------------------
 Release Notes
 --------------------
+<<<<<<< HEAD
 * Updates, processor situation for os (?)
 * Updates, all codebases refactor + fixed, refactor all codebases + optimize, max out eventuals
 * Oktay AI
@@ -76,4 +80,9 @@ Release Notes
 * Soulmate: RSAXCODE works as long as they exist.
 * Assess + Take + House rob + patches + bugfixes
 
+=======
+Links + Online Websites
+--------------------
+linktr.ee/oktays
+>>>>>>> dd3a93c11c1cfef3ef32db9525be524fb1cde129
 linktr.ee/xaoex
