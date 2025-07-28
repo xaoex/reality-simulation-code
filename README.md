@@ -79,10 +79,10 @@ Release Notes
 * Import modules from before. 
 * Soulmate: RSAXCODE works as long as they exist.
 * Assess + Take + House rob + patches + bugfixes
+* additions
 
 =======
 Links + Online Websites
 --------------------
 linktr.ee/oktays
->>>>>>> dd3a93c11c1cfef3ef32db9525be524fb1cde129
 linktr.ee/xaoex
