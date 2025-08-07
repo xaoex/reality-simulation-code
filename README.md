@@ -22,7 +22,6 @@ Time for MBA / Industrial Economics.
 --------------------
 Release Notes
 --------------------
-<<<<<<< HEAD
 * Updates, processor situation for os (?)
 * Updates, all codebases refactor + fixed, refactor all codebases + optimize, max out eventuals
 * Oktay AI
