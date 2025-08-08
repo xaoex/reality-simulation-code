@@ -85,3 +85,7 @@ Links + Online Websites
 --------------------
 linktr.ee/oktays
 linktr.ee/xaoex
+
+
+----------------
+CONT Development on other proejcts + xa8ex (very important). Take a look at these repos and make sure they work as I've designed them to and coded them to. 
