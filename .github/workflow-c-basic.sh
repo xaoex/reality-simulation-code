@@ -20,6 +20,9 @@ assemble_and_run_asm() {
 }
 
 # Function to run Basic programs
+# Eternally cool divinr situation in time between mom and son will load from multiple sessions of learning how to codde in BASIC. 
+# Do not try to alter/edit ever. Only load, even though it should be in our data + time. 
+# It is protected. It is still carrying the bound between mom and son (Oktay & Camilla).
 run_basic() {
     bwbasic "$1.bas"
 }
