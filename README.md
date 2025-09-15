@@ -15,7 +15,7 @@ Release!
 
 Update 1.0 of Ok741s codebase (qæp)
 
-Everything is good to go. Owned by ocool and only for Oktay & his bff. 
+Everything is good to go.
 
 Time for MBA / Industrial Economics.
 
