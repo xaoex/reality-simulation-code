@@ -9,7 +9,7 @@ linktr.ee/oktays
 
 v1.31337dbp ok741s release
 
-For you kiddo, Oktay and your best friend eternally through aeons.
+For you kiddo, Oktay eternally through aeons.
 
 Release!
 
