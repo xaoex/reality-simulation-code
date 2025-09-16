@@ -7,5 +7,8 @@
 .oktayrasmuscamilla --vs camilla --compare --complete
 .religionmax --camilla --complete
 .spiritualitymax --camilla --complete
+.aimax --camilla --complete
+.polytechnicmax --camilla --complete
+.simsimmax --camilla --complete
 .simsim --camilla --complete 
 .aiauthid --camilla --complete
