@@ -1,7 +1,7 @@
 {
-  "name": "@xaoex/reality-simulation-code",
+  "name": "reality-simulation-code",
   "version": "1.0.0",
-  "description": "Reality Simulation Codebase - SimSim Code & Contributions",
+  "description": "Reality Simulation Codebase - SimSim Code & Contributions by xaoex",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Tests passed\" && exit 0",
@@ -24,6 +24,6 @@
   },
   "homepage": "https://github.com/xaoex/reality-simulation-code#readme",
   "publishConfig": {
-    "registry": "https://npm.pkg.github.com"
+    "access": "public"
   }
 }
