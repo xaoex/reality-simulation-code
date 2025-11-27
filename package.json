@@ -6,13 +6,6 @@
   "scripts": {
     "test": "echo \"Tests passed\" && exit 0",
     "build": "echo \"Build complete\" && exit 0"
-  "name": "reality-simulation-code",
-  "version": "1.0.0",
-  "description": "SimSim Code & Contributions - Reality Simulation Codebase by xaoex",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"No test specified\" && exit 0",
-    "build": "echo \"Build complete\""
   },
   "repository": {
     "type": "git",
@@ -23,8 +16,6 @@
     "simulation",
     "simsim",
     "xaoex"
-    "xaoex",
-    "simsim"
   ],
   "author": "xaoex",
   "license": "MIT",
@@ -35,5 +26,4 @@
   "publishConfig": {
     "registry": "https://npm.pkg.github.com"
   }
-  "homepage": "https://github.com/xaoex/reality-simulation-code#readme"
 }
