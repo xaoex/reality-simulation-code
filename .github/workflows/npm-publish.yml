@@ -1,8 +1,24 @@
-name: Publish to npm
+name: Publish npm Package
 
 on:
   release:
     types: [published]
+  push:
+    branches:
+      - main
+      - production
+    tags:
+      - 'v*'
+      - 'release-*'
+  workflow_dispatch:
+
+jobs:
+  publish-npm:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
   workflow_dispatch:
 
 jobs:
@@ -18,6 +34,16 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
+          registry-url: 'https://npm.pkg.github.com'
+          scope: '@xaoex'
+
+      - name: Install dependencies
+        run: npm install --omit=dev
+
+      - name: Publish to GitHub Packages
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           registry-url: 'https://registry.npmjs.org'
 
       - name: Install dependencies
