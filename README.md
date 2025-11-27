@@ -1,8 +1,60 @@
 😍❤️💻
 
+# Reality Simulation Code
+
 simulation-codebase prev simsim-md
 
 SimSim Code & Contributions.
+
+## Installation
+
+### npm (GitHub Packages)
+
+To install from GitHub Packages, first authenticate with GitHub:
+
+```bash
+npm login --registry=https://npm.pkg.github.com --scope=@xaoex
+```
+
+Then install the package:
+
+```bash
+npm install @xaoex/reality-simulation-code
+```
+
+### npm (npmjs.org)
+
+```bash
+npm install reality-simulation-code
+```
+
+### Docker (GitHub Container Registry)
+
+Pull the Docker image from GitHub Container Registry:
+
+```bash
+docker pull ghcr.io/xaoex/reality-simulation-code:latest
+```
+
+Run the container:
+
+```bash
+docker run ghcr.io/xaoex/reality-simulation-code:latest
+```
+
+## Usage
+
+```javascript
+const realitySim = require('@xaoex/reality-simulation-code');
+// or
+const realitySim = require('reality-simulation-code');
+
+// Initialize the simulation
+realitySim.init();
+
+// Get simulation info
+console.log(realitySim.info());
+```
 
 linktr.ee/xaoex
 linktr.ee/oktays
