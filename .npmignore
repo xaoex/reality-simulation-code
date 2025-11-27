@@ -8,7 +8,8 @@ Dockerfile
 .dockerignore
 
 # C source files (not part of npm package)
-*.c
+# Only exclude C files in root directory
+/*.c
 
 # Development and configuration files
 .DS_Store
