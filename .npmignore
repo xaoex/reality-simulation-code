@@ -1,0 +1,38 @@
+# Git and GitHub
+.git
+.github
+.gitignore
+
+# Docker
+Dockerfile
+.dockerignore
+
+# C source files (not part of npm package)
+# Only exclude C files in root directory
+/*.c
+
+# Development and configuration files
+.DS_Store
+.ar
+.gists
+.include
+.necessaries
+.oktaybahceci
+.online
+.osboost
+.osmax
+.qa
+.rasmusalpsjo
+.realtime
+.scripts
+.security
+.sim
+.vaoev
+.woke
+
+# Directories
+people/
+xaoex.github.io/
+
+# Documentation (keep README.md)
+SECURITY.md
