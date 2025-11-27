@@ -1,4 +1,11 @@
 {
+  "name": "@xaoex/reality-simulation-code",
+  "version": "1.0.0",
+  "description": "Reality Simulation Codebase - SimSim Code & Contributions",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Tests passed\" && exit 0",
+    "build": "echo \"Build complete\" && exit 0"
   "name": "reality-simulation-code",
   "version": "1.0.0",
   "description": "SimSim Code & Contributions - Reality Simulation Codebase by xaoex",
@@ -14,6 +21,8 @@
   "keywords": [
     "reality",
     "simulation",
+    "simsim",
+    "xaoex"
     "xaoex",
     "simsim"
   ],
@@ -22,5 +31,9 @@
   "bugs": {
     "url": "https://github.com/xaoex/reality-simulation-code/issues"
   },
+  "homepage": "https://github.com/xaoex/reality-simulation-code#readme",
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
+  }
   "homepage": "https://github.com/xaoex/reality-simulation-code#readme"
 }

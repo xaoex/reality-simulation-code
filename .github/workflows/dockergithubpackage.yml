@@ -1,21 +1,27 @@
 #
-name: Demo Push
+name: Publish Docker Package
 
 # This workflow runs when any of the following occur:
-# - A push is made to a branch called `main` or `seed`
-# - A tag starting with "v" is created
+# - A push is made to a branch called `main`, `production` or `seed`
+# - A tag starting with "v" or "release-" is created
 # - A pull request is created or updated
+# - Manual trigger
 on:
+  release:
+    types: [published]
   push:
     branches:
       - main
+      - production
       - seed
     tags:
       - v*
+      - release-*
   pull_request:
-  # This creates an environment variable called `IMAGE_NAME ` with the value `ghtoken_product_demo`.
+  workflow_dispatch:
+
 env:
-  IMAGE_NAME: dockergithubpackage
+  IMAGE_NAME: reality-simulation-code
 #
 jobs:
   # This pushes the image to GitHub Packages.
@@ -45,7 +51,7 @@ jobs:
           # This strips the "v" prefix from the tag name.
           [[ "${{ github.ref }}" == "refs/tags/"* ]] && VERSION=$(echo $VERSION | sed -e 's/^v//')
           # This uses the Docker `latest` tag convention.
-          [ "$VERSION" == "main" ] && VERSION=latest
+          [ "$VERSION" == "production" ] && VERSION=latest
           echo IMAGE_ID=$IMAGE_ID
           echo VERSION=$VERSION
           docker tag $IMAGE_NAME $IMAGE_ID:$VERSION
