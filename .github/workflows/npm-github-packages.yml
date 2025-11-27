@@ -1,0 +1,68 @@
+name: Publish npm to GitHub Packages
+
+on:
+  release:
+    types: [published]
+  push:
+    branches:
+      - main
+      - production
+    tags:
+      - 'v*'
+      - 'release-*'
+  workflow_dispatch:
+
+jobs:
+  publish-gpr:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          registry-url: 'https://npm.pkg.github.com'
+          scope: '@xaoex'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Configure package for GitHub Packages
+        run: |
+          # Update package.json name for scoped package
+          node -e "
+            const fs = require('fs');
+            const pkg = JSON.parse(fs.readFileSync('package.json', 'utf8'));
+            pkg.name = '@xaoex/reality-simulation-code';
+            pkg.publishConfig = {
+              registry: 'https://npm.pkg.github.com'
+            };
+            fs.writeFileSync('package.json', JSON.stringify(pkg, null, 2) + '\n');
+          "
+
+      - name: Extract version from release tag
+        if: github.event_name == 'release'
+        run: |
+          VERSION="${{ github.event.release.tag_name }}"
+          VERSION=$(echo "$VERSION" | sed 's/^v//')
+          if [[ ! "$VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+ ]]; then
+            VERSION="1.0.${{ github.run_number }}"
+          fi
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          npm version "$VERSION" --no-git-tag-version --allow-same-version
+
+      - name: Set version for push/workflow_dispatch
+        if: github.event_name != 'release'
+        run: |
+          VERSION="1.0.${{ github.run_number }}"
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          npm version "$VERSION" --no-git-tag-version --allow-same-version
+
+      - name: Publish to GitHub Packages
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
