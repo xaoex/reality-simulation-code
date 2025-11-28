@@ -43,20 +43,38 @@ module.exports = {
    * Parse xaoex .gamers file and extract entries
    * @param {string} filePath - Path to the .gamers file
    * @returns {Array} Array of parsed entries
+   * @throws {Error} If file cannot be read
    */
   parseGamers: function(filePath) {
+    if (!fs.existsSync(filePath)) {
+      throw new Error('File not found: ' + filePath);
+    }
     const content = fs.readFileSync(filePath, 'utf-8');
     const lines = content.split('\n');
     const entries = [];
     
     for (const line of lines) {
       const trimmed = line.trim();
-      if (trimmed.startsWith('.') && !trimmed.startsWith('#')) {
+      // Skip empty lines and comments (lines starting with #)
+      if (trimmed.length === 0 || trimmed.startsWith('#')) {
+        continue;
+      }
+      // Include lines starting with . (xaoex format entries)
+      if (trimmed.startsWith('.')) {
         entries.push(trimmed);
       }
     }
     
     return entries;
+  },
+
+  /**
+   * Remove leading dot from entry if present
+   * @param {string} entry - Entry string
+   * @returns {string} Entry without leading dot
+   */
+  removeDotPrefix: function(entry) {
+    return entry.startsWith('.') ? entry.substring(1) : entry;
   },
 
   /**
@@ -101,21 +119,21 @@ module.exports = {
     // Add core entities
     lines.push('# Core xaoex entities');
     for (const entity of entities) {
-      lines.push('.entity' + entity.substring(1));
+      lines.push('.entity.' + this.removeDotPrefix(entity));
     }
     lines.push('');
 
     // Add gaming integration
     lines.push('# Gaming integration');
     for (const game of gaming) {
-      lines.push('.gaming.integration' + game.substring(1) + '.enabled');
+      lines.push('.gaming.integration.' + this.removeDotPrefix(game) + '.enabled');
     }
     lines.push('');
 
     // Add platform support
     lines.push('# Platform support');
     for (const platform of platforms) {
-      lines.push('.platform' + platform.substring(1) + '.supported');
+      lines.push('.platform.' + this.removeDotPrefix(platform) + '.supported');
     }
     lines.push('');
 
@@ -130,14 +148,14 @@ module.exports = {
     // Add max optimization states
     lines.push('# Max optimization states');
     for (const maxopt of maxopts) {
-      lines.push('.maxopt' + maxopt.substring(1) + '.complete');
+      lines.push('.maxopt.' + this.removeDotPrefix(maxopt) + '.complete');
     }
     lines.push('');
 
     // Add eternal configuration
     lines.push('# Eternal configuration');
     for (const et of eternal) {
-      lines.push('.eternal' + et.substring(1) + '.active');
+      lines.push('.eternal.' + this.removeDotPrefix(et) + '.active');
     }
     lines.push('');
 
