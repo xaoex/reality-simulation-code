@@ -1,0 +1,43 @@
+# .oai situation - Generated from xaoex.gamers
+# OpenAI Integration Situation for Reality Simulation
+
+.situation
+.oai
+
+# Core xaoex entities
+.entity.xaoex
+.entity.oktay
+.entity.rasmus
+.entity.camilla
+
+# Gaming integration
+.gaming.integration.enabled
+.gaming.multiplayer.active
+.gaming.singleplayer.active
+.gaming.streaming.ready
+
+# Platform support
+.platform.consoles.supported
+.platform.pc.supported
+.platform.mobile.supported
+
+# AI situation mappings
+.oai.connection.established
+.oai.xaoexgamers.mapped
+.oai.realitysim.integrated
+.oai.simsim.connected
+
+# Max optimization states
+.maxopt.gaming.complete
+.maxopt.xaoex.complete
+.maxopt.oktay.complete
+.maxopt.rasmus.complete
+
+# Eternal configuration
+.eternal.forever.active
+.eternal.maxopt.enabled
+
+# Situation status
+.situation.generated
+.situation.active
+.situation.xaoex.gamers.source
