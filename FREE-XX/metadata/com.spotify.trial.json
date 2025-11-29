@@ -1,0 +1,26 @@
+{
+  "id": "com.spotify.trial",
+  "name": "Spotify Premium",
+  "summary": "Music streaming with free trial",
+  "description": "Spotify Premium offers ad-free music streaming, offline downloads, and high-quality audio. New users can get a free trial period, and the trial can be recycled with new email accounts.",
+  "freeType": "subscription-trial",
+  "website": "https://www.spotify.com/premium/",
+  "platforms": ["windows", "macos", "linux", "web", "ios", "android"],
+  "categories": ["creative", "utilities"],
+  "added": "2024-01-01",
+  "studentOffer": {
+    "available": true,
+    "discount": "50%",
+    "verification": "sheerid",
+    "link": "https://www.spotify.com/student/",
+    "duration": "up-to-4-years"
+  },
+  "trial": {
+    "available": true,
+    "duration": "1-3 months",
+    "features": "full",
+    "recyclable": true,
+    "recycleMethod": "new-email",
+    "recycleNotes": "Create new account with different email for new trial"
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "id": "com.cloudflare.free",
+  "name": "Cloudflare",
+  "summary": "Free CDN, DNS, and security - forever free tier",
+  "description": "Cloudflare offers a generous free tier that includes DNS, CDN, SSL certificates, DDoS protection, and basic analytics. Perfect for personal projects and small websites.",
+  "freeType": "free-forever",
+  "website": "https://www.cloudflare.com",
+  "platforms": ["web"],
+  "categories": ["cloud", "security"],
+  "added": "2024-01-01",
+  "studentOffer": {
+    "available": false
+  },
+  "trial": {
+    "available": false
+  },
+  "freeTier": {
+    "available": true,
+    "lifetime": true,
+    "features": [
+      "Free DNS",
+      "Free SSL",
+      "Free CDN",
+      "DDoS protection",
+      "Basic analytics",
+      "Unlimited bandwidth"
+    ]
+  }
+}

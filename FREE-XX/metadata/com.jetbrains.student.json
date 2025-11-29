@@ -1,0 +1,23 @@
+{
+  "id": "com.jetbrains.student",
+  "name": "JetBrains All Products Pack",
+  "summary": "Free professional IDEs for students",
+  "description": "JetBrains offers all their professional development tools free for students. Includes IntelliJ IDEA, PyCharm, WebStorm, and more. Requires verification through GitHub Student Developer Pack or educational email.",
+  "freeType": "student-free",
+  "website": "https://www.jetbrains.com/community/education/",
+  "platforms": ["windows", "macos", "linux"],
+  "categories": ["development"],
+  "added": "2024-01-01",
+  "studentOffer": {
+    "available": true,
+    "discount": "100%",
+    "verification": "edu-email-or-github",
+    "link": "https://www.jetbrains.com/community/education/",
+    "duration": "renewable-annually"
+  },
+  "trial": {
+    "available": true,
+    "duration": "30 days",
+    "features": "full"
+  }
+}

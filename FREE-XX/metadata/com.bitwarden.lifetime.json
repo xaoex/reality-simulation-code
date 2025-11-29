@@ -1,0 +1,28 @@
+{
+  "id": "com.bitwarden.lifetime",
+  "name": "Bitwarden",
+  "summary": "Free password manager - lifetime free core features",
+  "description": "Bitwarden is an open source password manager. Core features are free forever including unlimited passwords, unlimited devices, and secure password generator.",
+  "freeType": "lifetime-free",
+  "website": "https://bitwarden.com",
+  "platforms": ["windows", "macos", "linux", "web", "ios", "android"],
+  "categories": ["security", "utilities"],
+  "added": "2024-01-01",
+  "studentOffer": {
+    "available": false
+  },
+  "trial": {
+    "available": false
+  },
+  "freeTier": {
+    "available": true,
+    "lifetime": true,
+    "features": [
+      "Unlimited passwords",
+      "All devices",
+      "Basic 2FA",
+      "Password generator",
+      "Secure notes"
+    ]
+  }
+}

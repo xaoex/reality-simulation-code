@@ -1,0 +1,17 @@
+{
+  "id": "com.vscode.editor",
+  "name": "Visual Studio Code",
+  "summary": "Free source code editor by Microsoft",
+  "description": "Visual Studio Code is a free, lightweight but powerful source code editor available for Windows, macOS and Linux. It has built-in support for JavaScript, TypeScript and Node.js with a rich ecosystem of extensions.",
+  "freeType": "free-forever",
+  "website": "https://code.visualstudio.com",
+  "platforms": ["windows", "macos", "linux"],
+  "categories": ["development", "productivity"],
+  "added": "2024-01-01",
+  "studentOffer": {
+    "available": false
+  },
+  "trial": {
+    "available": false
+  }
+}
