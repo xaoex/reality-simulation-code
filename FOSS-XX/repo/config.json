@@ -1,0 +1,46 @@
+{
+  "repo": {
+    "name": "FOSS-XX Official Repository",
+    "description": "Free and Open Source Software for Retro Computers (80s onwards)",
+    "icon": "icons/foss-xx-icon.png",
+    "address": "https://github.com/xaoex/reality-simulation-code/tree/main/FOSS-XX",
+    "mirrors": [],
+    "timestamp": 1704067200,
+    "version": 1,
+    "maxAge": 14
+  },
+  "requests": {
+    "install": [],
+    "uninstall": []
+  },
+  "antiFeatures": {
+    "Ads": {
+      "name": "Advertising",
+      "description": "Contains advertising"
+    },
+    "Tracking": {
+      "name": "Tracking",
+      "description": "Contains tracking features"
+    },
+    "NonFreeNet": {
+      "name": "Non-Free Network Services",
+      "description": "Requires non-free network services"
+    },
+    "NonFreeAdd": {
+      "name": "Non-Free Addons",
+      "description": "Promotes non-free addons"
+    },
+    "NonFreeDep": {
+      "name": "Non-Free Dependencies",
+      "description": "Depends on non-free software"
+    },
+    "UpstreamNonFree": {
+      "name": "Upstream Non-Free",
+      "description": "Upstream source is not fully free"
+    },
+    "NonFreeAssets": {
+      "name": "Non-Free Assets",
+      "description": "Contains non-free assets"
+    }
+  }
+}

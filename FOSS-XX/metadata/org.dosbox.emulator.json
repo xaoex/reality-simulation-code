@@ -1,0 +1,39 @@
+{
+  "id": "org.dosbox.emulator",
+  "name": "DOSBox",
+  "summary": "DOS emulator for running classic DOS games and software",
+  "description": "DOSBox is a DOS-emulator that uses the SDL-library which makes DOSBox very easy to port to different platforms. DOSBox has already been ported to many different platforms, such as Windows, BeOS, Linux, MacOS X.",
+  "license": "GPL-2.0",
+  "website": "https://www.dosbox.com",
+  "source": "https://github.com/dosbox-staging/dosbox-staging",
+  "issueTracker": "https://github.com/dosbox-staging/dosbox-staging/issues",
+  "changelog": "https://www.dosbox.com/news.php",
+  "author": "DOSBox Team",
+  "categories": ["emulators", "games"],
+  "platforms": ["windows95", "windows98", "windowsxp", "windows10", "linux", "macosx-tiger", "macos", "beos", "haiku"],
+  "icon": "icons/dosbox.png",
+  "added": "2024-01-01",
+  "lastUpdated": "2024-01-01",
+  "antiFeatures": [],
+  "versions": [
+    {
+      "version": "0.74-3",
+      "versionCode": 743,
+      "releaseDate": "2019-06-20",
+      "minPlatformVersion": "Windows XP/Linux 2.6",
+      "downloads": {
+        "windowsxp": {
+          "url": "apps/dosbox-0.74-3-winxp.exe",
+          "size": 1572864,
+          "hash": "sha256:example-hash-here"
+        },
+        "linux": {
+          "url": "apps/dosbox-0.74-3-linux.tar.gz",
+          "size": 2097152,
+          "hash": "sha256:example-hash-here"
+        }
+      },
+      "releaseNotes": "Stable release with wide compatibility"
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "id": "graphics",
+  "name": "Graphics",
+  "description": "Image editors, viewers, and art tools for retro and modern systems",
+  "icon": "icons/category-graphics.png",
+  "appCount": 0,
+  "featured": [
+    "org.gimp.classic"
+  ],
+  "subcategories": [
+    {
+      "id": "image-editors",
+      "name": "Image Editors",
+      "description": "Bitmap and vector image editing"
+    },
+    {
+      "id": "viewers",
+      "name": "Image Viewers",
+      "description": "Image viewing applications"
+    },
+    {
+      "id": "3d",
+      "name": "3D Graphics",
+      "description": "3D modeling and rendering"
+    },
+    {
+      "id": "pixel-art",
+      "name": "Pixel Art",
+      "description": "Pixel art and retro graphics tools"
+    }
+  ]
+}

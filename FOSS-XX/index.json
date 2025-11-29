@@ -1,0 +1,118 @@
+{
+  "name": "FOSS-XX",
+  "description": "Free and Open Source Software Store for Retro Computers (80s onwards)",
+  "version": "1.0.0",
+  "timestamp": "2024-01-01T00:00:00Z",
+  "homepage": "https://github.com/xaoex/reality-simulation-code/tree/main/FOSS-XX",
+  "license": "MIT",
+  "author": "xaoex",
+  "platforms": {
+    "1980s": [
+      "commodore64",
+      "commodore128",
+      "apple2",
+      "apple2e",
+      "apple2gs",
+      "ibmpc",
+      "ibmxt",
+      "ibmat",
+      "amiga",
+      "atarist",
+      "msx",
+      "msx2",
+      "zxspectrum"
+    ],
+    "1990s": [
+      "dos",
+      "freedos",
+      "windows3x",
+      "windows95",
+      "windows98",
+      "windowsnt",
+      "classicmacos",
+      "macos7",
+      "macos8",
+      "macos9",
+      "linux-early",
+      "os2",
+      "beos"
+    ],
+    "2000s": [
+      "windowsxp",
+      "windows2000",
+      "macosx-tiger",
+      "macosx-leopard",
+      "linux",
+      "freebsd",
+      "netbsd",
+      "openbsd"
+    ],
+    "2010s-present": [
+      "windows10",
+      "windows11",
+      "macos",
+      "linux-modern",
+      "freebsd-modern",
+      "reactos",
+      "haiku"
+    ]
+  },
+  "categories": [
+    {
+      "id": "development",
+      "name": "Development",
+      "description": "IDEs, compilers, debuggers, and programming tools"
+    },
+    {
+      "id": "games",
+      "name": "Games",
+      "description": "FOSS games and emulators"
+    },
+    {
+      "id": "graphics",
+      "name": "Graphics",
+      "description": "Image editors, viewers, and art tools"
+    },
+    {
+      "id": "internet",
+      "name": "Internet",
+      "description": "Browsers, email clients, and network tools"
+    },
+    {
+      "id": "multimedia",
+      "name": "Multimedia",
+      "description": "Audio and video players and editors"
+    },
+    {
+      "id": "office",
+      "name": "Office",
+      "description": "Word processors, spreadsheets, and databases"
+    },
+    {
+      "id": "system",
+      "name": "System",
+      "description": "System utilities, file managers, and shells"
+    },
+    {
+      "id": "education",
+      "name": "Education",
+      "description": "Learning tools and educational software"
+    },
+    {
+      "id": "science",
+      "name": "Science",
+      "description": "Scientific computing and visualization"
+    },
+    {
+      "id": "emulators",
+      "name": "Emulators",
+      "description": "Platform emulators for running retro software"
+    }
+  ],
+  "apps": [],
+  "stats": {
+    "totalApps": 0,
+    "totalCategories": 10,
+    "totalPlatforms": 43
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "id": "net.mozilla.firefox.esr",
+  "name": "Firefox ESR Classic",
+  "summary": "Extended Support Release Firefox for older systems",
+  "description": "Mozilla Firefox Extended Support Release for older operating systems. Firefox ESR provides long-term security updates for organizations and users who need extended support.",
+  "license": "MPL-2.0",
+  "website": "https://www.mozilla.org/firefox/enterprise/",
+  "source": "https://hg.mozilla.org/releases/mozilla-esr",
+  "issueTracker": "https://bugzilla.mozilla.org",
+  "changelog": "https://www.mozilla.org/firefox/releases/",
+  "author": "Mozilla Foundation",
+  "categories": ["internet"],
+  "platforms": ["windowsxp", "windows10", "linux", "macosx-leopard", "macos"],
+  "icon": "icons/firefox.png",
+  "added": "2024-01-01",
+  "lastUpdated": "2024-01-01",
+  "antiFeatures": [],
+  "versions": [
+    {
+      "version": "52.9.0esr",
+      "versionCode": 5290,
+      "releaseDate": "2018-06-26",
+      "minPlatformVersion": "Windows XP SP3",
+      "downloads": {
+        "windowsxp": {
+          "url": "apps/firefox-52.9.0esr-winxp.exe",
+          "size": 44040192,
+          "hash": "sha256:example-hash-here"
+        }
+      },
+      "releaseNotes": "Last ESR version with Windows XP support"
+    }
+  ]
+}

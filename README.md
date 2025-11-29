@@ -56,6 +56,53 @@ realitySim.init();
 console.log(realitySim.info());
 ```
 
+## FOSS-XX Store
+
+FOSS-XX is a Free and Open Source Software store for retro computers from the 80s onwards, similar to F-Droid for Android.
+
+### Using FOSS-XX
+
+```javascript
+const realitySim = require('reality-simulation-code');
+
+// Access the FOSS-XX store
+const fossxx = realitySim.fossxx;
+
+// Initialize the store
+fossxx.init();
+
+// List all available apps
+const apps = fossxx.listApps();
+console.log('Available apps:', apps.length);
+
+// Search for apps
+const emulators = fossxx.searchApps('emulator');
+
+// Get apps by category
+const graphicsApps = fossxx.getAppsByCategory('graphics');
+
+// Get apps by platform (e.g., DOS, Windows XP)
+const dosApps = fossxx.getAppsByPlatform('dos');
+
+// Get specific app details
+const app = fossxx.getApp('org.vice.emulator');
+
+// Get store statistics
+const stats = fossxx.getStats();
+console.log('Total apps:', stats.totalApps);
+console.log('Total platforms:', stats.totalPlatforms);
+```
+
+### Supported Platforms
+
+FOSS-XX supports computers from the 1980s to present:
+- **1980s**: Commodore 64/128, Apple II, IBM PC/XT/AT, Amiga, Atari ST, MSX, ZX Spectrum
+- **1990s**: DOS, Windows 3.x/9x, Classic Mac OS, Linux, OS/2, BeOS
+- **2000s**: Windows XP, Mac OS X, Linux, BSD variants
+- **2010s-Present**: Modern Windows, macOS, Linux, ReactOS, Haiku
+
+See [FOSS-XX/README.md](./FOSS-XX/README.md) for full documentation.
+
 linktr.ee/xaoex
 linktr.ee/oktays
 

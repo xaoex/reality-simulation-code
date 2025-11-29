@@ -1,0 +1,33 @@
+{
+  "id": "emulators",
+  "name": "Emulators",
+  "description": "Platform emulators for running retro software on modern systems",
+  "icon": "icons/category-emulators.png",
+  "appCount": 0,
+  "featured": [
+    "org.vice.emulator",
+    "org.dosbox.emulator"
+  ],
+  "subcategories": [
+    {
+      "id": "8bit",
+      "name": "8-bit Systems",
+      "description": "Emulators for 8-bit computers (C64, Apple II, etc.)"
+    },
+    {
+      "id": "16bit",
+      "name": "16-bit Systems",
+      "description": "Emulators for 16-bit computers (Amiga, Atari ST, etc.)"
+    },
+    {
+      "id": "dos",
+      "name": "DOS Emulators",
+      "description": "DOS and IBM PC compatible emulators"
+    },
+    {
+      "id": "console",
+      "name": "Console Emulators",
+      "description": "Game console emulators"
+    }
+  ]
+}
