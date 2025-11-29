@@ -36,7 +36,7 @@ module.exports = {
       version: this.version,
       author: this.author,
       modules: {
-        fossxx: this.fossxx.info()
+        fossxx: this.fossxx ? this.fossxx.info() : null
       },
       links: [
         'https://linktr.ee/xaoex',
