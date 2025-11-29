@@ -1,0 +1,63 @@
+{
+  "id": "org.vice.emulator",
+  "name": "VICE",
+  "summary": "Versatile Commodore Emulator",
+  "description": "VICE is a program that runs on Unix, MS-DOS, Win32/64, OS/2, BeOS, Haiku, QNX, Amiga, Syllable or Mac OS X machines and executes programs intended for the old 8-bit computers. The current version emulates the C64, the C64DTV, the C128, the VIC20, practically all PET models, the PLUS4 and the CBM-II.",
+  "license": "GPL-2.0",
+  "website": "https://vice-emu.sourceforge.io",
+  "source": "https://github.com/VICE-Team/svn-mirror",
+  "issueTracker": "https://sourceforge.net/p/vice-emu/bugs/",
+  "changelog": "https://vice-emu.sourceforge.io/#changelog",
+  "author": "VICE Team",
+  "categories": ["emulators", "games"],
+  "platforms": ["dos", "windows95", "windows98", "windowsxp", "windows10", "linux", "macosx-tiger", "macos", "os2", "beos", "haiku", "amiga"],
+  "icon": "icons/vice.png",
+  "added": "2024-01-01",
+  "lastUpdated": "2024-01-01",
+  "antiFeatures": [],
+  "versions": [
+    {
+      "version": "3.7",
+      "versionCode": 37,
+      "releaseDate": "2022-12-25",
+      "minPlatformVersion": "Windows 7/Linux modern",
+      "downloads": {
+        "windows10": {
+          "url": "apps/vice-3.7-win64.zip",
+          "size": 52428800,
+          "hash": "sha256:example-hash-here"
+        },
+        "linux": {
+          "url": "apps/vice-3.7-linux-x86_64.tar.gz",
+          "size": 41943040,
+          "hash": "sha256:example-hash-here"
+        },
+        "macos": {
+          "url": "apps/vice-3.7-macos.dmg",
+          "size": 62914560,
+          "hash": "sha256:example-hash-here"
+        }
+      },
+      "releaseNotes": "Latest stable release"
+    },
+    {
+      "version": "2.4",
+      "versionCode": 24,
+      "releaseDate": "2014-07-01",
+      "minPlatformVersion": "Windows XP/DOS",
+      "downloads": {
+        "dos": {
+          "url": "apps/vice-2.4-dos.zip",
+          "size": 10485760,
+          "hash": "sha256:example-hash-here"
+        },
+        "windowsxp": {
+          "url": "apps/vice-2.4-winxp.zip",
+          "size": 20971520,
+          "hash": "sha256:example-hash-here"
+        }
+      },
+      "releaseNotes": "Last version with DOS support"
+    }
+  ]
+}

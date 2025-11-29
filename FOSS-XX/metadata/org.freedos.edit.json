@@ -1,0 +1,34 @@
+{
+  "id": "org.freedos.edit",
+  "name": "FreeDOS Edit",
+  "summary": "Classic DOS text editor for FreeDOS",
+  "description": "FreeDOS Edit is a free and open source text editor that is part of the FreeDOS project. It provides a familiar DOS-style text editing experience compatible with systems from the late 1980s through modern DOS-compatible environments.",
+  "license": "GPL-2.0",
+  "website": "https://www.freedos.org",
+  "source": "https://github.com/FDOS/freecom",
+  "issueTracker": "https://github.com/FDOS/freecom/issues",
+  "changelog": "https://github.com/FDOS/freecom/blob/master/CHANGES",
+  "author": "FreeDOS Project",
+  "categories": ["system", "development"],
+  "platforms": ["dos", "freedos", "ibmpc", "ibmxt", "ibmat"],
+  "icon": "icons/freedos-edit.png",
+  "added": "2024-01-01",
+  "lastUpdated": "2024-01-01",
+  "antiFeatures": [],
+  "versions": [
+    {
+      "version": "0.9a",
+      "versionCode": 9,
+      "releaseDate": "2023-06-01",
+      "minPlatformVersion": "DOS 3.0",
+      "downloads": {
+        "dos": {
+          "url": "apps/freedos-edit-0.9a-dos.zip",
+          "size": 45056,
+          "hash": "sha256:example-hash-here"
+        }
+      },
+      "releaseNotes": "Initial release for FOSS-XX repository"
+    }
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "id": "development",
+  "name": "Development",
+  "description": "IDEs, compilers, debuggers, and programming tools for retro and modern systems",
+  "icon": "icons/category-development.png",
+  "appCount": 0,
+  "featured": [
+    "org.freedos.edit"
+  ],
+  "subcategories": [
+    {
+      "id": "editors",
+      "name": "Text Editors",
+      "description": "Source code and text editors"
+    },
+    {
+      "id": "compilers",
+      "name": "Compilers",
+      "description": "Programming language compilers"
+    },
+    {
+      "id": "debuggers",
+      "name": "Debuggers",
+      "description": "Debugging tools"
+    },
+    {
+      "id": "version-control",
+      "name": "Version Control",
+      "description": "Version control systems"
+    }
+  ]
+}

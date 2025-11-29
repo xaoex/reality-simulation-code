@@ -1,0 +1,58 @@
+{
+  "id": "org.gimp.classic",
+  "name": "GIMP Classic",
+  "summary": "GNU Image Manipulation Program for classic systems",
+  "description": "GIMP is a free and open source image editor. This entry tracks versions compatible with older operating systems including early Linux distributions, Windows 9x/XP, and classic Mac OS X versions.",
+  "license": "GPL-3.0",
+  "website": "https://www.gimp.org",
+  "source": "https://gitlab.gnome.org/GNOME/gimp",
+  "issueTracker": "https://gitlab.gnome.org/GNOME/gimp/-/issues",
+  "changelog": "https://www.gimp.org/news/",
+  "author": "GIMP Development Team",
+  "categories": ["graphics"],
+  "platforms": ["linux", "windows95", "windows98", "windowsxp", "macosx-tiger", "macosx-leopard"],
+  "icon": "icons/gimp-classic.png",
+  "added": "2024-01-01",
+  "lastUpdated": "2024-01-01",
+  "antiFeatures": [],
+  "versions": [
+    {
+      "version": "2.6.12",
+      "versionCode": 2612,
+      "releaseDate": "2012-02-01",
+      "minPlatformVersion": "Windows 98/Linux 2.4",
+      "downloads": {
+        "windows98": {
+          "url": "apps/gimp-2.6.12-win98.exe",
+          "size": 15728640,
+          "hash": "sha256:example-hash-here"
+        },
+        "linux": {
+          "url": "apps/gimp-2.6.12-linux-i386.tar.gz",
+          "size": 20971520,
+          "hash": "sha256:example-hash-here"
+        }
+      },
+      "releaseNotes": "Last version with Windows 98 support"
+    },
+    {
+      "version": "2.8.22",
+      "versionCode": 2822,
+      "releaseDate": "2017-05-11",
+      "minPlatformVersion": "Windows XP/Linux 2.6",
+      "downloads": {
+        "windowsxp": {
+          "url": "apps/gimp-2.8.22-winxp.exe",
+          "size": 89128960,
+          "hash": "sha256:example-hash-here"
+        },
+        "linux": {
+          "url": "apps/gimp-2.8.22-linux-x86_64.tar.gz",
+          "size": 75497472,
+          "hash": "sha256:example-hash-here"
+        }
+      },
+      "releaseNotes": "Last version with Windows XP support"
+    }
+  ]
+}
