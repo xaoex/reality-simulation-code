@@ -7,8 +7,6 @@
 # Core xaoex entities
 .entity.xaoex
 .entity.oktay
-.entity.rasmus
-.entity.camilla
 
 # Gaming integration
 .gaming.integration.enabled
@@ -37,7 +35,6 @@
 .maxopt.gaming.complete
 .maxopt.xaoex.complete
 .maxopt.oktay.complete
-.maxopt.rasmus.complete
 
 # Eternal configuration
 .eternal.forever.active
