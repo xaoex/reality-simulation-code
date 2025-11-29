@@ -61,7 +61,7 @@ const fossxx = {
         return JSON.parse(fs.readFileSync(indexPath, 'utf8'));
       }
     } catch (err) {
-      console.error('Error loading index:', err.message);
+      console.error('Error loading index from ' + path.join(REPO_BASE, 'index.json') + ':', err.message);
     }
     return null;
   },
@@ -90,8 +90,8 @@ const fossxx = {
    */
   listApps: function() {
     const apps = [];
+    const metadataDir = path.join(REPO_BASE, 'metadata');
     try {
-      const metadataDir = path.join(REPO_BASE, 'metadata');
       if (fs.existsSync(metadataDir)) {
         const files = fs.readdirSync(metadataDir);
         for (const file of files) {
@@ -104,7 +104,7 @@ const fossxx = {
         }
       }
     } catch (err) {
-      console.error('Error listing apps:', err.message);
+      console.error('Error listing apps from ' + metadataDir + ':', err.message);
     }
     return apps;
   },
@@ -121,7 +121,7 @@ const fossxx = {
         return JSON.parse(fs.readFileSync(appPath, 'utf8'));
       }
     } catch (err) {
-      console.error('Error getting app:', err.message);
+      console.error('Error getting app "' + appId + '":', err.message);
     }
     return null;
   },
