@@ -99,7 +99,7 @@ module.exports = {
     const eternal = [];
 
     for (const entry of gamersEntries) {
-      if (entry.includes('oktay') || entry.includes('rasmus') || entry.includes('camilla') || entry.includes('xaoex')) {
+      if (entry.includes('oktay') || entry.includes('xaoex')) {
         entities.push(entry);
       }
       if (entry.includes('gaming') || entry.includes('gamer') || entry.includes('multiplayer') || entry.includes('singleplayer') || entry.includes('streaming')) {
