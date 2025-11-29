@@ -1,0 +1,31 @@
+{
+  "id": "com.notion.freemium",
+  "name": "Notion",
+  "summary": "All-in-one workspace - free for personal use",
+  "description": "Notion is an all-in-one workspace for notes, tasks, wikis, and databases. Personal plan is free forever with unlimited pages and blocks. Students get the Plus plan free.",
+  "freeType": "freemium",
+  "website": "https://www.notion.so",
+  "platforms": ["windows", "macos", "linux", "web", "ios", "android"],
+  "categories": ["productivity", "education"],
+  "added": "2024-01-01",
+  "studentOffer": {
+    "available": true,
+    "discount": "100%",
+    "verification": "edu-email",
+    "link": "https://www.notion.so/product/notion-for-education",
+    "duration": "while-student",
+    "plan": "Plus"
+  },
+  "trial": {
+    "available": false
+  },
+  "freeTier": {
+    "available": true,
+    "features": [
+      "Unlimited pages & blocks",
+      "Share with 10 guests",
+      "Sync across devices",
+      "7 day page history"
+    ]
+  }
+}

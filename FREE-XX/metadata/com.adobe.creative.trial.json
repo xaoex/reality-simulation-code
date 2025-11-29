@@ -1,0 +1,26 @@
+{
+  "id": "com.adobe.creative.trial",
+  "name": "Adobe Creative Cloud",
+  "summary": "Professional creative tools with free trial",
+  "description": "Adobe Creative Cloud includes Photoshop, Illustrator, Premiere Pro, and more. Offers a 7-day free trial that can be recycled. Students get 60% off.",
+  "freeType": "subscription-trial",
+  "website": "https://www.adobe.com/creativecloud.html",
+  "platforms": ["windows", "macos"],
+  "categories": ["creative"],
+  "added": "2024-01-01",
+  "studentOffer": {
+    "available": true,
+    "discount": "60%",
+    "verification": "sheerid-or-edu",
+    "link": "https://www.adobe.com/creativecloud/plans.html?plan=edu",
+    "duration": "first-year"
+  },
+  "trial": {
+    "available": true,
+    "duration": "7 days",
+    "features": "full",
+    "recyclable": true,
+    "recycleMethod": "new-email-new-payment",
+    "recycleNotes": "Requires new email and payment method for each trial"
+  }
+}

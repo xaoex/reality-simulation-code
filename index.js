@@ -10,6 +10,9 @@
 // Import FOSS-XX store module
 const fossxx = require('./FOSS-XX');
 
+// Import FREE-XX store module
+const freexx = require('./FREE-XX');
+
 module.exports = {
   name: 'reality-simulation-code',
   version: '1.0.0',
@@ -18,6 +21,9 @@ module.exports = {
   
   // FOSS-XX: Free and Open Source Software Store for Retro Computers
   fossxx: fossxx,
+  
+  // FREE-XX: Free Software & Offers Store
+  freexx: freexx,
   
   /**
    * Initialize the simulation
@@ -36,7 +42,8 @@ module.exports = {
       version: this.version,
       author: this.author,
       modules: {
-        fossxx: this.fossxx ? this.fossxx.info() : null
+        fossxx: this.fossxx ? this.fossxx.info() : null,
+        freexx: this.freexx ? this.freexx.info() : null
       },
       links: [
         'https://linktr.ee/xaoex',

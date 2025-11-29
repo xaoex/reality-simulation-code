@@ -1,0 +1,107 @@
+{
+  "name": "FREE-XX",
+  "description": "Free Software & Offers Store - 100% Free, Student Offers, Trials & Lifetime Free",
+  "version": "1.0.0",
+  "timestamp": "2024-01-01T00:00:00Z",
+  "homepage": "https://github.com/xaoex/reality-simulation-code/tree/main/FREE-XX",
+  "license": "MIT",
+  "author": "xaoex",
+  "freeTypes": [
+    {
+      "id": "free-forever",
+      "name": "100% Free Forever",
+      "description": "Completely free software with no time limits or feature restrictions"
+    },
+    {
+      "id": "freemium",
+      "name": "Freemium",
+      "description": "Free base version with optional paid features or upgrades"
+    },
+    {
+      "id": "student-free",
+      "name": "Free for Students",
+      "description": "100% free for verified students with educational email or ID"
+    },
+    {
+      "id": "student-discount",
+      "name": "Student Discount",
+      "description": "Significant discounts for verified students"
+    },
+    {
+      "id": "lifetime-free",
+      "name": "Lifetime Free",
+      "description": "Free after one-time registration or action"
+    },
+    {
+      "id": "trial-unlimited",
+      "name": "Unlimited Trial",
+      "description": "Unlimited use trial with some feature or usage restrictions"
+    },
+    {
+      "id": "trial-timed",
+      "name": "Timed Trial",
+      "description": "Time-limited trial with full feature access"
+    },
+    {
+      "id": "subscription-trial",
+      "name": "Subscription Trial",
+      "description": "Free trial period for subscription-based software"
+    }
+  ],
+  "categories": [
+    {
+      "id": "productivity",
+      "name": "Productivity",
+      "description": "Office suites, note-taking, project management"
+    },
+    {
+      "id": "development",
+      "name": "Development",
+      "description": "IDEs, code editors, development tools"
+    },
+    {
+      "id": "creative",
+      "name": "Creative",
+      "description": "Graphics, video, audio, and design tools"
+    },
+    {
+      "id": "security",
+      "name": "Security",
+      "description": "Antivirus, VPN, password managers"
+    },
+    {
+      "id": "education",
+      "name": "Education",
+      "description": "Learning platforms, courses, educational software"
+    },
+    {
+      "id": "cloud",
+      "name": "Cloud Services",
+      "description": "Cloud storage, hosting, online services"
+    },
+    {
+      "id": "utilities",
+      "name": "Utilities",
+      "description": "System tools, file management, backup"
+    },
+    {
+      "id": "communication",
+      "name": "Communication",
+      "description": "Email, messaging, video conferencing"
+    }
+  ],
+  "platforms": [
+    "windows",
+    "macos",
+    "linux",
+    "web",
+    "ios",
+    "android",
+    "chromeos"
+  ],
+  "stats": {
+    "totalEntries": 8,
+    "totalCategories": 8,
+    "totalFreeTypes": 8
+  }
+}

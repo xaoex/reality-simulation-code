@@ -1,0 +1,29 @@
+{
+  "id": "com.github.student",
+  "name": "GitHub Student Developer Pack",
+  "summary": "Free developer tools and services for students",
+  "description": "The GitHub Student Developer Pack gives students free access to the best developer tools in one place. Includes GitHub Pro, cloud hosting credits, domains, and dozens of premium tools.",
+  "freeType": "student-free",
+  "website": "https://education.github.com/pack",
+  "platforms": ["web", "windows", "macos", "linux"],
+  "categories": ["development", "cloud"],
+  "added": "2024-01-01",
+  "studentOffer": {
+    "available": true,
+    "discount": "100%",
+    "verification": "edu-email-or-school-id",
+    "link": "https://education.github.com/pack",
+    "duration": "while-student",
+    "includes": [
+      "GitHub Pro",
+      "Free .tech domain",
+      "Cloud hosting credits",
+      "JetBrains IDEs",
+      "Namecheap domain",
+      "And many more tools"
+    ]
+  },
+  "trial": {
+    "available": false
+  }
+}

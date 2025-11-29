@@ -103,6 +103,65 @@ FOSS-XX supports computers from the 1980s to present:
 
 See [FOSS-XX/README.md](./FOSS-XX/README.md) for full documentation.
 
+## FREE-XX Store
+
+FREE-XX is a comprehensive catalog of 100% free software, student offers, lifetime free deals, free trials, and subscription management.
+
+### Using FREE-XX
+
+```javascript
+const realitySim = require('reality-simulation-code');
+
+// Access the FREE-XX store
+const freexx = realitySim.freexx;
+
+// Initialize the store
+freexx.init();
+
+// List all free software
+const allFree = freexx.listFree();
+
+// Get 100% free forever software
+const freeForever = freexx.getFreeForever();
+
+// Get student offers
+const studentDeals = freexx.getStudentOffers();
+
+// Get lifetime free software
+const lifetimeFree = freexx.getLifetimeFree();
+
+// Get active trials
+const trials = freexx.getTrials();
+
+// Get subscription trials with recycling info
+const subscriptionTrials = freexx.getSubscriptionTrials();
+const recyclable = freexx.getRecyclableTrials();
+
+// Get trial recycling information
+const recycleInfo = freexx.getTrialRecycling('com.spotify.trial');
+
+// Search free software
+const results = freexx.search('office');
+
+// Get store statistics
+const stats = freexx.getStats();
+console.log('Total entries:', stats.totalEntries);
+console.log('Student offers:', stats.studentOffers);
+```
+
+### Free Types
+
+- **100% Free Forever** - Completely free with no restrictions
+- **Freemium** - Free base version with paid upgrades
+- **Student Free** - 100% free for verified students
+- **Student Discount** - Discounted pricing for students
+- **Lifetime Free** - Free after one-time registration
+- **Trial Unlimited** - Unlimited trial with some restrictions
+- **Trial Timed** - Time-limited full access trial
+- **Subscription Trial** - Trial period for subscriptions (with recycling tracking)
+
+See [FREE-XX/README.md](./FREE-XX/README.md) for full documentation.
+
 linktr.ee/xaoex
 linktr.ee/oktays
 
