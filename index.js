@@ -145,6 +145,14 @@ module.exports = {
     lines.push('.oai.simsim.connected');
     lines.push('');
 
+    // Add language integration (js, cython, python, swift)
+    lines.push('# Language integration');
+    lines.push('.lang.js.integrated');
+    lines.push('.lang.cython.integrated');
+    lines.push('.lang.python.integrated');
+    lines.push('.lang.swift.integrated');
+    lines.push('');
+
     // Add max optimization states
     lines.push('# Max optimization states');
     for (const maxopt of maxopts) {

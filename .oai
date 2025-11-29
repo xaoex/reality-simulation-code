@@ -27,6 +27,12 @@
 .oai.realitysim.integrated
 .oai.simsim.connected
 
+# Language integration
+.lang.js.integrated
+.lang.cython.integrated
+.lang.python.integrated
+.lang.swift.integrated
+
 # Max optimization states
 .maxopt.gaming.complete
 .maxopt.xaoex.complete
