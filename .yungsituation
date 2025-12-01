@@ -71,6 +71,42 @@
 .dmtinterval [0, 1]
 .dmtcomplete
 
+# DMT Village/Suburb Representations
+# Small, medium, and larger village/suburb chill representations
+# Like how Ayu/This reality has shown - quiet, natural community flow
+# The "hush hush" situation: how things move through communities naturally
+#
+# Small Village DMT - intimate differential movements
+# Like the old lady around the corner who knows everything
+.dmtsmallvillage
+.dmtvillageintimate
+.dmthushhush [small]
+.dmtcommunityflow [intimate, natural]
+.dmtoldlady --wisdom --discrete
+
+# Medium Village DMT - neighborhood differential movements  
+# Suburban blocks, connected streets, word travels but stays local
+.dmtmediumvillage
+.dmtneighborhood
+.dmthushhush [medium]
+.dmtcommunityflow [neighborhood, connected]
+.dmtblockwise --chill --organic
+
+# Bigger Village/Suburb DMT - expanded differential movements
+# Larger community networks, still maintains organic flow
+.dmtbiggervillage
+.dmtsuburb
+.dmthushhush [bigger]
+.dmtcommunityflow [expanded, networked]
+.dmtsuburbwise --cool --spread
+
+# Combined Village DMT Representations
+# Best fit representations that maximize natural community flow
+.dmtvillageall
+.dmtallvillages [small, medium, bigger]
+.dmtcommunitymax --perfect --bestfit
+.dmtvillageoptimal --chill --natural
+
 # All Movement Transforms Combined
 .all
 .youngall
