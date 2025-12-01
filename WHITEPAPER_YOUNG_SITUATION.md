@@ -527,10 +527,12 @@ data DMT = DMT {
 
 ### 8.2 DMT Axioms
 
-**Axiom D1 (Differential Linearity):**
+**Axiom D1 (Differential Leibniz Rule):**
+The differential operator follows the Leibniz product rule in the tangent space:
 ```
-∂(g₁ ∘ g₂) = ∂(g₁) ∘ g₂ + g₁ ∘ ∂(g₂)    [Leibniz rule]
+∂(g₁ ∘ g₂) = ∂(g₁) ⊕ Ad_{g₁}(∂(g₂))    [Leibniz rule in Lie group]
 ```
+where ⊕ denotes addition in the Lie algebra (tangent space at identity), and Ad is the adjoint representation.
 
 **Axiom D2 (Interpolation Bounds):**
 ```
@@ -669,14 +671,14 @@ DMT_I = { D | ∀t ∈ dom(D.η) : t ∈ I }
 The set of DMT transforms whose interpolation domain is contained within I.
 
 **Theorem 9.2 (Interval Composition):**
-For ZMT Z with interval I_Z and DMT D with interval I_D:
+For ZMT Z with interval I_Z and DMT D with interval I_D, define their composition via the CMT structure:
 ```
-(Z ⋈ D)_I = Z_[I ∩ I_Z] ⋈ D_[I ∩ I_D]
+(Z ⊗ D)_I = CMT(Z_[I ∩ I_Z], D_[I ∩ I_D], I ∩ I_Z ∩ I_D)
 ```
-The composition respects interval bounds.
+The composition respects interval bounds through the Complete Movement Transform structure.
 
 **Proof:**
-By Axiom I3 (interval intersection) and the closure properties of ZMT (Axiom Z1) and DMT (Axiom D2). □
+By Axiom I3 (interval intersection) and the closure properties of ZMT (Axiom Z1) and DMT (Axiom D2). The CMT structure (Definition 9.4) provides the formal composition mechanism. □
 
 ### 9.5 All Transforms: ZMT + DMT + Interval
 
@@ -707,6 +709,12 @@ applyCMT cmt s t =
     let z_result = tempTransition (zmt cmt) s t
         normalized_t = t / measure (interval cmt)
     in applyDMT (dmt cmt) z_result normalized_t
+
+-- Apply DMT interpolation to a situation
+applyDMT :: DMT -> s -> Real -> s
+applyDMT d s t = 
+    let movement = interpolation d t
+    in act movement s    -- act from Movement group action (Definition 6.2)
 ```
 
 **Theorem 9.3 (CMT Completeness):**
