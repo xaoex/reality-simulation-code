@@ -408,7 +408,9 @@ Any T can be decomposed into:
 2. Relation modifications (follows from E, C)
 3. Valuation changes (achieved through O sequences)
 
-Thus T = O^a ∘ E^b ∘ C^c for some a, b, c ∈ ℤ.
+Thus T = O^a ∘ E^b ∘ C^c for some a, b, c ∈ ℕ (non-negative integers).
+
+*Note:* We restrict to ℕ since C (contract) may not always be invertible—contracted states cannot always be recovered.
 
 **QED** □
 
@@ -438,7 +440,8 @@ A Young Ring is an algebraic structure **Y** = (R, +, ×, 0, 1) where:
 
 - **(R, +, 0)** is an abelian group (additive structure)
 - **(R, ×, 1)** is a monoid (multiplicative structure)
-- **Distribution:** ∀a, b, c ∈ R : a × (b + c) = (a × b) + (a × c)
+- **Left Distribution:** ∀a, b, c ∈ R : a × (b + c) = (a × b) + (a × c)
+- **Right Distribution:** ∀a, b, c ∈ R : (a + b) × c = (a × c) + (b × c)
 
 Extended with relational algebra operations:
 - **Selection (σ):** Filter elements
@@ -546,9 +549,10 @@ For any bound computation sequence B₀, B₁, ..., Bₙ:
 
 Define well-founded order ≺ on bounds:
 ```
-B ≺ B' ⟺ ∀s : [L(s) ≤ L'(s) ∧ U'(s) ≤ U(s)] ∧ 
-           ∃s : [L(s) < L'(s) ∨ U'(s) < U(s)]
+B ≺ B' ⟺ [∀s ∈ S : L(s) ≤ L'(s) ∧ U'(s) ≤ U(s)] ∧ 
+           [∃s₀ ∈ S : L(s₀) < L'(s₀) ∨ U'(s₀) < U(s₀)]
 ```
+(B is strictly tighter than B' if all bounds are at least as tight, and at least one is strictly tighter)
 
 The order ≺ is well-founded since:
 - L(s) bounded below by optimal lower bound
@@ -623,7 +627,7 @@ The Young Ring provides the algebraic foundation integrating these concepts into
 3. Pierce, B.C. (2002). *Types and Programming Languages*. MIT Press.
 4. Rotman, J.J. (2010). *Advanced Modern Algebra*. 2nd ed. AMS.
 5. Sipser, M. (2012). *Introduction to the Theory of Computation*. 3rd ed. Cengage.
-6. xaoex (2025). "Young Ring: Abstract Mathematical Ring for Dynamic Enterprise." *Reality Simulation Code Repository*.
+6. xaoex (2025). "Young Ring: Abstract Mathematical Ring for Dynamic Enterprise." GitHub Repository. Available at: https://github.com/xaoex/reality-simulation-code (Accessed: December 2025).
 
 ---
 
