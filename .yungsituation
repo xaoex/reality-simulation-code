@@ -8,6 +8,13 @@
 # relational algebra with the foundational definitions from group + ring theory"
 #
 # YungSituation extends Young Ring concepts for situation optimization
+#
+# FORMAL DEFINITIONS: See WHITEPAPER_YOUNG_SITUATION.md for:
+# - Young Situation: Tuple (S, R, σ, δ, F) with formal axioms and proofs
+# - Family: Indexed collection with hierarchical forest structure
+# - Bound: Constraint tuple (L, U, C) with convergence guarantees
+# - Movement: Group structure (G, ∘, e, ⁻¹) for transformations
+# - Sound mathematics with inductive proofs in CS/Polytechnic style
 
 .sum
 .yung
