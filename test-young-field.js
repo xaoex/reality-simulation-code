@@ -340,8 +340,8 @@ function testFiniteFieldOperations() {
   
   // Test inverses in ℤ₇
   assert(field.inverse(1) === 1, '1⁻¹ = 1');
-  assert(field.inverse(2) === 4, '2⁻¹ = 4 (since 2×4=8≡1)');
-  assert(field.inverse(3) === 5, '3⁻¹ = 5 (since 3×5=15≡1)');
+  assert(field.inverse(2) === 4, '2⁻¹ = 4 (since 2×4=8≡1 (mod 7))');
+  assert(field.inverse(3) === 5, '3⁻¹ = 5 (since 3×5=15≡1 (mod 7))');
   
   // Test division
   const result = field.divide(5, 2);

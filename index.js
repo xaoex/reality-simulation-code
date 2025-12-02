@@ -107,7 +107,7 @@ class YoungField extends YoungRing {
   constructor(elements = [], addOp = null, mulOp = null, invOp = null, zeroVal = 0, oneVal = 1) {
     super(elements, addOp, mulOp, zeroVal, oneVal);
     this.invOp = invOp || ((a) => {
-      if (a === 0) return null;
+      if (a === this.zero) return null;
       return 1 / a;
     });
   }
@@ -163,7 +163,8 @@ class YoungField extends YoungRing {
    */
   normalize(values) {
     const sum = values.reduce((acc, val) => this.add(acc, val), this.zero);
-    if (sum === this.zero) return null;
+    // Check for zero sum with tolerance for floating point
+    if (Math.abs(sum - this.zero) < 1e-10) return null;
     return values.map(val => this.divide(val, sum));
   }
 
@@ -230,13 +231,24 @@ function createFiniteField(p) {
     elements,
     (a, b) => (a + b) % p,        // modular addition
     (a, b) => (a * b) % p,        // modular multiplication
-    (a) => {                       // modular inverse
+    (a) => {                       // modular inverse using Extended Euclidean Algorithm
       if (a === 0) return null;
       // Extended Euclidean algorithm for modular inverse
-      for (let i = 1; i < p; i++) {
-        if ((a * i) % p === 1) return i;
+      // Find x such that (a * x) % p = 1
+      let [old_r, r] = [a, p];
+      let [old_s, s] = [1, 0];
+      
+      while (r !== 0) {
+        const quotient = Math.floor(old_r / r);
+        [old_r, r] = [r, old_r - quotient * r];
+        [old_s, s] = [s, old_s - quotient * s];
       }
-      return null;
+      
+      // old_r is the GCD, should be 1 for prime p
+      if (old_r !== 1) return null;
+      
+      // Normalize to positive result
+      return ((old_s % p) + p) % p;
     },
     0,  // zero
     1   // one
