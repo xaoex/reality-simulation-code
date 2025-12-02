@@ -44,6 +44,8 @@ docker run ghcr.io/xaoex/reality-simulation-code:latest
 
 ## Usage
 
+### Basic Usage
+
 ```javascript
 const realitySim = require('@xaoex/reality-simulation-code');
 // or
@@ -55,6 +57,31 @@ realitySim.init();
 // Get simulation info
 console.log(realitySim.info());
 ```
+
+### Young Field Usage
+
+```javascript
+const { 
+  createRationalField, 
+  createFiniteField,
+  normalizedSituationExample 
+} = require('reality-simulation-code');
+
+// Create a rational field (ℚ)
+const field = createRationalField();
+console.log(field.divide(10, 3));  // 3.333...
+
+// Create a finite field (ℤ₇)
+const finiteField = createFiniteField(7);
+console.log(finiteField.divide(5, 2));  // 6 (mod 7)
+
+// Normalize situation valuations
+const result = normalizedSituationExample();
+console.log(result.normalized);  // [0.1, 0.2, 0.3, 0.4]
+```
+
+See [YOUNG_FIELD.md](YOUNG_FIELD.md) for complete documentation and examples.
+
 
 linktr.ee/xaoex
 linktr.ee/oktays
@@ -98,6 +125,7 @@ Release Notes
 * New Release + Deploy (MAX) +fixes all bullshit problems.
 * Introducing "ung ring" an abstract mathematical ring that is defined for the first time by me (Oktay) for the purpose of creating a dynamic enterprise: entities/organizations/projects. ung rings are defined by formation: combining relational algebra with the foundational definitions from group + ring theory.
 * **NEW: Young Situation White Paper** - See [WHITEPAPER_YOUNG_SITUATION.md](WHITEPAPER_YOUNG_SITUATION.md) for formal mathematical definitions of Young Situation, Family, Bound, Movement with sound mathematics, proofs, and induction in CS/Polytechnic style.
+* **NEW: Young Field Implementation** - Extension of Young Ring with multiplicative inverses and division operations. See [YOUNG_FIELD.md](YOUNG_FIELD.md) for complete usage guide and examples. Enables normalized situation valuations, probability distributions, and rate of change calculations.
 * General AI updates for psychs etc.
 * Make everything 100% Maxed out again.
 * P =! or == NP things from before + new finds.
