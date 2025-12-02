@@ -82,6 +82,51 @@ console.log(result.normalized);  // [0.1, 0.2, 0.3, 0.4]
 
 See [YOUNG_FIELD.md](YOUNG_FIELD.md) for complete documentation and examples.
 
+### Young Discrete Mathematics Usage
+
+```javascript
+const { 
+  YoungDiagram,
+  YoungTableau,
+  YoungLattice,
+  YoungsRule,
+  createStandardTableauFromPermutation
+} = require('reality-simulation-code');
+
+// Create a Young Diagram (partition)
+const diagram = new YoungDiagram([4, 3, 1]);
+console.log(diagram.size());          // 8
+console.log(diagram.toString());      // ASCII representation
+
+// Get conjugate partition
+const conjugate = diagram.conjugate();
+console.log(conjugate.toArray());     // [3, 2, 2, 1]
+
+// Create a Young Tableau
+const tableau = new YoungTableau([
+  [1, 2, 5],
+  [3, 4],
+  [6]
+], true);
+console.log(tableau.isValid());       // true
+
+// Work with Young Lattice (all partitions)
+const lattice = new YoungLattice();
+const partitions = lattice.getLevel(4);
+console.log(partitions.length);       // 5 partitions of 4
+
+// Calculate representation dimension using hook length formula
+const dimension = YoungsRule.hookLengthFormula([3, 2, 1]);
+console.log(dimension);               // 16
+
+// Robinson-Schensted correspondence
+const permutation = [3, 1, 4, 2];
+const rsTableau = createStandardTableauFromPermutation(permutation);
+console.log(rsTableau.toString());
+```
+
+See [YOUNG_DISCRETE_MATH.md](YOUNG_DISCRETE_MATH.md) for complete documentation and examples.
+
 
 linktr.ee/xaoex
 linktr.ee/oktays
@@ -126,6 +171,7 @@ Release Notes
 * Introducing "young ring" an abstract mathematical ring that is defined for the first time by me (Oktay) for the purpose of creating a dynamic enterprise: entities/organizations/projects. young rings are defined by formation: combining relational algebra with the foundational definitions from group + ring theory.
 * **NEW: Young Situation White Paper** - See [WHITEPAPER_YOUNG_SITUATION.md](WHITEPAPER_YOUNG_SITUATION.md) for formal mathematical definitions of Young Situation, Family, Bound, Movement with sound mathematics, proofs, and induction in CS/Polytechnic style.
 * **NEW: Young Field Implementation** - Extension of Young Ring with multiplicative inverses and division operations. See [YOUNG_FIELD.md](YOUNG_FIELD.md) for complete usage guide and examples. Enables normalized situation valuations, probability distributions, and rate of change calculations.
+* **NEW: Young Discrete Mathematics** - Comprehensive implementation of Young-related concepts in discrete mathematics: Young Diagrams (partition representations), Young Tableaux (standard and semi-standard), Young Lattice (poset of partitions), and Young's Rule (hook length formula and representation theory). See [YOUNG_DISCRETE_MATH.md](YOUNG_DISCRETE_MATH.md) for complete documentation. These classical structures from combinatorics and representation theory complement the Young Ring/Field algebraic framework.
 * General AI updates for psychs etc.
 * Make everything 100% Maxed out again.
 * P =! or == NP things from before + new finds.
