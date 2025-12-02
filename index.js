@@ -356,13 +356,25 @@ module.exports = {
   YoungRing,
   YoungField,
 
+  // Young Discrete Math classes
+  YoungDiagram: require('./young-discrete-math.js').YoungDiagram,
+  YoungTableau: require('./young-discrete-math.js').YoungTableau,
+  YoungLattice: require('./young-discrete-math.js').YoungLattice,
+  YoungsRule: require('./young-discrete-math.js').YoungsRule,
+
   // Factory functions
   createRationalField,
   createFiniteField,
   createSituationValuationField,
+  createStandardTableauFromPermutation: require('./young-discrete-math.js').createStandardTableauFromPermutation,
 
   // Example functions
   normalizedSituationExample,
   youngFieldOperationsExample,
-  finiteFieldExample
+  finiteFieldExample,
+  partitionsExample: require('./young-discrete-math.js').partitionsExample,
+  youngDiagramExample: require('./young-discrete-math.js').youngDiagramExample,
+  youngTableauExample: require('./young-discrete-math.js').youngTableauExample,
+  hookLengthExample: require('./young-discrete-math.js').hookLengthExample,
+  youngLatticeExample: require('./young-discrete-math.js').youngLatticeExample
 };

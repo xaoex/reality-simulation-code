@@ -4,7 +4,9 @@
   "description": "Reality Simulation Codebase - SimSim Code & Contributions by xaoex",
   "main": "index.js",
   "scripts": {
-    "test": "node test-young-field.js",
+    "test": "node test-young-field.js && node test-young-discrete-math.js",
+    "test:field": "node test-young-field.js",
+    "test:discrete": "node test-young-discrete-math.js",
     "build": "echo \"Build complete\" && exit 0"
   },
   "repository": {
