@@ -1,13 +1,17 @@
 /**
  * Young Field Test Suite
- * Tests for Young Ring, Young Field, and Young Area implementations
- * Based on WHITEPAPER_YOUNG_SITUATION.md Section 10
+ * Tests for Young Ring, Young Field, Young Area, and Young Situation Framework
+ * Based on WHITEPAPER_YOUNG_SITUATION.md
  */
 
 const {
   YoungRing,
   YoungField,
   YoungArea,
+  YoungSituation,
+  YoungFamily,
+  YoungBound,
+  YoungMovement,
   createRationalField,
   createFiniteField,
   createSituationValuationField,
@@ -19,7 +23,12 @@ const {
   geometricAreasExample,
   integrationExample,
   volumeOfRevolutionExample,
-  nDimensionalVolumeExample
+  nDimensionalVolumeExample,
+  youngSituationAreaExample,
+  youngFamilyAreaExample,
+  youngBoundAreaExample,
+  youngMovementAreaExample,
+  situationInterpolationAreaExample
 } = require('./index.js');
 
 // ============================================================================
@@ -731,13 +740,326 @@ function testNDimensionalVolumeExample() {
 }
 
 // ============================================================================
+// Young Situation Tests
+// ============================================================================
+
+function testYoungSituationConstruction() {
+  const states = new Set(['s1', 's2', 's3']);
+  const valuation = (s) => s === 's1' ? 10 : s === 's2' ? 20 : 30;
+  const finalStates = new Set(['s3']);
+  
+  const situation = new YoungSituation(states, new Set(), valuation, null, finalStates);
+  
+  assert(situation.states.size === 3, 'Should have 3 states');
+  assert(situation.isValid(), 'Should be valid situation');
+  assert(situation.totalValuation() === 60, 'Total valuation should be 60');
+  
+  console.log('  ✓ YoungSituation construction');
+}
+
+function testYoungSituationReachability() {
+  const states = new Set(['s1', 's2', 's3']);
+  const relations = new Set([['s1', 's2'], ['s2', 's3']]);
+  const situation = new YoungSituation(states, relations);
+  
+  assert(situation.isReachable('s1', 's2'), 's2 should be reachable from s1');
+  assert(situation.isReachable('s1', 's3'), 's3 should be reachable from s1');
+  assert(!situation.isReachable('s3', 's1'), 's1 should not be reachable from s3');
+  
+  console.log('  ✓ YoungSituation reachability');
+}
+
+// ============================================================================
+// Young Family Tests
+// ============================================================================
+
+function testYoungFamilyConstruction() {
+  const indexSet = new Set([1, 2, 3]);
+  const members = (i) => new YoungSituation();
+  const parent = (i) => i === 1 ? null : 1;
+  
+  const family = new YoungFamily(indexSet, members, parent);
+  
+  assert(family.indexSet.size === 3, 'Should have 3 members');
+  assert(family.roots().size === 1, 'Should have 1 root');
+  assert(family.isWellFounded(), 'Should be well-founded');
+  
+  console.log('  ✓ YoungFamily construction');
+}
+
+function testYoungFamilyHierarchy() {
+  const indexSet = new Set([1, 2, 3, 4]);
+  const parent = (i) => {
+    if (i === 1) return null; // root
+    if (i === 2 || i === 3) return 1; // children of 1
+    if (i === 4) return 2; // child of 2
+    return null;
+  };
+  
+  const family = new YoungFamily(indexSet, null, parent);
+  
+  const descendants1 = family.descendants(1);
+  assert(descendants1.size === 3, 'Root should have 3 descendants');
+  assert(descendants1.has(2) && descendants1.has(3) && descendants1.has(4), 'Should include all descendants');
+  
+  const descendants2 = family.descendants(2);
+  assert(descendants2.size === 1, 'Node 2 should have 1 descendant');
+  assert(descendants2.has(4), 'Should be node 4');
+  
+  console.log('  ✓ YoungFamily hierarchy');
+}
+
+// ============================================================================
+// Young Bound Tests
+// ============================================================================
+
+function testYoungBoundConstruction() {
+  const lowerBound = (s) => 10;
+  const upperBound = (s) => 50;
+  const bound = new YoungBound(lowerBound, upperBound);
+  
+  const valuation = (s) => 30;
+  assert(bound.isValid('s1', valuation), 'Valuation 30 should be valid in [10, 50]');
+  assert(bound.width('s1') === 40, 'Width should be 40');
+  
+  console.log('  ✓ YoungBound construction');
+}
+
+function testYoungBoundTightness() {
+  const lowerBound = (s) => 10;
+  const upperBound = (s) => 50;
+  const bound = new YoungBound(lowerBound, upperBound);
+  
+  const tightLower = (s) => 10;
+  const tightUpper = (s) => 50;
+  const middle = (s) => 30;
+  
+  assert(bound.isTight('s1', tightLower), 'Lower bound should be tight');
+  assert(bound.isTight('s1', tightUpper), 'Upper bound should be tight');
+  assert(!bound.isTight('s1', middle), 'Middle value should not be tight');
+  
+  console.log('  ✓ YoungBound tightness');
+}
+
+// ============================================================================
+// Young Movement Tests
+// ============================================================================
+
+function testYoungMovementIdentity() {
+  const states = new Set(['s1', 's2']);
+  const valuation = (s) => s === 's1' ? 10 : 20;
+  const situation = new YoungSituation(states, new Set(), valuation);
+  
+  const identity = YoungMovement.identity();
+  const transformed = identity.apply(situation);
+  
+  assert(transformed.totalValuation() === 30, 'Identity should preserve valuation');
+  
+  console.log('  ✓ YoungMovement identity');
+}
+
+function testYoungMovementComposition() {
+  const states = new Set(['s1']);
+  const valuation = (s) => 10;
+  const situation = new YoungSituation(states, new Set(), valuation);
+  
+  const m1 = new YoungMovement((y) => {
+    const newVal = (s) => y.valuation(s) * 2;
+    return new YoungSituation(y.states, y.relations, newVal, y.transition, y.finalStates);
+  });
+  
+  const m2 = new YoungMovement((y) => {
+    const newVal = (s) => y.valuation(s) + 5;
+    return new YoungSituation(y.states, y.relations, newVal, y.transition, y.finalStates);
+  });
+  
+  const composed = m1.compose(m2);
+  const result = composed.apply(situation);
+  
+  // First m1 doubles (10 -> 20), then m2 adds 5 (20 -> 25)
+  assert(result.totalValuation() === 25, 'Composed movement should apply in sequence');
+  
+  console.log('  ✓ YoungMovement composition');
+}
+
+// ============================================================================
+// Young Area Integration Tests (with Situation Framework)
+// ============================================================================
+
+function testYoungAreaSituationMeasure() {
+  const area = createEuclideanArea();
+  
+  const states = new Set(['s1', 's2', 's3']);
+  const valuation = (s) => s === 's1' ? 10 : s === 's2' ? 20 : 30;
+  const situation = new YoungSituation(states, new Set(), valuation);
+  
+  const measure = area.situationRegionMeasure(situation);
+  assertAlmostEqual(measure, 60, 1e-10, 'Situation measure should be sum of valuations');
+  
+  console.log('  ✓ YoungArea situation measure');
+}
+
+function testYoungAreaFamilyMeasure() {
+  const area = createEuclideanArea();
+  
+  const indexSet = new Set([1, 2, 3]);
+  const members = (i) => {
+    const states = new Set([`s${i}`]);
+    const valuation = (s) => i * 10;
+    return new YoungSituation(states, new Set(), valuation);
+  };
+  
+  const family = new YoungFamily(indexSet, members);
+  const measure = area.familyRegionMeasure(family);
+  
+  assertAlmostEqual(measure, 60, 1e-10, 'Family measure should be sum of all situations');
+  
+  console.log('  ✓ YoungArea family measure');
+}
+
+function testYoungAreaBoundedRegion() {
+  const area = createEuclideanArea();
+  
+  const states = new Set(['s1', 's2', 's3']);
+  const valuation = (s) => s === 's1' ? 5 : s === 's2' ? 15 : 25;
+  const situation = new YoungSituation(states, new Set(), valuation);
+  
+  const bound = new YoungBound((s) => 10, (s) => 20);
+  const boundedMeasure = area.boundedRegionArea(situation, bound);
+  
+  // Only s2 (15) is within bounds [10, 20]
+  assertAlmostEqual(boundedMeasure, 15, 1e-10, 'Bounded measure should only include valid states');
+  
+  console.log('  ✓ YoungArea bounded region');
+}
+
+function testYoungAreaMovementTrajectory() {
+  const area = createEuclideanArea();
+  
+  const states = new Set(['s1', 's2']);
+  const valuation = (s) => 10;
+  const situation = new YoungSituation(states, new Set(), valuation);
+  
+  const movement = new YoungMovement((y) => {
+    const newVal = (s) => y.valuation(s) * 1.1;
+    return new YoungSituation(y.states, y.relations, newVal, y.transition, y.finalStates);
+  });
+  
+  const trajectoryArea = area.movementTrajectoryArea(situation, movement, 5);
+  
+  assert(trajectoryArea > 20, 'Trajectory area should be positive');
+  
+  console.log('  ✓ YoungArea movement trajectory');
+}
+
+function testYoungAreaStateSpaceVolume() {
+  const area = createEuclideanArea();
+  
+  const states = new Set(['s1', 's2', 's3']);
+  const valuation = (s) => s === 's1' ? 2 : s === 's2' ? 3 : 4;
+  const situation = new YoungSituation(states, new Set(), valuation);
+  
+  const volume = area.stateSpaceVolume(situation);
+  assertAlmostEqual(volume, 24, 1e-10, 'State space volume should be product of valuations');
+  
+  console.log('  ✓ YoungArea state space volume');
+}
+
+function testYoungAreaInterpolation() {
+  const area = createEuclideanArea();
+  
+  const states = new Set(['s1', 's2']);
+  const valuation1 = (s) => s === 's1' ? 10 : 20;
+  const valuation2 = (s) => s === 's1' ? 30 : 40;
+  
+  const situation1 = new YoungSituation(states, new Set(), valuation1);
+  const situation2 = new YoungSituation(states, new Set(), valuation2);
+  
+  const interpolated50 = area.interpolatedSituationArea(situation1, situation2, 0.5);
+  // s1: (10+30)/2 = 20, s2: (20+40)/2 = 30, total = 50
+  assertAlmostEqual(interpolated50, 50, 0.1, 'Interpolation at 0.5 should be midpoint (20+30=50)');
+  
+  const interpolated25 = area.interpolatedSituationArea(situation1, situation2, 0.25);
+  assert(interpolated25 < interpolated50, 'Interpolation at 0.25 should be less than 0.5');
+  
+  console.log('  ✓ YoungArea situation interpolation');
+}
+
+// ============================================================================
+// Young Situation Framework Example Tests
+// ============================================================================
+
+function testYoungSituationAreaExample() {
+  const result = youngSituationAreaExample();
+  
+  assert(result.totalValuation === 60, 'Total valuation should be 60');
+  assert(result.regionMeasure === 60, 'Region measure should equal total valuation');
+  assert(result.isValid === true, 'Situation should be valid');
+  
+  console.log('  ✓ Example: youngSituationAreaExample()');
+  console.log(`    Total valuation: ${result.totalValuation}`);
+  console.log(`    Region measure: ${result.regionMeasure}`);
+  console.log(`    State space volume: ${result.stateSpaceVolume}`);
+}
+
+function testYoungFamilyAreaExample() {
+  const result = youngFamilyAreaExample();
+  
+  assert(result.rootCount === 1, 'Should have 1 root');
+  assert(result.totalFamilyMeasure === 60, 'Total family measure should be 60');
+  assert(result.isWellFounded === true, 'Family should be well-founded');
+  
+  console.log('  ✓ Example: youngFamilyAreaExample()');
+  console.log(`    Roots: ${result.rootCount}`);
+  console.log(`    Total family measure: ${result.totalFamilyMeasure}`);
+}
+
+function testYoungBoundAreaExample() {
+  const result = youngBoundAreaExample();
+  
+  assert(result.unboundedArea === 45, 'Unbounded area should be 45');
+  assert(result.boundedArea === 15, 'Bounded area should be 15');
+  assert(result.boundWidth === 10, 'Bound width should be 10');
+  
+  console.log('  ✓ Example: youngBoundAreaExample()');
+  console.log(`    Unbounded area: ${result.unboundedArea}`);
+  console.log(`    Bounded area: ${result.boundedArea}`);
+}
+
+function testYoungMovementAreaExample() {
+  const result = youngMovementAreaExample();
+  
+  assert(result.initialMeasure === 60, 'Initial measure should be 60');
+  assert(result.transformedMeasure > 0, 'Transformed measure should be positive');
+  
+  console.log('  ✓ Example: youngMovementAreaExample()');
+  console.log(`    Initial: ${result.initialMeasure.toFixed(2)}`);
+  console.log(`    Transformed: ${result.transformedMeasure.toFixed(2)}`);
+  console.log(`    Trajectory area: ${result.trajectoryArea.toFixed(2)}`);
+}
+
+function testSituationInterpolationAreaExample() {
+  const result = situationInterpolationAreaExample();
+  
+  assert(result.situation1Measure === 30, 'Situation 1 measure should be 30');
+  assert(result.situation2Measure === 70, 'Situation 2 measure should be 70');
+  assert(result.interpolatedAt25 < result.interpolatedAt50, 'Interpolation should be monotonic');
+  assert(result.interpolatedAt50 < result.interpolatedAt75, 'Interpolation should be monotonic');
+  
+  console.log('  ✓ Example: situationInterpolationAreaExample()');
+  console.log(`    Situation 1: ${result.situation1Measure}`);
+  console.log(`    Situation 2: ${result.situation2Measure}`);
+  console.log(`    Interpolated at t=0.5: ${result.interpolatedAt50}`);
+}
+
+// ============================================================================
 // Run All Tests
 // ============================================================================
 
 function runAllTests() {
   console.log('\n' + '='.repeat(70));
-  console.log('YOUNG FIELD & YOUNG AREA TEST SUITE');
-  console.log('Based on WHITEPAPER_YOUNG_SITUATION.md Section 10');
+  console.log('YOUNG SITUATION FRAMEWORK TEST SUITE');
+  console.log('Based on WHITEPAPER_YOUNG_SITUATION.md');
   console.log('='.repeat(70));
 
   // Young Ring Tests
@@ -795,6 +1117,37 @@ function runAllTests() {
   testSection('Example: Integration', testIntegrationExample);
   testSection('Example: Volume of Revolution', testVolumeOfRevolutionExample);
   testSection('Example: N-Dimensional Volume', testNDimensionalVolumeExample);
+
+  // Young Situation Tests (Section 3)
+  testSection('Young Situation Construction', testYoungSituationConstruction);
+  testSection('Young Situation Reachability', testYoungSituationReachability);
+
+  // Young Family Tests (Section 4)
+  testSection('Young Family Construction', testYoungFamilyConstruction);
+  testSection('Young Family Hierarchy', testYoungFamilyHierarchy);
+
+  // Young Bound Tests (Section 5)
+  testSection('Young Bound Construction', testYoungBoundConstruction);
+  testSection('Young Bound Tightness', testYoungBoundTightness);
+
+  // Young Movement Tests (Section 6)
+  testSection('Young Movement Identity', testYoungMovementIdentity);
+  testSection('Young Movement Composition', testYoungMovementComposition);
+
+  // Young Area Integration with Situation Framework
+  testSection('Young Area: Situation Measure', testYoungAreaSituationMeasure);
+  testSection('Young Area: Family Measure', testYoungAreaFamilyMeasure);
+  testSection('Young Area: Bounded Region', testYoungAreaBoundedRegion);
+  testSection('Young Area: Movement Trajectory', testYoungAreaMovementTrajectory);
+  testSection('Young Area: State Space Volume', testYoungAreaStateSpaceVolume);
+  testSection('Young Area: Situation Interpolation', testYoungAreaInterpolation);
+
+  // Young Situation Framework Examples
+  testSection('Example: Young Situation Area', testYoungSituationAreaExample);
+  testSection('Example: Young Family Area', testYoungFamilyAreaExample);
+  testSection('Example: Young Bound Area', testYoungBoundAreaExample);
+  testSection('Example: Young Movement Area', testYoungMovementAreaExample);
+  testSection('Example: Situation Interpolation', testSituationInterpolationAreaExample);
 
   console.log('\n' + '='.repeat(70));
   console.log('ALL TESTS PASSED ✓');

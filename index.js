@@ -359,6 +359,398 @@ class YoungArea extends YoungField {
     
     return true;
   }
+
+  /**
+   * Situation Region Measure (Application to Young Situation)
+   * Calculate the measure of a region defined by a Young Situation
+   * Based on state valuations
+   */
+  situationRegionMeasure(situation) {
+    if (!(situation instanceof YoungSituation)) {
+      throw new Error('Argument must be a YoungSituation');
+    }
+    
+    // Sum of state valuations gives the total measure
+    return situation.totalValuation();
+  }
+
+  /**
+   * Family Region Measure
+   * Calculate total measure across a Young Family
+   */
+  familyRegionMeasure(family) {
+    if (!(family instanceof YoungFamily)) {
+      throw new Error('Argument must be a YoungFamily');
+    }
+    
+    let totalMeasure = this.zero;
+    for (const index of family.indexSet) {
+      const situation = family.members(index);
+      totalMeasure = this.add(totalMeasure, this.situationRegionMeasure(situation));
+    }
+    return totalMeasure;
+  }
+
+  /**
+   * Bounded Region Area
+   * Calculate area of region constrained by bounds
+   */
+  boundedRegionArea(situation, bound) {
+    if (!(situation instanceof YoungSituation) || !(bound instanceof YoungBound)) {
+      throw new Error('Arguments must be YoungSituation and YoungBound');
+    }
+    
+    let boundedMeasure = this.zero;
+    for (const state of situation.states) {
+      if (bound.isValid(state, situation.valuation)) {
+        boundedMeasure = this.add(boundedMeasure, situation.valuation(state));
+      }
+    }
+    return boundedMeasure;
+  }
+
+  /**
+   * Movement Trajectory Area
+   * Calculate area under trajectory of movement application
+   * Integrates valuation changes over movement sequence
+   */
+  movementTrajectoryArea(situation, movement, steps = 10) {
+    if (!(situation instanceof YoungSituation) || !(movement instanceof YoungMovement)) {
+      throw new Error('Arguments must be YoungSituation and YoungMovement');
+    }
+    
+    let currentSituation = situation;
+    let totalArea = this.zero;
+    
+    for (let i = 0; i < steps; i++) {
+      const measure = this.situationRegionMeasure(currentSituation);
+      totalArea = this.add(totalArea, measure);
+      currentSituation = movement.apply(currentSituation);
+    }
+    
+    return this.divide(totalArea, steps);
+  }
+
+  /**
+   * Situation State Space Volume
+   * Calculate volume of state space for multi-dimensional situations
+   * Uses state valuations as dimensions
+   */
+  stateSpaceVolume(situation) {
+    if (!(situation instanceof YoungSituation)) {
+      throw new Error('Argument must be a YoungSituation');
+    }
+    
+    const dimensions = [...situation.states].map(s => situation.valuation(s));
+    return this.volumeNDimensional(dimensions);
+  }
+
+  /**
+   * Interpolated Situation Area
+   * Calculate area between two situations (like area between curves)
+   * Useful for DMT (Differential Movement Transform) analysis
+   */
+  interpolatedSituationArea(situation1, situation2, t = 0.5) {
+    if (!(situation1 instanceof YoungSituation) || !(situation2 instanceof YoungSituation)) {
+      throw new Error('Arguments must be YoungSituation instances');
+    }
+    
+    // Interpolate valuations between situations
+    const interpolatedValuation = (state) => {
+      const v1 = situation1.valuation(state);
+      const v2 = situation2.valuation(state);
+      return this.add(this.multiply(v1, this.add(this.one, this.multiply(-1, t))), 
+                     this.multiply(v2, t));
+    };
+    
+    let totalArea = this.zero;
+    for (const state of situation1.states) {
+      if (situation2.states.has(state)) {
+        totalArea = this.add(totalArea, interpolatedValuation(state));
+      }
+    }
+    
+    return totalArea;
+  }
+}
+
+
+// ============================================================================
+// Young Situation Implementation
+// Based on WHITEPAPER_YOUNG_SITUATION.md Section 3
+// ============================================================================
+
+/**
+ * Young Situation - Formal definition from Young Situation framework
+ * 
+ * A Young Situation is a tuple Y = (S, R, σ, δ, F) where:
+ * - S is a finite set of states (situation configurations)
+ * - R ⊆ S × S is a relation over states (transitions)
+ * - σ: S → ℝ≥0 is a valuation function (situation measure)
+ * - δ: S × A → S is a transition function for action set A
+ * - F ⊆ S is the set of final (optimized) states
+ * 
+ * @param {Set} states - Finite set of states
+ * @param {Set} relations - Set of (state, state) transition pairs
+ * @param {Function} valuation - Function mapping states to non-negative reals
+ * @param {Function} transition - Function: (state, action) => newState
+ * @param {Set} finalStates - Set of final/optimized states
+ */
+class YoungSituation {
+  constructor(states = new Set(), relations = new Set(), valuation = null, transition = null, finalStates = new Set()) {
+    this.states = states;
+    this.relations = relations;
+    this.valuation = valuation || ((s) => 0);
+    this.transition = transition || ((s, a) => s);
+    this.finalStates = finalStates;
+  }
+
+  /**
+   * Check if situation satisfies axioms (non-emptiness, final states subset)
+   */
+  isValid() {
+    return this.states.size > 0 && 
+           [...this.finalStates].every(f => this.states.has(f));
+  }
+
+  /**
+   * Get total valuation of the situation
+   */
+  totalValuation() {
+    return [...this.states].reduce((sum, s) => sum + this.valuation(s), 0);
+  }
+
+  /**
+   * Check if state is reachable from another state
+   */
+  isReachable(from, to) {
+    const visited = new Set();
+    const queue = [from];
+    
+    while (queue.length > 0) {
+      const current = queue.shift();
+      if (current === to) return true;
+      if (visited.has(current)) continue;
+      visited.add(current);
+      
+      for (const [s1, s2] of this.relations) {
+        if (s1 === current && !visited.has(s2)) {
+          queue.push(s2);
+        }
+      }
+    }
+    return false;
+  }
+}
+
+// ============================================================================
+// Young Family Implementation
+// Based on WHITEPAPER_YOUNG_SITUATION.md Section 4
+// ============================================================================
+
+/**
+ * Young Family - Indexed collection of Young Situations with hierarchical structure
+ * 
+ * A Family F = {Yᵢ}ᵢ∈I where:
+ * - I is an index set
+ * - Each Yᵢ is a Young Situation
+ * - π: I → I ∪ {⊥} defines parent relationships
+ * - β: I × I → Bool defines sibling relationships
+ * 
+ * @param {Set} indexSet - Set of indices
+ * @param {Function} members - Function mapping index to YoungSituation
+ * @param {Function} parent - Function mapping index to parent index (null for root)
+ * @param {Function} sibling - Function checking if two indices are siblings
+ */
+class YoungFamily {
+  constructor(indexSet = new Set(), members = null, parent = null, sibling = null) {
+    this.indexSet = indexSet;
+    this.members = members || ((i) => new YoungSituation());
+    this.parent = parent || ((i) => null);
+    this.sibling = sibling || ((i, j) => false);
+  }
+
+  /**
+   * Get root elements (those with no parent)
+   */
+  roots() {
+    return new Set([...this.indexSet].filter(i => this.parent(i) === null));
+  }
+
+  /**
+   * Get descendants of an index
+   */
+  descendants(index) {
+    const result = new Set();
+    const queue = [index];
+    
+    while (queue.length > 0) {
+      const current = queue.shift();
+      for (const i of this.indexSet) {
+        if (this.parent(i) === current) {
+          result.add(i);
+          queue.push(i);
+        }
+      }
+    }
+    return result;
+  }
+
+  /**
+   * Check if family is well-founded (acyclic parent relationships)
+   */
+  isWellFounded() {
+    for (const i of this.indexSet) {
+      const visited = new Set();
+      let current = i;
+      while (current !== null) {
+        if (visited.has(current)) return false; // Cycle detected
+        visited.add(current);
+        current = this.parent(current);
+      }
+    }
+    return true;
+  }
+}
+
+// ============================================================================
+// Young Bound Implementation
+// Based on WHITEPAPER_YOUNG_SITUATION.md Section 5
+// ============================================================================
+
+/**
+ * Young Bound - Bounds on situation valuations
+ * 
+ * A Bound B = (L, U, C) where:
+ * - L: S → ℝ is a lower bound function
+ * - U: S → ℝ is an upper bound function
+ * - C ⊆ S × S is a constraint set
+ * 
+ * Satisfying: ∀s ∈ S : L(s) ≤ σ(s) ≤ U(s)
+ * 
+ * @param {Function} lowerBound - Function mapping states to lower bounds
+ * @param {Function} upperBound - Function mapping states to upper bounds
+ * @param {Set} constraints - Set of (state, state) constraint pairs
+ */
+class YoungBound {
+  constructor(lowerBound = null, upperBound = null, constraints = new Set()) {
+    this.lowerBound = lowerBound || ((s) => -Infinity);
+    this.upperBound = upperBound || ((s) => Infinity);
+    this.constraints = constraints;
+  }
+
+  /**
+   * Check if valuation respects bounds
+   */
+  isValid(state, valuation) {
+    const val = valuation(state);
+    return this.lowerBound(state) <= val && val <= this.upperBound(state);
+  }
+
+  /**
+   * Check if bound is tight at state
+   */
+  isTight(state, valuation) {
+    const val = valuation(state);
+    return Math.abs(val - this.lowerBound(state)) < 1e-10 || 
+           Math.abs(val - this.upperBound(state)) < 1e-10;
+  }
+
+  /**
+   * Get bound width at state
+   */
+  width(state) {
+    return this.upperBound(state) - this.lowerBound(state);
+  }
+}
+
+// ============================================================================
+// Young Movement Implementation
+// Based on WHITEPAPER_YOUNG_SITUATION.md Section 6
+// ============================================================================
+
+/**
+ * Young Movement - Group of transformations on Young Situations
+ * 
+ * A Movement M = (G, ∘, e, ⁻¹) where:
+ * - G is a set of transformations on Young Situations
+ * - ∘: G × G → G is composition
+ * - e is identity transformation
+ * - ⁻¹: G → G is inverse operation
+ * 
+ * @param {Function} transformation - Function: YoungSituation → YoungSituation
+ */
+class YoungMovement {
+  constructor(transformation = null) {
+    this.transformation = transformation || ((y) => y);
+  }
+
+  /**
+   * Compose with another movement
+   */
+  compose(other) {
+    return new YoungMovement((y) => other.transformation(this.transformation(y)));
+  }
+
+  /**
+   * Apply movement to a Young Situation
+   */
+  apply(situation) {
+    return this.transformation(situation);
+  }
+
+  /**
+   * Identity movement (returns situation unchanged)
+   */
+  static identity() {
+    return new YoungMovement((y) => y);
+  }
+
+  /**
+   * Optimization movement generator (O)
+   * Transforms situation toward optimal states
+   */
+  static optimize() {
+    return new YoungMovement((y) => {
+      // Move valuations toward final states
+      const newValuation = (s) => {
+        if (y.finalStates.has(s)) {
+          return y.valuation(s) * 1.1; // Increase valuation of final states
+        }
+        return y.valuation(s) * 0.9; // Decrease others
+      };
+      return new YoungSituation(y.states, y.relations, newValuation, y.transition, y.finalStates);
+    });
+  }
+
+  /**
+   * Exploration movement generator (E)
+   * Expands the state space
+   */
+  static explore() {
+    return new YoungMovement((y) => {
+      // Uniform valuation exploration
+      const newValuation = (s) => {
+        const total = y.totalValuation();
+        return total / y.states.size;
+      };
+      return new YoungSituation(y.states, y.relations, newValuation, y.transition, y.finalStates);
+    });
+  }
+
+  /**
+   * Constraint movement generator (C)
+   * Applies constraints to valuations
+   */
+  static constrain(bound) {
+    return new YoungMovement((y) => {
+      const newValuation = (s) => {
+        const val = y.valuation(s);
+        return Math.max(bound.lowerBound(s), Math.min(val, bound.upperBound(s)));
+      };
+      return new YoungSituation(y.states, y.relations, newValuation, y.transition, y.finalStates);
+    });
+  }
 }
 
 // ============================================================================
@@ -625,6 +1017,143 @@ function nDimensionalVolumeExample() {
 }
 
 // ============================================================================
+// Young Situation, Family, Bound, Movement Examples
+// ============================================================================
+
+/**
+ * Example: Young Situation with Area Calculation
+ */
+function youngSituationAreaExample() {
+  const area = createEuclideanArea();
+  
+  // Create a Young Situation with 3 states
+  const states = new Set(['s1', 's2', 's3']);
+  const relations = new Set([['s1', 's2'], ['s2', 's3']]);
+  const valuation = (s) => {
+    if (s === 's1') return 10;
+    if (s === 's2') return 20;
+    if (s === 's3') return 30;
+    return 0;
+  };
+  const finalStates = new Set(['s3']);
+  
+  const situation = new YoungSituation(states, relations, valuation, null, finalStates);
+  
+  return {
+    totalValuation: situation.totalValuation(),
+    regionMeasure: area.situationRegionMeasure(situation),
+    isValid: situation.isValid(),
+    stateSpaceVolume: area.stateSpaceVolume(situation)
+  };
+}
+
+/**
+ * Example: Young Family with Hierarchical Measure
+ */
+function youngFamilyAreaExample() {
+  const area = createEuclideanArea();
+  
+  // Create a family with parent-child relationships
+  const indexSet = new Set([1, 2, 3]);
+  const members = (i) => {
+    const states = new Set([`s${i}`]);
+    const valuation = (s) => i * 10;
+    return new YoungSituation(states, new Set(), valuation, null, states);
+  };
+  const parent = (i) => i === 1 ? null : 1; // 1 is root, 2 and 3 are children
+  
+  const family = new YoungFamily(indexSet, members, parent);
+  
+  return {
+    rootCount: family.roots().size,
+    totalFamilyMeasure: area.familyRegionMeasure(family),
+    isWellFounded: family.isWellFounded()
+  };
+}
+
+/**
+ * Example: Young Bound with Constrained Area
+ */
+function youngBoundAreaExample() {
+  const area = createEuclideanArea();
+  
+  // Create situation
+  const states = new Set(['s1', 's2', 's3']);
+  const valuation = (s) => {
+    if (s === 's1') return 5;
+    if (s === 's2') return 15;
+    if (s === 's3') return 25;
+    return 0;
+  };
+  const situation = new YoungSituation(states, new Set(), valuation);
+  
+  // Create bounds
+  const bound = new YoungBound(
+    (s) => 10,  // Lower bound
+    (s) => 20   // Upper bound
+  );
+  
+  return {
+    unboundedArea: area.situationRegionMeasure(situation),
+    boundedArea: area.boundedRegionArea(situation, bound),
+    s2IsTight: bound.isTight('s2', valuation),
+    boundWidth: bound.width('s1')
+  };
+}
+
+/**
+ * Example: Young Movement with Trajectory Analysis
+ */
+function youngMovementAreaExample() {
+  const area = createEuclideanArea();
+  
+  // Create initial situation
+  const states = new Set(['s1', 's2', 's3']);
+  const valuation = (s) => {
+    if (s === 's1') return 10;
+    if (s === 's2') return 20;
+    if (s === 's3') return 30;
+    return 0;
+  };
+  const finalStates = new Set(['s3']);
+  const situation = new YoungSituation(states, new Set(), valuation, null, finalStates);
+  
+  // Apply optimization movement
+  const optimizeMovement = YoungMovement.optimize();
+  const transformedSituation = optimizeMovement.apply(situation);
+  
+  return {
+    initialMeasure: area.situationRegionMeasure(situation),
+    transformedMeasure: area.situationRegionMeasure(transformedSituation),
+    trajectoryArea: area.movementTrajectoryArea(situation, optimizeMovement, 5)
+  };
+}
+
+/**
+ * Example: Situation Interpolation with DMT
+ */
+function situationInterpolationAreaExample() {
+  const area = createEuclideanArea();
+  
+  // Create two situations
+  const states = new Set(['s1', 's2']);
+  
+  const valuation1 = (s) => s === 's1' ? 10 : 20;
+  const situation1 = new YoungSituation(states, new Set(), valuation1);
+  
+  const valuation2 = (s) => s === 's1' ? 30 : 40;
+  const situation2 = new YoungSituation(states, new Set(), valuation2);
+  
+  return {
+    situation1Measure: area.situationRegionMeasure(situation1),
+    situation2Measure: area.situationRegionMeasure(situation2),
+    interpolatedAt25: area.interpolatedSituationArea(situation1, situation2, 0.25),
+    interpolatedAt50: area.interpolatedSituationArea(situation1, situation2, 0.5),
+    interpolatedAt75: area.interpolatedSituationArea(situation1, situation2, 0.75)
+  };
+}
+
+// ============================================================================
 // Module Exports
 // ============================================================================
 
@@ -656,6 +1185,12 @@ module.exports = {
   YoungRing,
   YoungField,
   YoungArea,
+  
+  // Young Situation Framework classes
+  YoungSituation,
+  YoungFamily,
+  YoungBound,
+  YoungMovement,
 
   // Factory functions
   createRationalField,
@@ -671,5 +1206,10 @@ module.exports = {
   geometricAreasExample,
   integrationExample,
   volumeOfRevolutionExample,
-  nDimensionalVolumeExample
+  nDimensionalVolumeExample,
+  youngSituationAreaExample,
+  youngFamilyAreaExample,
+  youngBoundAreaExample,
+  youngMovementAreaExample,
+  situationInterpolationAreaExample
 };
