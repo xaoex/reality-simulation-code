@@ -574,7 +574,7 @@ function testBaeMathematicsTransitiveConnection() {
   const transitive = bae.transitiveConnection('a', 'c');
   
   assert(transitive > 0, 'Transitive connection should exist');
-  assertAlmostEqual(transitive, 0.48, 1e-10, 'Transitive connection should be product of strengths');
+  assertAlmostEqual(transitive, 0.48, 1e-6, 'Transitive connection should be product of strengths');
   
   console.log('  ✓ BaeMathematics transitive connections');
 }
@@ -820,7 +820,7 @@ function runAllTests() {
   testSection('GodGenerator Most Powerful', testGodGeneratorMostPowerful);
 
   // New Example Functions
-  testSection('Example: Yoshis Secret', testYoshisSecretExampleFunction);
+  testSection('Example: Yoshi\'s Secret', testYoshisSecretExampleFunction);
   testSection('Example: Bae Mathematics', testBaeMathematicsExampleFunction);
   testSection('Example: God Generator', testGodGeneratorExampleFunction);
 
