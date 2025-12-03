@@ -189,6 +189,163 @@ class YoungField extends YoungRing {
 }
 
 // ============================================================================
+// Young Area Implementation
+// Based on Young Field with Measure Theory Extension
+// ============================================================================
+
+/**
+ * Young Area - Extension of Young Field with measure theory
+ * 
+ * A Young Area is an algebraic structure A = (F, μ, ∫) where:
+ * - F is a Young Field (providing arithmetic operations)
+ * - μ: Ω → ℝ≥0 is a measure function (assigns area/measure to regions)
+ * - ∫: (Ω → F) × Ω → F is an integration operation
+ * 
+ * This enables:
+ * - Area calculations for geometric regions
+ * - Integration over intervals
+ * - Measure-theoretic computations
+ * - Volume and higher-dimensional measure
+ */
+class YoungArea extends YoungField {
+  constructor(elements = [], addOp = null, mulOp = null, invOp = null, measureOp = null, zeroVal = 0, oneVal = 1) {
+    super(elements, addOp, mulOp, invOp, zeroVal, oneVal);
+    this.measureOp = measureOp || ((region) => {
+      // Default measure: length/area depending on region type
+      if (typeof region === 'number') {
+        return Math.abs(region); // 1D measure (length)
+      } else if (Array.isArray(region) && region.length === 2) {
+        // 2D rectangular region [width, height]
+        return Math.abs(region[0] * region[1]);
+      } else if (region.type === 'circle') {
+        // Circle area: πr²
+        return Math.PI * region.radius * region.radius;
+      } else if (region.type === 'interval') {
+        // Interval [a, b]
+        return Math.abs(region.end - region.start);
+      }
+      return 0;
+    });
+  }
+
+  /**
+   * Measure function: μ(Ω) → ℝ≥0
+   * Assigns a non-negative measure (area) to a region
+   */
+  measure(region) {
+    const m = this.measureOp(region);
+    return m < 0 ? 0 : m; // Ensure non-negative
+  }
+
+  /**
+   * Rectangle area: width × height
+   */
+  rectangleArea(width, height) {
+    return this.multiply(Math.abs(width), Math.abs(height));
+  }
+
+  /**
+   * Circle area: πr²
+   */
+  circleArea(radius) {
+    const r2 = this.multiply(radius, radius);
+    return this.multiply(Math.PI, r2);
+  }
+
+  /**
+   * Triangle area: (base × height) / 2
+   */
+  triangleArea(base, height) {
+    const area = this.multiply(base, height);
+    return this.divide(area, 2);
+  }
+
+  /**
+   * Ellipse area: πab (where a, b are semi-axes)
+   */
+  ellipseArea(semiMajor, semiMinor) {
+    const ab = this.multiply(semiMajor, semiMinor);
+    return this.multiply(Math.PI, ab);
+  }
+
+  /**
+   * Integration over an interval [a, b]
+   * Riemann sum approximation: ∫ᵃᵇ f(x)dx ≈ Σ f(xᵢ)Δx
+   */
+  integrate(f, start, end, numSteps = 1000) {
+    if (start === end) return this.zero;
+    
+    const a = Math.min(start, end);
+    const b = Math.max(start, end);
+    const h = this.divide(this.add(b, this.multiply(-1, a)), numSteps);
+    
+    let sum = this.zero;
+    for (let i = 0; i < numSteps; i++) {
+      const x = this.add(a, this.multiply(h, i + 0.5)); // Midpoint rule
+      const fx = f(x);
+      sum = this.add(sum, fx);
+    }
+    
+    const result = this.multiply(sum, h);
+    return start > end ? this.multiply(-1, result) : result;
+  }
+
+  /**
+   * Area under curve from a to b
+   * Equivalent to ∫ᵃᵇ f(x)dx for non-negative f
+   */
+  areaUnderCurve(f, start, end, numSteps = 1000) {
+    return Math.abs(this.integrate(f, start, end, numSteps));
+  }
+
+  /**
+   * Surface area of a region defined by parametric functions
+   * For 2D: area of region bounded by curves
+   */
+  regionArea(lowerBound, upperBound, start, end, numSteps = 1000) {
+    const f = (x) => this.add(upperBound(x), this.multiply(-1, lowerBound(x)));
+    return this.areaUnderCurve(f, start, end, numSteps);
+  }
+
+  /**
+   * Volume of revolution around x-axis
+   * V = π ∫ᵃᵇ [f(x)]² dx
+   */
+  volumeOfRevolution(f, start, end, numSteps = 1000) {
+    const fSquared = (x) => {
+      const fx = f(x);
+      return this.multiply(fx, fx);
+    };
+    const integral = this.integrate(fSquared, start, end, numSteps);
+    return this.multiply(Math.PI, integral);
+  }
+
+  /**
+   * N-dimensional measure (volume)
+   * For N-dimensional rectangular region
+   */
+  volumeNDimensional(dimensions) {
+    if (!Array.isArray(dimensions) || dimensions.length === 0) return this.zero;
+    return dimensions.reduce((acc, dim) => this.multiply(acc, Math.abs(dim)), this.one);
+  }
+
+  /**
+   * Check if this is a valid Young Area
+   * Must be a valid field and have a valid measure function
+   */
+  isValidArea() {
+    // Check field properties
+    if (!this.isValidField()) return false;
+    
+    // Check measure properties: μ(∅) = 0
+    const emptyMeasure = this.measure(0);
+    if (Math.abs(emptyMeasure - this.zero) > 1e-10) return false;
+    
+    return true;
+  }
+}
+
+// ============================================================================
 // Young Field Factory Functions
 // ============================================================================
 
@@ -264,6 +421,47 @@ function createSituationValuationField() {
 }
 
 // ============================================================================
+// Young Area Factory Functions
+// ============================================================================
+
+/**
+ * Create a Euclidean Young Area (ℝ² with standard measure)
+ * Standard 2D area with real numbers and Lebesgue measure
+ */
+function createEuclideanArea() {
+  return new YoungArea(
+    [], // Infinite set (reals)
+    (a, b) => a + b,      // addition
+    (a, b) => a * b,      // multiplication
+    (a) => a === 0 ? null : 1 / a,  // inverse
+    (region) => {
+      // Lebesgue measure for various region types
+      if (typeof region === 'number') {
+        return Math.abs(region); // 1D measure
+      } else if (Array.isArray(region)) {
+        // N-dimensional box
+        return region.reduce((acc, dim) => acc * Math.abs(dim), 1);
+      } else if (region.type === 'circle') {
+        return Math.PI * region.radius * region.radius;
+      } else if (region.type === 'interval') {
+        return Math.abs(region.end - region.start);
+      }
+      return 0;
+    },
+    0,  // zero
+    1   // one
+  );
+}
+
+/**
+ * Create a Situation Area Field
+ * Area field for situation regions and valuations
+ */
+function createSituationAreaField() {
+  return createEuclideanArea();
+}
+
+// ============================================================================
 // Young Field Examples and Demonstrations
 // ============================================================================
 
@@ -325,6 +523,92 @@ function finiteFieldExample() {
 }
 
 // ============================================================================
+// Young Area Examples and Demonstrations
+// ============================================================================
+
+/**
+ * Example: Geometric Areas
+ * Demonstrate area calculations for common shapes
+ */
+function geometricAreasExample() {
+  const area = createEuclideanArea();
+  
+  return {
+    rectangle: area.rectangleArea(5, 3),        // 15
+    circle: area.circleArea(2),                  // π × 4 ≈ 12.566
+    triangle: area.triangleArea(6, 4),           // 12
+    ellipse: area.ellipseArea(3, 2)             // π × 6 ≈ 18.849
+  };
+}
+
+/**
+ * Example: Integration
+ * Demonstrate integration and area under curve
+ */
+function integrationExample() {
+  const area = createEuclideanArea();
+  
+  // f(x) = x² from 0 to 2
+  // ∫₀² x² dx = [x³/3]₀² = 8/3 ≈ 2.667
+  const quadratic = area.integrate((x) => x * x, 0, 2);
+  
+  // f(x) = sin(x) from 0 to π
+  // ∫₀ᵖⁱ sin(x) dx = [-cos(x)]₀ᵖⁱ = 2
+  const sine = area.integrate((x) => Math.sin(x), 0, Math.PI);
+  
+  // Area under f(x) = x from 0 to 4
+  // Forms a triangle with area = 8
+  const linear = area.areaUnderCurve((x) => x, 0, 4);
+  
+  return {
+    quadratic: Math.round(quadratic * 1000) / 1000,  // ≈ 2.667
+    sine: Math.round(sine * 1000) / 1000,            // ≈ 2.000
+    linear: Math.round(linear * 1000) / 1000          // ≈ 8.000
+  };
+}
+
+/**
+ * Example: Volume of Revolution
+ * Demonstrate volume calculations using rotation
+ */
+function volumeOfRevolutionExample() {
+  const area = createEuclideanArea();
+  
+  // Rotate f(x) = x around x-axis from x=0 to x=2
+  // V = π ∫₀² x² dx = π × 8/3 ≈ 8.378
+  const cone = area.volumeOfRevolution((x) => x, 0, 2);
+  
+  // Rotate f(x) = √(r² - x²) (semicircle) around x-axis
+  // Creates a sphere: V = (4/3)πr³
+  const r = 1;
+  const sphere = area.volumeOfRevolution(
+    (x) => Math.sqrt(Math.max(0, r*r - x*x)), 
+    -r, 
+    r
+  );
+  
+  return {
+    cone: Math.round(cone * 1000) / 1000,        // ≈ 8.378
+    sphere: Math.round(sphere * 1000) / 1000     // ≈ 4.189 (≈ 4π/3)
+  };
+}
+
+/**
+ * Example: N-Dimensional Volume
+ * Demonstrate volume calculations in higher dimensions
+ */
+function nDimensionalVolumeExample() {
+  const area = createEuclideanArea();
+  
+  return {
+    line: area.volumeNDimensional([5]),                    // 5 (length)
+    rectangle: area.volumeNDimensional([3, 4]),            // 12 (area)
+    box: area.volumeNDimensional([2, 3, 4]),              // 24 (volume)
+    hypercube: area.volumeNDimensional([2, 2, 2, 2])      // 16 (4D volume)
+  };
+}
+
+// ============================================================================
 // Module Exports
 // ============================================================================
 
@@ -352,17 +636,24 @@ module.exports = {
     };
   },
 
-  // Young Ring and Young Field classes
+  // Young Ring, Young Field, and Young Area classes
   YoungRing,
   YoungField,
+  YoungArea,
 
   // Factory functions
   createRationalField,
   createFiniteField,
   createSituationValuationField,
+  createEuclideanArea,
+  createSituationAreaField,
 
   // Example functions
   normalizedSituationExample,
   youngFieldOperationsExample,
-  finiteFieldExample
+  finiteFieldExample,
+  geometricAreasExample,
+  integrationExample,
+  volumeOfRevolutionExample,
+  nDimensionalVolumeExample
 };

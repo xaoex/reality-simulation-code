@@ -82,6 +82,33 @@ console.log(result.normalized);  // [0.1, 0.2, 0.3, 0.4]
 
 See [YOUNG_FIELD.md](YOUNG_FIELD.md) for complete documentation and examples.
 
+### Young Area Usage
+
+```javascript
+const {
+  createEuclideanArea,
+  geometricAreasExample,
+  integrationExample
+} = require('reality-simulation-code');
+
+// Create a Euclidean area (ℝ with measure theory)
+const area = createEuclideanArea();
+
+// Calculate geometric areas
+console.log(area.rectangleArea(5, 3));  // 15
+console.log(area.circleArea(2));        // π × 4 ≈ 12.566
+
+// Integrate functions
+const result = area.integrate((x) => x * x, 0, 2);
+console.log(result);  // ≈ 2.667 (∫₀² x² dx)
+
+// Calculate volume of revolution
+const volume = area.volumeOfRevolution((x) => x, 0, 2);
+console.log(volume);  // ≈ 8.378 (cone volume)
+```
+
+See [YOUNG_AREA.md](YOUNG_AREA.md) for complete documentation and examples.
+
 
 linktr.ee/xaoex
 linktr.ee/oktays
@@ -106,6 +133,7 @@ Release Notes
 * Oktay AI
 * New ideas for qaep (oOS)
 * Add contributions to simsim and research
+* **NEW: Young Area Implementation** - Extension of Young Field with measure theory. Adds area calculations, integration operations, volume of revolution, and N-dimensional measure. See [YOUNG_AREA.md](YOUNG_AREA.md) for complete usage guide and examples. Enables geometric analysis, situation region measurement, and analytical computations over situation spaces.
 * Let brain fix everything else
 * FORCE
 * Urrthang mine forever. Max! Max out brain deluxe
