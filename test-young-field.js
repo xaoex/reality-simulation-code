@@ -1,18 +1,25 @@
 /**
  * Young Field Test Suite
- * Tests for Young Ring and Young Field implementations
+ * Tests for Young Ring, Young Field, and Young Area implementations
  * Based on WHITEPAPER_YOUNG_SITUATION.md Section 10
  */
 
 const {
   YoungRing,
   YoungField,
+  YoungArea,
   createRationalField,
   createFiniteField,
   createSituationValuationField,
+  createEuclideanArea,
+  createSituationAreaField,
   normalizedSituationExample,
   youngFieldOperationsExample,
-  finiteFieldExample
+  finiteFieldExample,
+  geometricAreasExample,
+  integrationExample,
+  volumeOfRevolutionExample,
+  nDimensionalVolumeExample
 } = require('./index.js');
 
 // ============================================================================
@@ -456,12 +463,280 @@ function testFiniteFieldExampleFunction() {
 }
 
 // ============================================================================
+// Young Area Tests - Basic Construction
+// ============================================================================
+
+function testYoungAreaConstruction() {
+  const area = new YoungArea([0, 1, 2, 3, 4]);
+  
+  assert(area.elements.has(0), 'Area should contain 0');
+  assert(area.elements.has(1), 'Area should contain 1');
+  assert(area.zero === 0, 'Zero element should be 0');
+  assert(area.one === 1, 'One element should be 1');
+  
+  console.log('  ✓ YoungArea construction');
+}
+
+function testYoungAreaInheritance() {
+  const area = createEuclideanArea();
+  
+  // Test that area inherits field operations
+  assert(area.add(2, 3) === 5, 'Area should inherit addition');
+  assert(area.multiply(2, 3) === 6, 'Area should inherit multiplication');
+  assert(area.divide(6, 2) === 3, 'Area should inherit division');
+  
+  // Test that area has additional operations
+  assert(typeof area.measure === 'function', 'Area should have measure method');
+  assert(typeof area.integrate === 'function', 'Area should have integrate method');
+  assert(typeof area.rectangleArea === 'function', 'Area should have rectangleArea method');
+  
+  console.log('  ✓ YoungArea inherits from YoungField');
+}
+
+// ============================================================================
+// Young Area Tests - Measure Operations
+// ============================================================================
+
+function testYoungAreaMeasure() {
+  const area = createEuclideanArea();
+  
+  // Test 1D measure (length)
+  assertAlmostEqual(area.measure(5), 5, 1e-10, 'Measure of interval [0,5]');
+  assertAlmostEqual(area.measure(-3), 3, 1e-10, 'Measure handles negative values');
+  
+  // Test 2D measure (area)
+  assertAlmostEqual(area.measure([3, 4]), 12, 1e-10, 'Measure of 3×4 rectangle');
+  assertAlmostEqual(area.measure([2.5, 3.5]), 8.75, 1e-10, 'Measure of 2.5×3.5 rectangle');
+  
+  // Test circle measure
+  const circleRegion = { type: 'circle', radius: 2 };
+  assertAlmostEqual(area.measure(circleRegion), Math.PI * 4, 1e-10, 'Measure of circle with r=2');
+  
+  // Test interval measure
+  const intervalRegion = { type: 'interval', start: 1, end: 5 };
+  assertAlmostEqual(area.measure(intervalRegion), 4, 1e-10, 'Measure of interval [1,5]');
+  
+  console.log('  ✓ YoungArea measure operations');
+}
+
+function testYoungAreaGeometricShapes() {
+  const area = createEuclideanArea();
+  
+  // Rectangle
+  assertAlmostEqual(area.rectangleArea(5, 3), 15, 1e-10, 'Rectangle area 5×3 = 15');
+  assertAlmostEqual(area.rectangleArea(2.5, 4), 10, 1e-10, 'Rectangle area 2.5×4 = 10');
+  
+  // Circle
+  assertAlmostEqual(area.circleArea(1), Math.PI, 1e-10, 'Circle area πr² with r=1');
+  assertAlmostEqual(area.circleArea(2), Math.PI * 4, 1e-10, 'Circle area πr² with r=2');
+  
+  // Triangle
+  assertAlmostEqual(area.triangleArea(6, 4), 12, 1e-10, 'Triangle area (6×4)/2 = 12');
+  assertAlmostEqual(area.triangleArea(5, 8), 20, 1e-10, 'Triangle area (5×8)/2 = 20');
+  
+  // Ellipse
+  assertAlmostEqual(area.ellipseArea(3, 2), Math.PI * 6, 1e-10, 'Ellipse area π×3×2');
+  assertAlmostEqual(area.ellipseArea(1, 1), Math.PI, 1e-10, 'Ellipse (circle) area π×1×1');
+  
+  console.log('  ✓ YoungArea geometric shape areas');
+}
+
+// ============================================================================
+// Young Area Tests - Integration
+// ============================================================================
+
+function testYoungAreaIntegration() {
+  const area = createEuclideanArea();
+  
+  // Test constant function: ∫₀² 3 dx = 3×2 = 6
+  const constant = area.integrate((x) => 3, 0, 2);
+  assertAlmostEqual(constant, 6, 0.01, 'Integral of constant 3 from 0 to 2');
+  
+  // Test linear function: ∫₀⁴ x dx = [x²/2]₀⁴ = 8
+  const linear = area.integrate((x) => x, 0, 4);
+  assertAlmostEqual(linear, 8, 0.01, 'Integral of x from 0 to 4');
+  
+  // Test quadratic: ∫₀² x² dx = [x³/3]₀² = 8/3 ≈ 2.667
+  const quadratic = area.integrate((x) => x * x, 0, 2);
+  assertAlmostEqual(quadratic, 8/3, 0.01, 'Integral of x² from 0 to 2');
+  
+  // Test sine: ∫₀ᵖⁱ sin(x) dx = 2
+  const sine = area.integrate((x) => Math.sin(x), 0, Math.PI);
+  assertAlmostEqual(sine, 2, 0.01, 'Integral of sin(x) from 0 to π');
+  
+  console.log('  ✓ YoungArea integration operations');
+}
+
+function testYoungAreaUnderCurve() {
+  const area = createEuclideanArea();
+  
+  // Area under f(x) = 2 from 0 to 5
+  const constant = area.areaUnderCurve((x) => 2, 0, 5);
+  assertAlmostEqual(constant, 10, 0.01, 'Area under constant function');
+  
+  // Area under f(x) = x from 0 to 4 (triangle)
+  const triangle = area.areaUnderCurve((x) => x, 0, 4);
+  assertAlmostEqual(triangle, 8, 0.01, 'Area under linear function (triangle)');
+  
+  // Area under parabola
+  const parabola = area.areaUnderCurve((x) => x * x, 0, 3);
+  assertAlmostEqual(parabola, 9, 0.1, 'Area under parabola x²');
+  
+  console.log('  ✓ YoungArea areaUnderCurve');
+}
+
+function testYoungAreaVolumeOfRevolution() {
+  const area = createEuclideanArea();
+  
+  // Rotate f(x) = r (constant) around x-axis from 0 to h
+  // Creates cylinder: V = πr²h
+  const r = 2, h = 5;
+  const cylinder = area.volumeOfRevolution((x) => r, 0, h);
+  assertAlmostEqual(cylinder, Math.PI * r * r * h, 0.1, 'Volume of cylinder');
+  
+  // Rotate f(x) = x around x-axis from 0 to r
+  // Creates cone: V = πr³/3
+  const r2 = 3;
+  const cone = area.volumeOfRevolution((x) => x, 0, r2);
+  assertAlmostEqual(cone, Math.PI * r2 * r2 * r2 / 3, 0.1, 'Volume of cone');
+  
+  console.log('  ✓ YoungArea volumeOfRevolution');
+}
+
+function testYoungAreaNDimensional() {
+  const area = createEuclideanArea();
+  
+  // 1D: line segment
+  assertAlmostEqual(area.volumeNDimensional([5]), 5, 1e-10, '1D volume (length)');
+  
+  // 2D: rectangle
+  assertAlmostEqual(area.volumeNDimensional([3, 4]), 12, 1e-10, '2D volume (area)');
+  
+  // 3D: box
+  assertAlmostEqual(area.volumeNDimensional([2, 3, 4]), 24, 1e-10, '3D volume');
+  
+  // 4D: hypercube
+  assertAlmostEqual(area.volumeNDimensional([2, 2, 2, 2]), 16, 1e-10, '4D volume');
+  
+  // Empty
+  assertAlmostEqual(area.volumeNDimensional([]), 0, 1e-10, 'Empty dimensions = 0');
+  
+  console.log('  ✓ YoungArea N-dimensional volumes');
+}
+
+// ============================================================================
+// Young Area Tests - Validation
+// ============================================================================
+
+function testYoungAreaValidation() {
+  const area = createEuclideanArea();
+  
+  // Check that it's a valid area (and valid field)
+  assert(area.isValidArea(), 'Euclidean area should be valid');
+  assert(area.isValidField(), 'Euclidean area should also be a valid field');
+  
+  // Test field axioms still hold
+  const a = 5, b = 3;
+  assertAlmostEqual(area.add(a, b), area.add(b, a), 1e-10, 'Addition commutative');
+  assertAlmostEqual(area.multiply(a, b), area.multiply(b, a), 1e-10, 'Multiplication commutative');
+  
+  const inv = area.inverse(a);
+  assertAlmostEqual(area.multiply(a, inv), 1, 1e-10, 'Multiplicative inverse');
+  
+  console.log('  ✓ YoungArea validation');
+}
+
+// ============================================================================
+// Young Area Tests - Factory Functions
+// ============================================================================
+
+function testEuclideanAreaFactory() {
+  const area = createEuclideanArea();
+  
+  assert(area instanceof YoungArea, 'Should create YoungArea instance');
+  assert(area.isValidArea(), 'Should be valid area');
+  
+  // Test basic operations work
+  assertAlmostEqual(area.rectangleArea(2, 3), 6, 1e-10, 'Rectangle area');
+  assertAlmostEqual(area.circleArea(1), Math.PI, 1e-10, 'Circle area');
+  
+  console.log('  ✓ createEuclideanArea factory');
+}
+
+function testSituationAreaFieldFactory() {
+  const area = createSituationAreaField();
+  
+  assert(area instanceof YoungArea, 'Should create YoungArea instance');
+  assert(area.isValidArea(), 'Should be valid area');
+  
+  console.log('  ✓ createSituationAreaField factory');
+}
+
+// ============================================================================
+// Young Area Tests - Examples
+// ============================================================================
+
+function testGeometricAreasExample() {
+  const result = geometricAreasExample();
+  
+  assertAlmostEqual(result.rectangle, 15, 1e-10, 'Rectangle example');
+  assertAlmostEqual(result.circle, Math.PI * 4, 0.001, 'Circle example');
+  assertAlmostEqual(result.triangle, 12, 1e-10, 'Triangle example');
+  assertAlmostEqual(result.ellipse, Math.PI * 6, 0.001, 'Ellipse example');
+  
+  console.log('  ✓ Example: geometricAreasExample()');
+  console.log(`    Rectangle (5×3): ${result.rectangle}`);
+  console.log(`    Circle (r=2): ${result.circle.toFixed(3)}`);
+  console.log(`    Triangle (b=6,h=4): ${result.triangle}`);
+  console.log(`    Ellipse (a=3,b=2): ${result.ellipse.toFixed(3)}`);
+}
+
+function testIntegrationExample() {
+  const result = integrationExample();
+  
+  assertAlmostEqual(result.quadratic, 8/3, 0.01, 'Quadratic integral');
+  assertAlmostEqual(result.sine, 2, 0.01, 'Sine integral');
+  assertAlmostEqual(result.linear, 8, 0.01, 'Linear integral');
+  
+  console.log('  ✓ Example: integrationExample()');
+  console.log(`    ∫₀² x² dx: ${result.quadratic}`);
+  console.log(`    ∫₀ᵖⁱ sin(x) dx: ${result.sine}`);
+  console.log(`    Area under f(x)=x: ${result.linear}`);
+}
+
+function testVolumeOfRevolutionExample() {
+  const result = volumeOfRevolutionExample();
+  
+  assertAlmostEqual(result.cone, Math.PI * 8 / 3, 0.1, 'Cone volume');
+  assertAlmostEqual(result.sphere, 4 * Math.PI / 3, 0.1, 'Sphere volume');
+  
+  console.log('  ✓ Example: volumeOfRevolutionExample()');
+  console.log(`    Cone volume: ${result.cone}`);
+  console.log(`    Sphere volume: ${result.sphere}`);
+}
+
+function testNDimensionalVolumeExample() {
+  const result = nDimensionalVolumeExample();
+  
+  assert(result.line === 5, 'Line length');
+  assert(result.rectangle === 12, 'Rectangle area');
+  assert(result.box === 24, 'Box volume');
+  assert(result.hypercube === 16, 'Hypercube 4D volume');
+  
+  console.log('  ✓ Example: nDimensionalVolumeExample()');
+  console.log(`    1D (line): ${result.line}`);
+  console.log(`    2D (rectangle): ${result.rectangle}`);
+  console.log(`    3D (box): ${result.box}`);
+  console.log(`    4D (hypercube): ${result.hypercube}`);
+}
+
+// ============================================================================
 // Run All Tests
 // ============================================================================
 
 function runAllTests() {
   console.log('\n' + '='.repeat(70));
-  console.log('YOUNG FIELD TEST SUITE');
+  console.log('YOUNG FIELD & YOUNG AREA TEST SUITE');
   console.log('Based on WHITEPAPER_YOUNG_SITUATION.md Section 10');
   console.log('='.repeat(70));
 
@@ -499,6 +774,27 @@ function runAllTests() {
   testSection('Example: Normalized Situations', testNormalizedSituationExample);
   testSection('Example: Field Operations', testYoungFieldOperationsExample);
   testSection('Example: Finite Field', testFiniteFieldExampleFunction);
+
+  // Young Area Tests
+  testSection('Young Area Construction', testYoungAreaConstruction);
+  testSection('Young Area Inheritance', testYoungAreaInheritance);
+  testSection('Young Area Measure', testYoungAreaMeasure);
+  testSection('Young Area Geometric Shapes', testYoungAreaGeometricShapes);
+  testSection('Young Area Integration', testYoungAreaIntegration);
+  testSection('Young Area Under Curve', testYoungAreaUnderCurve);
+  testSection('Young Area Volume of Revolution', testYoungAreaVolumeOfRevolution);
+  testSection('Young Area N-Dimensional', testYoungAreaNDimensional);
+  testSection('Young Area Validation', testYoungAreaValidation);
+
+  // Young Area Factory Functions
+  testSection('Euclidean Area Factory', testEuclideanAreaFactory);
+  testSection('Situation Area Field Factory', testSituationAreaFieldFactory);
+
+  // Young Area Examples
+  testSection('Example: Geometric Areas', testGeometricAreasExample);
+  testSection('Example: Integration', testIntegrationExample);
+  testSection('Example: Volume of Revolution', testVolumeOfRevolutionExample);
+  testSection('Example: N-Dimensional Volume', testNDimensionalVolumeExample);
 
   console.log('\n' + '='.repeat(70));
   console.log('ALL TESTS PASSED ✓');
