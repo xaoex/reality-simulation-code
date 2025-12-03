@@ -325,6 +325,492 @@ function finiteFieldExample() {
 }
 
 // ============================================================================
+// Yoshi's Secret - Cryptographic Encoding Framework
+// ============================================================================
+
+/**
+ * Yoshi's Secret - A cryptographic encoding system using Young Field mathematics
+ * 
+ * This implements a secret encoding/decoding system based on finite fields,
+ * allowing messages to be encoded using mathematical transformations.
+ * Inspired by childhood curiosity and data exploration.
+ */
+class YoshisSecret {
+  constructor(prime = 31337) {
+    // Use a large prime for the finite field
+    this.field = createFiniteField(prime);
+    this.prime = prime;
+    this.secretKey = this._generateSecretKey();
+  }
+
+  /**
+   * Generate a secret key based on special primes
+   * Uses primes significant to the creator
+   */
+  _generateSecretKey() {
+    const specialPrimes = [1993, 1991, 2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31];
+    let key = 1;
+    for (const p of specialPrimes) {
+      key = this.field.multiply(key, p % this.prime);
+    }
+    return key;
+  }
+
+  /**
+   * Encode a number using Yoshi's Secret transformation
+   */
+  encode(value) {
+    const normalized = value % this.prime;
+    const encoded = this.field.multiply(normalized, this.secretKey);
+    return this.field.add(encoded, 1337 % this.prime);
+  }
+
+  /**
+   * Decode a number using Yoshi's Secret inverse transformation
+   */
+  decode(encoded) {
+    const shifted = this.field.add(encoded, this.field.multiply(-1, 1337 % this.prime));
+    const keyInverse = this.field.inverse(this.secretKey);
+    return this.field.multiply(shifted, keyInverse);
+  }
+
+  /**
+   * Encode a string by converting to numeric values
+   */
+  encodeString(message) {
+    const encoded = [];
+    for (let i = 0; i < message.length; i++) {
+      const charCode = message.charCodeAt(i);
+      encoded.push(this.encode(charCode));
+    }
+    return encoded;
+  }
+
+  /**
+   * Decode numeric array back to string
+   */
+  decodeString(encoded) {
+    let message = '';
+    for (const value of encoded) {
+      const charCode = this.decode(value);
+      message += String.fromCharCode(charCode);
+    }
+    return message;
+  }
+
+  /**
+   * Generate a hash of data using field operations
+   */
+  hash(data) {
+    let hash = 0;
+    const dataStr = typeof data === 'string' ? data : JSON.stringify(data);
+    
+    for (let i = 0; i < dataStr.length; i++) {
+      const charCode = dataStr.charCodeAt(i);
+      hash = this.field.add(
+        this.field.multiply(hash, 31),
+        charCode % this.prime
+      );
+    }
+    
+    return hash;
+  }
+}
+
+// ============================================================================
+// Bae Mathematics - Relationship & Connection Framework
+// ============================================================================
+
+/**
+ * Bae Mathematics - Framework for modeling relationships and connections
+ * 
+ * "Bae" (before anyone else) represents the mathematical modeling of
+ * relationships, bonds, and connections between entities.
+ * Uses Young Field to create relationship matrices and connection strengths.
+ */
+class BaeMathematics {
+  constructor() {
+    this.field = createRationalField();
+    this.relationships = new Map();
+    this.entities = new Set();
+  }
+
+  /**
+   * Add an entity to the relationship graph
+   */
+  addEntity(entityId, properties = {}) {
+    this.entities.add(entityId);
+    if (!this.relationships.has(entityId)) {
+      this.relationships.set(entityId, new Map());
+    }
+    return { id: entityId, properties };
+  }
+
+  /**
+   * Create a relationship between two entities
+   * strength: 0 (no connection) to 1 (maximum connection)
+   */
+  connect(entity1, entity2, strength = 0.5) {
+    if (!this.entities.has(entity1) || !this.entities.has(entity2)) {
+      throw new Error('Both entities must exist before creating connection');
+    }
+
+    // Normalize strength to [0, 1]
+    const normalizedStrength = Math.max(0, Math.min(1, strength));
+    
+    // Store bidirectional relationship
+    this.relationships.get(entity1).set(entity2, normalizedStrength);
+    this.relationships.get(entity2).set(entity1, normalizedStrength);
+    
+    return normalizedStrength;
+  }
+
+  /**
+   * Calculate relationship strength between two entities
+   */
+  getConnectionStrength(entity1, entity2) {
+    if (!this.relationships.has(entity1)) return 0;
+    return this.relationships.get(entity1).get(entity2) || 0;
+  }
+
+  /**
+   * Calculate transitive connection (connection through intermediaries)
+   */
+  transitiveConnection(entity1, entity2) {
+    if (entity1 === entity2) return 1;
+    
+    const direct = this.getConnectionStrength(entity1, entity2);
+    if (direct > 0) return direct;
+    
+    // Calculate through common connections
+    let maxTransitive = 0;
+    const connections1 = this.relationships.get(entity1) || new Map();
+    
+    for (const [intermediate, strength1] of connections1) {
+      if (intermediate !== entity2) {
+        const strength2 = this.getConnectionStrength(intermediate, entity2);
+        if (strength2 > 0) {
+          // Transitive strength = product of connections
+          const transitiveStrength = this.field.multiply(strength1, strength2);
+          maxTransitive = Math.max(maxTransitive, transitiveStrength);
+        }
+      }
+    }
+    
+    return maxTransitive;
+  }
+
+  /**
+   * Create a relationship matrix for all entities
+   */
+  getRelationshipMatrix() {
+    const entityList = Array.from(this.entities);
+    const n = entityList.length;
+    const matrix = [];
+    
+    for (let i = 0; i < n; i++) {
+      const row = [];
+      for (let j = 0; j < n; j++) {
+        if (i === j) {
+          row.push(1); // Self-connection is always 1
+        } else {
+          row.push(this.getConnectionStrength(entityList[i], entityList[j]));
+        }
+      }
+      matrix.push(row);
+    }
+    
+    return { entities: entityList, matrix };
+  }
+
+  /**
+   * Calculate the "bae index" - strongest relationship for an entity
+   */
+  getBaeIndex(entityId) {
+    const connections = this.relationships.get(entityId);
+    if (!connections || connections.size === 0) return null;
+    
+    let maxStrength = 0;
+    let bae = null;
+    
+    for (const [otherId, strength] of connections) {
+      if (strength > maxStrength) {
+        maxStrength = strength;
+        bae = otherId;
+      }
+    }
+    
+    return { bae, strength: maxStrength };
+  }
+
+  /**
+   * Normalize all relationship strengths to create probability distribution
+   */
+  normalizeRelationships(entityId) {
+    const connections = this.relationships.get(entityId);
+    if (!connections || connections.size === 0) return new Map();
+    
+    const values = Array.from(connections.values());
+    const normalized = this.field.normalize(values);
+    
+    const result = new Map();
+    let i = 0;
+    for (const [otherId] of connections) {
+      result.set(otherId, normalized[i++]);
+    }
+    
+    return result;
+  }
+}
+
+// ============================================================================
+// God Generator - Advanced Entity Creation System
+// ============================================================================
+
+/**
+ * God Generator - Creates advanced entities with encoded properties
+ * 
+ * Combines Yoshi's Secret (encoding) with Bae Mathematics (relationships)
+ * to generate complex entities with hidden properties and relationships.
+ * 
+ * Inspired by curiosity about data, learning, and creating emergent complexity.
+ */
+class GodGenerator {
+  constructor(secretPrime = 31337) {
+    this.secret = new YoshisSecret(secretPrime);
+    this.bae = new BaeMathematics();
+    this.field = createRationalField();
+    this.entities = new Map();
+    this.nextId = 1;
+  }
+
+  /**
+   * Generate a "god" entity with encoded properties
+   */
+  generateGod(properties = {}) {
+    const godId = `god_${this.nextId++}`;
+    
+    // Encode properties using Yoshi's Secret
+    const encodedProperties = {};
+    for (const [key, value] of Object.entries(properties)) {
+      if (typeof value === 'number') {
+        encodedProperties[key] = this.secret.encode(value);
+      } else if (typeof value === 'string') {
+        encodedProperties[key] = this.secret.encodeString(value);
+      } else {
+        encodedProperties[key] = value;
+      }
+    }
+    
+    // Create entity with special properties
+    const god = {
+      id: godId,
+      type: 'god',
+      createdAt: Date.now(),
+      properties: properties,
+      encodedProperties: encodedProperties,
+      essence: this._calculateEssence(properties),
+      power: this._calculatePower(properties)
+    };
+    
+    // Store entity
+    this.entities.set(godId, god);
+    this.bae.addEntity(godId, properties);
+    
+    return god;
+  }
+
+  /**
+   * Calculate entity essence (hash of properties)
+   */
+  _calculateEssence(properties) {
+    return this.secret.hash(properties);
+  }
+
+  /**
+   * Calculate entity power level (sum of numeric properties)
+   */
+  _calculatePower(properties) {
+    let power = 0;
+    for (const value of Object.values(properties)) {
+      if (typeof value === 'number') {
+        power = this.field.add(power, Math.abs(value));
+      }
+    }
+    return power;
+  }
+
+  /**
+   * Create a relationship between two entities
+   */
+  connectEntities(entity1Id, entity2Id, strength = 0.5) {
+    if (!this.entities.has(entity1Id) || !this.entities.has(entity2Id)) {
+      throw new Error('Both entities must exist');
+    }
+    
+    return this.bae.connect(entity1Id, entity2Id, strength);
+  }
+
+  /**
+   * Decode entity properties
+   */
+  decodeEntity(entityId) {
+    const entity = this.entities.get(entityId);
+    if (!entity) return null;
+    
+    const decoded = {};
+    for (const [key, value] of Object.entries(entity.encodedProperties)) {
+      if (Array.isArray(value)) {
+        decoded[key] = this.secret.decodeString(value);
+      } else if (typeof value === 'number') {
+        decoded[key] = this.secret.decode(value);
+      } else {
+        decoded[key] = value;
+      }
+    }
+    
+    return { ...entity, decodedProperties: decoded };
+  }
+
+  /**
+   * Generate a pantheon (collection of connected gods)
+   */
+  generatePantheon(count = 3, baseProperties = {}) {
+    const pantheon = [];
+    
+    // Generate gods
+    for (let i = 0; i < count; i++) {
+      const properties = {
+        ...baseProperties,
+        name: `Entity_${i + 1}`,
+        level: (i + 1) * 100,
+        wisdom: Math.floor(Math.random() * 100),
+        power: Math.floor(Math.random() * 100)
+      };
+      
+      const god = this.generateGod(properties);
+      pantheon.push(god);
+    }
+    
+    // Create relationships between all gods
+    for (let i = 0; i < pantheon.length; i++) {
+      for (let j = i + 1; j < pantheon.length; j++) {
+        const strength = this.field.divide(
+          Math.abs(pantheon[i].power - pantheon[j].power),
+          Math.max(pantheon[i].power, pantheon[j].power, 1)
+        );
+        const normalizedStrength = Math.max(0.1, 1 - strength);
+        this.connectEntities(pantheon[i].id, pantheon[j].id, normalizedStrength);
+      }
+    }
+    
+    return pantheon;
+  }
+
+  /**
+   * Get relationship graph for all entities
+   */
+  getRelationshipGraph() {
+    return this.bae.getRelationshipMatrix();
+  }
+
+  /**
+   * Find the most powerful entity
+   */
+  getMostPowerful() {
+    let maxPower = 0;
+    let mostPowerful = null;
+    
+    for (const [id, entity] of this.entities) {
+      if (entity.power > maxPower) {
+        maxPower = entity.power;
+        mostPowerful = entity;
+      }
+    }
+    
+    return mostPowerful;
+  }
+}
+
+// ============================================================================
+// Example Functions for New Features
+// ============================================================================
+
+/**
+ * Example: Yoshi's Secret encoding/decoding
+ */
+function yoshisSecretExample() {
+  const secret = new YoshisSecret(31337);
+  
+  const message = "Hello Yoshi!";
+  const encoded = secret.encodeString(message);
+  const decoded = secret.decodeString(encoded);
+  
+  return {
+    original: message,
+    encoded: encoded.slice(0, 5).join(',') + '...',
+    decoded: decoded,
+    hash: secret.hash(message)
+  };
+}
+
+/**
+ * Example: Bae Mathematics relationship modeling
+ */
+function baeMathematicsExample() {
+  const bae = new BaeMathematics();
+  
+  // Create entities
+  bae.addEntity('alice', { name: 'Alice' });
+  bae.addEntity('bob', { name: 'Bob' });
+  bae.addEntity('charlie', { name: 'Charlie' });
+  
+  // Create relationships
+  bae.connect('alice', 'bob', 0.9);      // Strong connection
+  bae.connect('bob', 'charlie', 0.7);    // Medium connection
+  bae.connect('alice', 'charlie', 0.3);  // Weak connection
+  
+  return {
+    aliceBob: bae.getConnectionStrength('alice', 'bob'),
+    bobCharlie: bae.getConnectionStrength('bob', 'charlie'),
+    aliceCharlie: bae.getConnectionStrength('alice', 'charlie'),
+    transitiveAliceCharlie: bae.transitiveConnection('alice', 'charlie'),
+    aliceBae: bae.getBaeIndex('alice')
+  };
+}
+
+/**
+ * Example: God Generator creating entities
+ */
+function godGeneratorExample() {
+  const generator = new GodGenerator(31337);
+  
+  // Generate a god
+  const god = generator.generateGod({
+    name: 'Zeus',
+    power: 9000,
+    wisdom: 8500,
+    domain: 'Sky'
+  });
+  
+  // Generate a pantheon
+  const pantheon = generator.generatePantheon(3, {
+    realm: 'Olympus'
+  });
+  
+  return {
+    singleGod: {
+      id: god.id,
+      type: god.type,
+      power: god.power,
+      essence: god.essence
+    },
+    pantheonCount: pantheon.length,
+    relationshipMatrix: generator.getRelationshipGraph()
+  };
+}
+
+// ============================================================================
 // Module Exports
 // ============================================================================
 
@@ -364,5 +850,17 @@ module.exports = {
   // Example functions
   normalizedSituationExample,
   youngFieldOperationsExample,
-  finiteFieldExample
+  finiteFieldExample,
+
+  // Yoshi's Secret - Cryptographic encoding framework
+  YoshisSecret,
+  yoshisSecretExample,
+
+  // Bae Mathematics - Relationship modeling
+  BaeMathematics,
+  baeMathematicsExample,
+
+  // God Generator - Advanced entity creation
+  GodGenerator,
+  godGeneratorExample
 };
