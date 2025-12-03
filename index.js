@@ -452,7 +452,7 @@ class BaeMathematics {
    */
   connect(entity1, entity2, strength = 0.5) {
     if (!this.entities.has(entity1) || !this.entities.has(entity2)) {
-      throw new Error('Both entities must exist before creating connection');
+      throw new Error(`Entities must be added before creating connection. Missing: ${!this.entities.has(entity1) ? entity1 : entity2}`);
     }
 
     // Normalize strength to [0, 1]
@@ -567,6 +567,10 @@ class BaeMathematics {
 // God Generator - Advanced Entity Creation System
 // ============================================================================
 
+// Constants for entity attribute generation
+const MIN_ATTRIBUTE_VALUE = 0;
+const MAX_ATTRIBUTE_VALUE = 100;
+
 /**
  * God Generator - Creates advanced entities with encoded properties
  * 
@@ -645,7 +649,7 @@ class GodGenerator {
    */
   connectEntities(entity1Id, entity2Id, strength = 0.5) {
     if (!this.entities.has(entity1Id) || !this.entities.has(entity2Id)) {
-      throw new Error('Both entities must exist');
+      throw new Error(`Cannot connect entities: one or both entity IDs do not exist (${entity1Id}, ${entity2Id})`);
     }
     
     return this.bae.connect(entity1Id, entity2Id, strength);
@@ -682,10 +686,10 @@ class GodGenerator {
     for (let i = 0; i < count; i++) {
       const properties = {
         ...baseProperties,
-        name: `Entity_${i + 1}`,
-        level: (i + 1) * 100,
-        wisdom: Math.floor(Math.random() * 100),
-        power: Math.floor(Math.random() * 100)
+        name: `God_${this.nextId}`,
+        level: (i + 1) * MAX_ATTRIBUTE_VALUE,
+        wisdom: Math.floor(Math.random() * (MAX_ATTRIBUTE_VALUE - MIN_ATTRIBUTE_VALUE + 1)) + MIN_ATTRIBUTE_VALUE,
+        power: Math.floor(Math.random() * (MAX_ATTRIBUTE_VALUE - MIN_ATTRIBUTE_VALUE + 1)) + MIN_ATTRIBUTE_VALUE
       };
       
       const god = this.generateGod(properties);
