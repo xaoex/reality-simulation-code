@@ -206,10 +206,19 @@ class YoungField extends YoungRing {
  * - Integration over intervals
  * - Measure-theoretic computations
  * - Volume and higher-dimensional measure
+ * 
+ * @param {Array} elements - Set of elements in the area (can be infinite, so often empty)
+ * @param {Function} addOp - Addition operation: (a, b) => a + b
+ * @param {Function} mulOp - Multiplication operation: (a, b) => a * b
+ * @param {Function} invOp - Inverse operation: (a) => 1/a (returns null for zero)
+ * @param {Function} measureOp - Measure operation: (region) => non-negative measure
+ * @param {Number} zeroVal - Zero element (additive identity)
+ * @param {Number} oneVal - One element (multiplicative identity)
  */
 class YoungArea extends YoungField {
   constructor(elements = [], addOp = null, mulOp = null, invOp = null, measureOp = null, zeroVal = 0, oneVal = 1) {
     super(elements, addOp, mulOp, invOp, zeroVal, oneVal);
+    this.tolerance = 1e-10; // Numerical tolerance for floating point comparisons
     this.measureOp = measureOp || ((region) => {
       // Default measure: length/area depending on region type
       if (typeof region === 'number') {
@@ -270,7 +279,13 @@ class YoungArea extends YoungField {
 
   /**
    * Integration over an interval [a, b]
-   * Riemann sum approximation: ∫ᵃᵇ f(x)dx ≈ Σ f(xᵢ)Δx
+   * Uses Riemann sum approximation with midpoint rule: ∫ᵃᵇ f(x)dx ≈ Σ f(xᵢ)Δx
+   * 
+   * @param {Function} f - Function to integrate
+   * @param {Number} start - Start of interval (a)
+   * @param {Number} end - End of interval (b)
+   * @param {Number} numSteps - Number of steps for Riemann sum (default: 1000)
+   * @returns {Number} Approximate integral value
    */
   integrate(f, start, end, numSteps = 1000) {
     if (start === end) return this.zero;
@@ -323,9 +338,10 @@ class YoungArea extends YoungField {
   /**
    * N-dimensional measure (volume)
    * For N-dimensional rectangular region
+   * Note: Empty dimensions array (0-dimensional point) returns 1 (empty product convention)
    */
   volumeNDimensional(dimensions) {
-    if (!Array.isArray(dimensions) || dimensions.length === 0) return this.zero;
+    if (!Array.isArray(dimensions) || dimensions.length === 0) return this.one;
     return dimensions.reduce((acc, dim) => this.multiply(acc, Math.abs(dim)), this.one);
   }
 
@@ -339,7 +355,7 @@ class YoungArea extends YoungField {
     
     // Check measure properties: μ(∅) = 0
     const emptyMeasure = this.measure(0);
-    if (Math.abs(emptyMeasure - this.zero) > 1e-10) return false;
+    if (Math.abs(emptyMeasure - this.zero) > this.tolerance) return false;
     
     return true;
   }

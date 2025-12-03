@@ -618,8 +618,8 @@ function testYoungAreaNDimensional() {
   // 4D: hypercube
   assertAlmostEqual(area.volumeNDimensional([2, 2, 2, 2]), 16, 1e-10, '4D volume');
   
-  // Empty
-  assertAlmostEqual(area.volumeNDimensional([]), 0, 1e-10, 'Empty dimensions = 0');
+  // Empty dimensions (0-dimensional point) should return 1 (empty product convention)
+  assertAlmostEqual(area.volumeNDimensional([]), 1, 1e-10, 'Empty dimensions = 1 (empty product)');
   
   console.log('  ✓ YoungArea N-dimensional volumes');
 }
