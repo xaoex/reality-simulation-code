@@ -411,10 +411,10 @@ class YoungArea extends YoungField {
 
   /**
    * Movement Trajectory Area
-   * Calculate area under trajectory of movement application
+   * Calculate average area over trajectory of movement application
    * Integrates valuation changes over movement sequence
    */
-  movementTrajectoryArea(situation, movement, steps = 10) {
+  averageMovementTrajectoryArea(situation, movement, steps = 10) {
     if (!(situation instanceof YoungSituation) || !(movement instanceof YoungMovement)) {
       throw new Error('Arguments must be YoungSituation and YoungMovement');
     }
@@ -429,6 +429,14 @@ class YoungArea extends YoungField {
     }
     
     return this.divide(totalArea, steps);
+  }
+
+  /**
+   * Movement Trajectory Area (alias for backward compatibility)
+   * @deprecated Use averageMovementTrajectoryArea for clarity
+   */
+  movementTrajectoryArea(situation, movement, steps = 10) {
+    return this.averageMovementTrajectoryArea(situation, movement, steps);
   }
 
   /**
@@ -449,18 +457,19 @@ class YoungArea extends YoungField {
    * Interpolated Situation Area
    * Calculate area between two situations (like area between curves)
    * Useful for DMT (Differential Movement Transform) analysis
+   * Formula: (1-t) * v1 + t * v2
    */
   interpolatedSituationArea(situation1, situation2, t = 0.5) {
     if (!(situation1 instanceof YoungSituation) || !(situation2 instanceof YoungSituation)) {
       throw new Error('Arguments must be YoungSituation instances');
     }
     
-    // Interpolate valuations between situations
+    // Interpolate valuations: v = (1-t)*v1 + t*v2
     const interpolatedValuation = (state) => {
       const v1 = situation1.valuation(state);
       const v2 = situation2.valuation(state);
-      return this.add(this.multiply(v1, this.add(this.one, this.multiply(-1, t))), 
-                     this.multiply(v2, t));
+      const oneMinusT = this.add(this.one, this.multiply(-1, t));
+      return this.add(this.multiply(v1, oneMinusT), this.multiply(v2, t));
     };
     
     let totalArea = this.zero;
