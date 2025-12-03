@@ -109,6 +109,38 @@ console.log(volume);  // ≈ 8.378 (cone volume)
 
 See [YOUNG_AREA.md](YOUNG_AREA.md) for complete documentation and examples.
 
+### Young Situation Framework Usage
+
+```javascript
+const {
+  YoungSituation,
+  YoungFamily,
+  YoungBound,
+  YoungMovement,
+  createEuclideanArea
+} = require('reality-simulation-code');
+
+const area = createEuclideanArea();
+
+// Create a Young Situation
+const states = new Set(['s1', 's2', 's3']);
+const valuation = (s) => s === 's1' ? 10 : s === 's2' ? 20 : 30;
+const situation = new YoungSituation(states, new Set(), valuation);
+
+// Measure situation region
+console.log(area.situationRegionMeasure(situation));  // 60
+
+// Apply movement transformation
+const movement = YoungMovement.optimize();
+const transformed = movement.apply(situation);
+
+// Analyze trajectory
+const trajectory = area.movementTrajectoryArea(situation, movement, 10);
+console.log(trajectory);  // Average measure over trajectory
+```
+
+See [YOUNG_AREA.md](YOUNG_AREA.md#integration-with-young-situation-framework) for complete integration examples with Young Situation, Family, Bound, and Movement.
+
 
 linktr.ee/xaoex
 linktr.ee/oktays
@@ -134,6 +166,7 @@ Release Notes
 * New ideas for qaep (oOS)
 * Add contributions to simsim and research
 * **NEW: Young Area Implementation** - Extension of Young Field with measure theory. Adds area calculations, integration operations, volume of revolution, and N-dimensional measure. See [YOUNG_AREA.md](YOUNG_AREA.md) for complete usage guide and examples. Enables geometric analysis, situation region measurement, and analytical computations over situation spaces.
+* **EXTENDED: Young Area Integration** - Deep integration with Young Situation framework. Adds YoungSituation, YoungFamily, YoungBound, and YoungMovement classes from Sections 3-6 of the whitepaper. Young Area now supports situation region measurement, family hierarchical measure, bounded region analysis, movement trajectory calculations, and situation interpolation for DMT applications. Comprehensive integration enables measure-theoretic analysis across the entire Young Situation framework.
 * Let brain fix everything else
 * FORCE
 * Urrthang mine forever. Max! Max out brain deluxe

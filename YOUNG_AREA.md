@@ -455,12 +455,239 @@ Young Area
 
 All three maintain backward compatibility—every Young Area is a Young Field, and every Young Field is a Young Ring.
 
+## Integration with Young Situation Framework
+
+Young Area extends to work with the core structures from the Young Situation framework:
+
+### Young Situation (Section 3)
+
+**YoungSituation** represents a formal situation with states, transitions, and valuations. Young Area can measure situation regions:
+
+```javascript
+const { YoungSituation, createEuclideanArea } = require('reality-simulation-code');
+
+const area = createEuclideanArea();
+
+// Create a situation with states and valuations
+const states = new Set(['s1', 's2', 's3']);
+const valuation = (s) => {
+  if (s === 's1') return 10;
+  if (s === 's2') return 20;
+  if (s === 's3') return 30;
+  return 0;
+};
+const situation = new YoungSituation(states, new Set(), valuation);
+
+// Calculate total measure of the situation
+const measure = area.situationRegionMeasure(situation);  // 60
+
+// Calculate state space volume (product of valuations)
+const volume = area.stateSpaceVolume(situation);  // 6000
+```
+
+### Young Family (Section 4)
+
+**YoungFamily** is a hierarchical collection of situations. Young Area can aggregate measures across families:
+
+```javascript
+const { YoungFamily, YoungSituation, createEuclideanArea } = require('reality-simulation-code');
+
+const area = createEuclideanArea();
+
+// Create a family with parent-child relationships
+const indexSet = new Set([1, 2, 3]);
+const members = (i) => {
+  const states = new Set([`s${i}`]);
+  const valuation = (s) => i * 10;
+  return new YoungSituation(states, new Set(), valuation);
+};
+const parent = (i) => i === 1 ? null : 1;  // 1 is root
+
+const family = new YoungFamily(indexSet, members, parent);
+
+// Calculate total family measure
+const totalMeasure = area.familyRegionMeasure(family);  // 60
+```
+
+### Young Bound (Section 5)
+
+**YoungBound** constrains situation valuations. Young Area can measure bounded regions:
+
+```javascript
+const { YoungBound, YoungSituation, createEuclideanArea } = require('reality-simulation-code');
+
+const area = createEuclideanArea();
+
+// Create a situation
+const states = new Set(['s1', 's2', 's3']);
+const valuation = (s) => {
+  if (s === 's1') return 5;
+  if (s === 's2') return 15;
+  if (s === 's3') return 25;
+  return 0;
+};
+const situation = new YoungSituation(states, new Set(), valuation);
+
+// Create bounds [10, 20]
+const bound = new YoungBound((s) => 10, (s) => 20);
+
+// Calculate measure of bounded region (only s2 with valuation 15 is within bounds)
+const boundedMeasure = area.boundedRegionArea(situation, bound);  // 15
+```
+
+### Young Movement (Section 6)
+
+**YoungMovement** transforms situations. Young Area can analyze movement trajectories:
+
+```javascript
+const { YoungMovement, YoungSituation, createEuclideanArea } = require('reality-simulation-code');
+
+const area = createEuclideanArea();
+
+// Create initial situation
+const states = new Set(['s1', 's2', 's3']);
+const valuation = (s) => {
+  if (s === 's1') return 10;
+  if (s === 's2') return 20;
+  if (s === 's3') return 30;
+  return 0;
+};
+const finalStates = new Set(['s3']);
+const situation = new YoungSituation(states, new Set(), valuation, null, finalStates);
+
+// Apply optimization movement (increases final state valuations)
+const optimizeMovement = YoungMovement.optimize();
+const transformedSituation = optimizeMovement.apply(situation);
+
+// Calculate trajectory area over movement sequence
+const trajectoryArea = area.movementTrajectoryArea(situation, optimizeMovement, 10);
+
+// Analyze transformation
+console.log('Initial measure:', area.situationRegionMeasure(situation));
+console.log('Transformed measure:', area.situationRegionMeasure(transformedSituation));
+console.log('Trajectory area:', trajectoryArea);
+```
+
+### Situation Interpolation (DMT Application)
+
+Young Area supports interpolation between situations, useful for Differential Movement Transform (DMT) analysis:
+
+```javascript
+const { YoungSituation, createEuclideanArea } = require('reality-simulation-code');
+
+const area = createEuclideanArea();
+
+// Create two situations
+const states = new Set(['s1', 's2']);
+
+const valuation1 = (s) => s === 's1' ? 10 : 20;
+const situation1 = new YoungSituation(states, new Set(), valuation1);
+
+const valuation2 = (s) => s === 's1' ? 30 : 40;
+const situation2 = new YoungSituation(states, new Set(), valuation2);
+
+// Interpolate at different points
+const interpolated25 = area.interpolatedSituationArea(situation1, situation2, 0.25);
+const interpolated50 = area.interpolatedSituationArea(situation1, situation2, 0.5);
+const interpolated75 = area.interpolatedSituationArea(situation1, situation2, 0.75);
+
+console.log('Interpolated measures:', interpolated25, interpolated50, interpolated75);
+// Progressive transition: 35, 50, 65
+```
+
+### Complete Example: Situation Optimization with Bounds and Movement
+
+```javascript
+const {
+  YoungSituation,
+  YoungBound,
+  YoungMovement,
+  createEuclideanArea
+} = require('reality-simulation-code');
+
+const area = createEuclideanArea();
+
+// 1. Define initial situation
+const states = new Set(['s1', 's2', 's3']);
+const valuation = (s) => Math.random() * 50;
+const finalStates = new Set(['s3']);
+const situation = new YoungSituation(states, new Set(), valuation, null, finalStates);
+
+// 2. Apply bounds
+const bound = new YoungBound((s) => 10, (s) => 40);
+const constrainMovement = YoungMovement.constrain(bound);
+const boundedSituation = constrainMovement.apply(situation);
+
+// 3. Optimize within bounds
+const optimizeMovement = YoungMovement.optimize();
+let currentSituation = boundedSituation;
+const trajectory = [];
+
+for (let i = 0; i < 10; i++) {
+  trajectory.push(area.situationRegionMeasure(currentSituation));
+  currentSituation = optimizeMovement.apply(currentSituation);
+  currentSituation = constrainMovement.apply(currentSituation);
+}
+
+// 4. Analyze optimization trajectory
+console.log('Optimization trajectory:', trajectory);
+console.log('Initial measure:', trajectory[0]);
+console.log('Final measure:', trajectory[trajectory.length - 1]);
+console.log('Average trajectory area:', trajectory.reduce((a, b) => a + b, 0) / trajectory.length);
+```
+
+## New Classes
+
+### YoungSituation
+
+Formal definition from Section 3: Y = (S, R, σ, δ, F)
+
+**Methods:**
+- `isValid()` - Check if situation satisfies axioms
+- `totalValuation()` - Sum of all state valuations
+- `isReachable(from, to)` - Check if state is reachable
+
+### YoungFamily  
+
+Hierarchical collection from Section 4: F = {Yᵢ}ᵢ∈I
+
+**Methods:**
+- `roots()` - Get root elements (no parent)
+- `descendants(index)` - Get all descendants of an index
+- `isWellFounded()` - Check for acyclic parent relationships
+
+### YoungBound
+
+Bounds on valuations from Section 5: B = (L, U, C)
+
+**Methods:**
+- `isValid(state, valuation)` - Check if valuation respects bounds
+- `isTight(state, valuation)` - Check if bound is tight at state
+- `width(state)` - Get bound width (upper - lower)
+
+### YoungMovement
+
+Group of transformations from Section 6: M = (G, ∘, e, ⁻¹)
+
+**Methods:**
+- `compose(other)` - Compose with another movement
+- `apply(situation)` - Apply movement to a situation
+- **Static methods:**
+  - `identity()` - Identity movement
+  - `optimize()` - Optimization generator (moves toward final states)
+  - `explore()` - Exploration generator (uniform distribution)
+  - `constrain(bound)` - Constraint generator (enforces bounds)
+
 ## References
 
 - **Young Ring:** [YOUNG_FIELD.md](YOUNG_FIELD.md) Section: Young Ring
 - **Young Field:** [YOUNG_FIELD.md](YOUNG_FIELD.md)
 - **Whitepaper:** [WHITEPAPER_YOUNG_SITUATION.md](WHITEPAPER_YOUNG_SITUATION.md)
-- **Section 10:** Young Ring Integration
+  - Section 3: Young Situation
+  - Section 4: Family
+  - Section 5: Bound
+  - Section 6: Movement
+  - Section 10: Young Ring Integration
 
 ## License
 
@@ -474,4 +701,4 @@ xaoex
 
 ---
 
-*Young Area extends the Young Situation framework with measure theory, enabling geometric and analytical computations over situation spaces.*
+*Young Area extends the Young Situation framework with measure theory, enabling geometric and analytical computations over situation spaces. It integrates seamlessly with YoungSituation, YoungFamily, YoungBound, and YoungMovement to provide comprehensive measure-theoretic analysis of the Young Situation framework.*
