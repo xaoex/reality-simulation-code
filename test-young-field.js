@@ -12,7 +12,13 @@ const {
   createSituationValuationField,
   normalizedSituationExample,
   youngFieldOperationsExample,
-  finiteFieldExample
+  finiteFieldExample,
+  YoshisSecret,
+  yoshisSecretExample,
+  BaeMathematics,
+  baeMathematicsExample,
+  GodGenerator,
+  godGeneratorExample
 } = require('./index.js');
 
 // ============================================================================
@@ -456,6 +462,297 @@ function testFiniteFieldExampleFunction() {
 }
 
 // ============================================================================
+// Yoshi's Secret Tests
+// ============================================================================
+
+function testYoshisSecretConstruction() {
+  const secret = new YoshisSecret(31337);
+  
+  assert(secret.prime === 31337, 'Prime should be set correctly');
+  assert(secret.secretKey !== null, 'Secret key should be generated');
+  
+  console.log('  ✓ YoshisSecret construction');
+}
+
+function testYoshisSecretEncoding() {
+  const secret = new YoshisSecret(31337);
+  
+  // Test number encoding/decoding
+  const original = 42;
+  const encoded = secret.encode(original);
+  const decoded = secret.decode(encoded);
+  
+  assert(decoded === original, `Encoding/decoding should be reversible: ${original} -> ${encoded} -> ${decoded}`);
+  assert(encoded !== original, 'Encoded value should differ from original');
+  
+  console.log('  ✓ YoshisSecret number encoding/decoding');
+}
+
+function testYoshisSecretStringEncoding() {
+  const secret = new YoshisSecret(31337);
+  
+  // Test string encoding/decoding
+  const message = "Hello World!";
+  const encoded = secret.encodeString(message);
+  const decoded = secret.decodeString(encoded);
+  
+  assert(decoded === message, `String encoding/decoding should be reversible: "${message}" -> "${decoded}"`);
+  assert(Array.isArray(encoded), 'Encoded string should be an array');
+  assert(encoded.length === message.length, 'Encoded array length should match message length');
+  
+  console.log('  ✓ YoshisSecret string encoding/decoding');
+}
+
+function testYoshisSecretHashing() {
+  const secret = new YoshisSecret(31337);
+  
+  // Test hashing
+  const data1 = "test data";
+  const data2 = "test data";
+  const data3 = "different data";
+  
+  const hash1 = secret.hash(data1);
+  const hash2 = secret.hash(data2);
+  const hash3 = secret.hash(data3);
+  
+  assert(hash1 === hash2, 'Same data should produce same hash');
+  assert(hash1 !== hash3, 'Different data should produce different hash');
+  assert(typeof hash1 === 'number', 'Hash should be a number');
+  
+  console.log('  ✓ YoshisSecret hashing');
+}
+
+// ============================================================================
+// Bae Mathematics Tests
+// ============================================================================
+
+function testBaeMathematicsConstruction() {
+  const bae = new BaeMathematics();
+  
+  assert(bae.entities.size === 0, 'Should start with no entities');
+  assert(bae.relationships.size === 0, 'Should start with no relationships');
+  
+  console.log('  ✓ BaeMathematics construction');
+}
+
+function testBaeMathematicsEntities() {
+  const bae = new BaeMathematics();
+  
+  const entity = bae.addEntity('entity1', { name: 'Test' });
+  
+  assert(entity.id === 'entity1', 'Entity should have correct ID');
+  assert(bae.entities.has('entity1'), 'Entity should be added to set');
+  
+  console.log('  ✓ BaeMathematics entity management');
+}
+
+function testBaeMathematicsConnections() {
+  const bae = new BaeMathematics();
+  
+  bae.addEntity('a');
+  bae.addEntity('b');
+  
+  const strength = bae.connect('a', 'b', 0.75);
+  
+  assert(strength === 0.75, 'Connection strength should be set');
+  assert(bae.getConnectionStrength('a', 'b') === 0.75, 'Should retrieve connection strength');
+  assert(bae.getConnectionStrength('b', 'a') === 0.75, 'Connection should be bidirectional');
+  
+  console.log('  ✓ BaeMathematics connections');
+}
+
+function testBaeMathematicsTransitiveConnection() {
+  const bae = new BaeMathematics();
+  
+  bae.addEntity('a');
+  bae.addEntity('b');
+  bae.addEntity('c');
+  
+  bae.connect('a', 'b', 0.8);
+  bae.connect('b', 'c', 0.6);
+  
+  const transitive = bae.transitiveConnection('a', 'c');
+  
+  assert(transitive > 0, 'Transitive connection should exist');
+  assertAlmostEqual(transitive, 0.48, 1e-10, 'Transitive connection should be product of strengths');
+  
+  console.log('  ✓ BaeMathematics transitive connections');
+}
+
+function testBaeMathematicsBaeIndex() {
+  const bae = new BaeMathematics();
+  
+  bae.addEntity('main');
+  bae.addEntity('friend1');
+  bae.addEntity('friend2');
+  
+  bae.connect('main', 'friend1', 0.6);
+  bae.connect('main', 'friend2', 0.9);
+  
+  const baeIndex = bae.getBaeIndex('main');
+  
+  assert(baeIndex.bae === 'friend2', 'Bae should be strongest connection');
+  assert(baeIndex.strength === 0.9, 'Bae strength should be 0.9');
+  
+  console.log('  ✓ BaeMathematics bae index');
+}
+
+function testBaeMathematicsMatrix() {
+  const bae = new BaeMathematics();
+  
+  bae.addEntity('a');
+  bae.addEntity('b');
+  bae.addEntity('c');
+  
+  bae.connect('a', 'b', 0.5);
+  bae.connect('b', 'c', 0.7);
+  
+  const matrix = bae.getRelationshipMatrix();
+  
+  assert(matrix.entities.length === 3, 'Matrix should have 3 entities');
+  assert(matrix.matrix.length === 3, 'Matrix should be 3x3');
+  assert(matrix.matrix[0].length === 3, 'Each row should have 3 elements');
+  
+  console.log('  ✓ BaeMathematics relationship matrix');
+}
+
+// ============================================================================
+// God Generator Tests
+// ============================================================================
+
+function testGodGeneratorConstruction() {
+  const generator = new GodGenerator(31337);
+  
+  assert(generator.secret !== null, 'Should have YoshisSecret instance');
+  assert(generator.bae !== null, 'Should have BaeMathematics instance');
+  assert(generator.entities.size === 0, 'Should start with no entities');
+  
+  console.log('  ✓ GodGenerator construction');
+}
+
+function testGodGeneratorCreateGod() {
+  const generator = new GodGenerator(31337);
+  
+  const god = generator.generateGod({
+    name: 'TestGod',
+    power: 100,
+    wisdom: 50
+  });
+  
+  assert(god.type === 'god', 'Entity should be of type god');
+  assert(god.id.startsWith('god_'), 'ID should have god prefix');
+  assert(god.power > 0, 'Power should be calculated');
+  assert(god.essence !== undefined, 'Essence should be calculated');
+  assert(god.encodedProperties !== undefined, 'Properties should be encoded');
+  
+  console.log('  ✓ GodGenerator create god');
+}
+
+function testGodGeneratorDecoding() {
+  const generator = new GodGenerator(31337);
+  
+  const god = generator.generateGod({
+    name: 'Zeus',
+    level: 100
+  });
+  
+  const decoded = generator.decodeEntity(god.id);
+  
+  assert(decoded !== null, 'Should decode entity');
+  assert(decoded.decodedProperties.name === 'Zeus', 'Name should decode correctly');
+  assert(decoded.decodedProperties.level === 100, 'Level should decode correctly');
+  
+  console.log('  ✓ GodGenerator decoding');
+}
+
+function testGodGeneratorConnectEntities() {
+  const generator = new GodGenerator(31337);
+  
+  const god1 = generator.generateGod({ name: 'God1' });
+  const god2 = generator.generateGod({ name: 'God2' });
+  
+  const strength = generator.connectEntities(god1.id, god2.id, 0.8);
+  
+  assert(strength === 0.8, 'Connection strength should be set');
+  assert(generator.bae.getConnectionStrength(god1.id, god2.id) === 0.8, 'Should retrieve connection');
+  
+  console.log('  ✓ GodGenerator connect entities');
+}
+
+function testGodGeneratorPantheon() {
+  const generator = new GodGenerator(31337);
+  
+  const pantheon = generator.generatePantheon(3, { realm: 'Olympus' });
+  
+  assert(pantheon.length === 3, 'Should generate 3 gods');
+  assert(pantheon[0].type === 'god', 'All should be gods');
+  
+  // Check that relationships exist
+  const matrix = generator.getRelationshipGraph();
+  assert(matrix.entities.length === 3, 'All gods should be in relationship graph');
+  
+  console.log('  ✓ GodGenerator pantheon generation');
+}
+
+function testGodGeneratorMostPowerful() {
+  const generator = new GodGenerator(31337);
+  
+  generator.generateGod({ power: 50 });
+  generator.generateGod({ power: 100 });
+  generator.generateGod({ power: 75 });
+  
+  const mostPowerful = generator.getMostPowerful();
+  
+  assert(mostPowerful !== null, 'Should find most powerful');
+  assert(mostPowerful.power === 100, 'Should find the one with power 100');
+  
+  console.log('  ✓ GodGenerator most powerful');
+}
+
+// ============================================================================
+// Example Function Tests
+// ============================================================================
+
+function testYoshisSecretExampleFunction() {
+  const result = yoshisSecretExample();
+  
+  assert(result.original === result.decoded, 'Example should encode/decode correctly');
+  assert(result.encoded !== undefined, 'Should have encoded representation');
+  assert(typeof result.hash === 'number', 'Should have hash');
+  
+  console.log('  ✓ Example: yoshisSecretExample()');
+  console.log(`    Original: "${result.original}"`);
+  console.log(`    Decoded: "${result.decoded}"`);
+  console.log(`    Hash: ${result.hash}`);
+}
+
+function testBaeMathematicsExampleFunction() {
+  const result = baeMathematicsExample();
+  
+  assert(result.aliceBob === 0.9, 'Alice-Bob connection should be 0.9');
+  assert(result.bobCharlie === 0.7, 'Bob-Charlie connection should be 0.7');
+  assert(result.aliceBae.bae === 'bob', 'Alice bae should be Bob');
+  
+  console.log('  ✓ Example: baeMathematicsExample()');
+  console.log(`    Alice-Bob: ${result.aliceBob}`);
+  console.log(`    Bob-Charlie: ${result.bobCharlie}`);
+  console.log(`    Alice's Bae: ${result.aliceBae.bae} (strength: ${result.aliceBae.strength})`);
+}
+
+function testGodGeneratorExampleFunction() {
+  const result = godGeneratorExample();
+  
+  assert(result.singleGod.type === 'god', 'Should generate a god');
+  assert(result.pantheonCount === 3, 'Should generate pantheon of 3');
+  assert(result.relationshipMatrix !== undefined, 'Should have relationship matrix');
+  
+  console.log('  ✓ Example: godGeneratorExample()');
+  console.log(`    God ID: ${result.singleGod.id}`);
+  console.log(`    God Power: ${result.singleGod.power}`);
+  console.log(`    Pantheon Count: ${result.pantheonCount}`);
+}
+
+// ============================================================================
 // Run All Tests
 // ============================================================================
 
@@ -499,6 +796,33 @@ function runAllTests() {
   testSection('Example: Normalized Situations', testNormalizedSituationExample);
   testSection('Example: Field Operations', testYoungFieldOperationsExample);
   testSection('Example: Finite Field', testFiniteFieldExampleFunction);
+
+  // Yoshi's Secret Tests
+  testSection('YoshisSecret Construction', testYoshisSecretConstruction);
+  testSection('YoshisSecret Encoding', testYoshisSecretEncoding);
+  testSection('YoshisSecret String Encoding', testYoshisSecretStringEncoding);
+  testSection('YoshisSecret Hashing', testYoshisSecretHashing);
+
+  // Bae Mathematics Tests
+  testSection('BaeMathematics Construction', testBaeMathematicsConstruction);
+  testSection('BaeMathematics Entities', testBaeMathematicsEntities);
+  testSection('BaeMathematics Connections', testBaeMathematicsConnections);
+  testSection('BaeMathematics Transitive Connection', testBaeMathematicsTransitiveConnection);
+  testSection('BaeMathematics Bae Index', testBaeMathematicsBaeIndex);
+  testSection('BaeMathematics Matrix', testBaeMathematicsMatrix);
+
+  // God Generator Tests
+  testSection('GodGenerator Construction', testGodGeneratorConstruction);
+  testSection('GodGenerator Create God', testGodGeneratorCreateGod);
+  testSection('GodGenerator Decoding', testGodGeneratorDecoding);
+  testSection('GodGenerator Connect Entities', testGodGeneratorConnectEntities);
+  testSection('GodGenerator Pantheon', testGodGeneratorPantheon);
+  testSection('GodGenerator Most Powerful', testGodGeneratorMostPowerful);
+
+  // New Example Functions
+  testSection('Example: Yoshis Secret', testYoshisSecretExampleFunction);
+  testSection('Example: Bae Mathematics', testBaeMathematicsExampleFunction);
+  testSection('Example: God Generator', testGodGeneratorExampleFunction);
 
   console.log('\n' + '='.repeat(70));
   console.log('ALL TESTS PASSED ✓');
