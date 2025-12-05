@@ -482,6 +482,9 @@ class YoshisSecret {
   /**
    * Compute commitment to a value (Pedersen-like commitment)
    * Definition: C(v, r) = E(v) + r mod p
+   * 
+   * NOTE: This uses Math.random() which is NOT cryptographically secure.
+   * For production use, replace with a CSPRNG (e.g., crypto.getRandomValues).
    */
   commit(value, randomness = null) {
     const r = randomness !== null ? randomness : Math.floor(Math.random() * this.prime);
@@ -502,6 +505,9 @@ class YoshisSecret {
   /**
    * Oblivious transfer-like protocol setup
    * Generate two encoded values where receiver can choose one
+   * 
+   * NOTE: This uses Math.random() which is NOT cryptographically secure.
+   * For production use, replace with a CSPRNG (e.g., crypto.getRandomValues).
    */
   obliviousTransferSend(message0, message1) {
     const encoded0 = this.encode(message0);
@@ -690,7 +696,9 @@ class BaeMathematics {
       }
     }
     
-    return this.field.divide(2 * edgesInNeighborhood, k * (k - 1));
+    // Safe division: k*(k-1) is always positive when k >= 2
+    const denominator = k * (k - 1);
+    return this.field.divide(2 * edgesInNeighborhood, denominator);
   }
 
   /**
@@ -898,6 +906,11 @@ class BaeMathematics {
 // Constants for entity attribute generation
 const MIN_ATTRIBUTE_VALUE = 0;
 const MAX_ATTRIBUTE_VALUE = 100;
+
+// Constants for evolutionary and simulation parameters
+const OFFSPRING_VARIATION_FACTOR = 0.2;  // 20% variation in offspring traits
+const SIMILARITY_THRESHOLD = 0.5;         // Neutral similarity point
+const INTERACTION_DELTA_FACTOR = 0.1;     // Relationship change rate
 
 /**
  * God Generator - Creates advanced entities with encoded properties
@@ -1201,7 +1214,7 @@ class GodGenerator {
       if (typeof v1 === 'number' && typeof v2 === 'number') {
         // Average with random variation
         const avg = this.field.divide(this.field.add(v1, v2), 2);
-        const variation = (Math.random() - 0.5) * 0.2 * avg;
+        const variation = (Math.random() - 0.5) * OFFSPRING_VARIATION_FACTOR * avg;
         offspringProperties[key] = Math.max(0, avg + variation);
       } else {
         // Random choice for non-numeric properties
@@ -1231,7 +1244,7 @@ class GodGenerator {
     const currentStrength = this.bae.getConnectionStrength(entity1Id, entity2Id);
     
     // Update relationship based on similarity
-    const delta = (similarity - 0.5) * 0.1; // Similarity affects relationship
+    const delta = (similarity - SIMILARITY_THRESHOLD) * INTERACTION_DELTA_FACTOR;
     const newStrength = Math.max(0, Math.min(1, currentStrength + delta));
     
     this.connectEntities(entity1Id, entity2Id, newStrength);
