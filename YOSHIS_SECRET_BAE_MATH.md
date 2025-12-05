@@ -513,11 +513,249 @@ npm test
 ```
 
 The test suite includes:
-- Yoshi's Secret encoding/decoding
-- Bae Mathematics relationship modeling
-- God Generator entity creation
+- Yoshi's Secret encoding/decoding, authentication, commitments, and random generation
+- Bae Mathematics relationship modeling, centrality measures, path finding, and graph metrics
+- God Generator entity creation, evolution, merging, offspring generation, and hierarchy
 - All integration scenarios
 - Example function validation
+- **Total: 55 comprehensive tests**
+
+---
+
+## Extended Features
+
+### Advanced Yoshi's Secret Operations
+
+#### Batch Operations
+```javascript
+const secret = new YoshisSecret(31337);
+const values = [10, 20, 30, 40];
+const encoded = secret.encodeBatch(values);
+const decoded = secret.decodeBatch(encoded);
+```
+
+#### Message Authentication
+```javascript
+const message = "Important data";
+const authCode = secret.authenticate(message);
+const isValid = secret.verifyAuthentication(message, authCode);
+```
+
+#### Cryptographic Commitments
+```javascript
+const value = 42;
+const { commitment, randomness } = secret.commit(value);
+const isValid = secret.verifyCommitment(value, commitment, randomness);
+```
+
+#### Deterministic Random Sequence
+```javascript
+const seed = 12345;
+const sequence = secret.generateRandomSequence(seed, 10);
+```
+
+#### Oblivious Transfer Protocol
+```javascript
+const transfer = secret.obliviousTransferSend(msg0, msg1);
+const chosen = secret.obliviousTransferReceive(transfer, 0, transfer.mask);
+```
+
+### Advanced Bae Mathematics Operations
+
+#### Centrality Measures
+```javascript
+const bae = new BaeMathematics();
+// ... add entities and connections
+
+// Various centrality measures
+const degree = bae.degreeCentrality('entity');
+const betweenness = bae.betweennessCentrality('entity');
+const closeness = bae.closenessCentrality('entity');
+const clustering = bae.clusteringCoefficient('entity');
+```
+
+#### Path Finding
+```javascript
+// Find all paths between entities
+const paths = bae.findPaths('start', 'end', maxDepth);
+
+// Find strongest path
+const strongest = bae.strongestPath('start', 'end');
+console.log(strongest.path);     // ['start', 'mid', 'end']
+console.log(strongest.strength);  // 0.48
+```
+
+#### Graph Analysis
+```javascript
+// Graph metrics
+const density = bae.graphDensity();
+const avgStrength = bae.averageConnectionStrength();
+const components = bae.connectedComponents();
+```
+
+### Advanced God Generator Operations
+
+#### Entity Evolution
+```javascript
+const generator = new GodGenerator(31337);
+const god = generator.generateGod({ power: 100 });
+
+// Evolve entity over time
+generator.evolveEntity(god.id, 0.1); // 10% growth rate
+```
+
+#### Entity Merging
+```javascript
+const god1 = generator.generateGod({ power: 100, wisdom: 50 });
+const god2 = generator.generateGod({ power: 200, wisdom: 150 });
+
+// Merge two entities
+const merged = generator.mergeEntities(god1.id, god2.id, 0.5);
+```
+
+#### Offspring Generation
+```javascript
+const parent1 = generator.generateGod({ power: 100 });
+const parent2 = generator.generateGod({ power: 150 });
+
+// Generate offspring with inherited traits
+const offspring = generator.generateOffspring(parent1.id, parent2.id);
+console.log(offspring.properties.parents); // [parent1.id, parent2.id]
+```
+
+#### Entity Analysis
+```javascript
+// Calculate similarity
+const similarity = generator.entitySimilarity(god1.id, god2.id);
+
+// Get influence score
+const influence = generator.calculateInfluence(god.id);
+
+// Get entity hierarchy
+const hierarchy = generator.getEntityHierarchy();
+
+// Get lineage (ancestors and descendants)
+const lineage = generator.getLineage(god.id);
+
+// Get statistics
+const stats = generator.getStatistics();
+console.log(stats);
+// {
+//   count: 5,
+//   avgPower: 150,
+//   maxPower: 200,
+//   minPower: 100,
+//   avgEssence: 12345,
+//   density: 0.7,
+//   harmony: 0.65
+// }
+```
+
+#### Simulation
+```javascript
+// Simulate interaction between entities
+const result = generator.simulateInteraction(god1.id, god2.id);
+console.log(result.newStrength); // Updated relationship strength
+
+// Find natural factions/clusters
+const factions = generator.findFactions();
+
+// Calculate pantheon harmony
+const harmony = generator.pantheonHarmony();
+```
+
+---
+
+## Mathematical Definitions
+
+### Yoshi's Secret Definitions
+
+**Definition 1 (Encoding)**: For value x ∈ ℤₚ, the encoding function is:
+```
+E(x) = (x × k + c) mod p
+```
+where k is the secret key and c is the constant shift.
+
+**Definition 2 (Batch Encoding)**: For a set V = {v₁, v₂, ..., vₙ}:
+```
+E(V) = {E(v₁), E(v₂), ..., E(vₙ)}
+```
+
+**Definition 3 (HMAC-like Authentication)**: For message m and key k:
+```
+HMAC(m, k) = H((k ⊕ opad) || H((k ⊕ ipad) || m))
+```
+Simplified for finite field operations.
+
+**Definition 4 (Commitment Scheme)**: A commitment C to value v with randomness r:
+```
+C(v, r) = E(v) + r mod p
+```
+
+**Definition 5 (Random Sequence Generator)**: Linear Congruential Generator:
+```
+Rₙ = (a × Rₙ₋₁ + c) mod p
+```
+
+### Bae Mathematics Definitions
+
+**Definition 6 (Clustering Coefficient)**: For vertex v with k neighbors:
+```
+C(v) = (2 × |edges in neighborhood|) / (k × (k-1))
+```
+
+**Definition 7 (Degree Centrality)**: For vertex v in graph with n vertices:
+```
+C_D(v) = deg(v) / (n - 1)
+```
+
+**Definition 8 (Closeness Centrality)**: 
+```
+C_C(v) = (n - 1) / Σᵤ d(v, u)
+```
+where d(v, u) is the distance between vertices.
+
+**Definition 9 (Path Strength)**: For path P = [v₁, v₂, ..., vₖ]:
+```
+S(P) = ∏ᵢ₌₁ᵏ⁻¹ s(vᵢ, vᵢ₊₁)
+```
+where s(vᵢ, vᵢ₊₁) is the edge strength.
+
+**Definition 10 (Graph Density)**:
+```
+D = (2 × |E|) / (|V| × (|V| - 1))
+```
+where |E| is the number of edges and |V| is the number of vertices.
+
+### God Generator Definitions
+
+**Definition 11 (Entity Similarity)**:
+```
+sim(A, B) = 1 - |P(A) - P(B)| / max(P(A), P(B))
+```
+
+**Definition 12 (Entity Evolution)**:
+```
+P(t+1) = P(t) × (1 + γ)
+```
+where γ is the growth rate.
+
+**Definition 13 (Entity Merge)**:
+```
+H(A, B, w) = {p | p ∈ P(A) ∪ P(B), value(p) = w × A.p + (1-w) × B.p}
+```
+
+**Definition 14 (Offspring Generation)**:
+```
+O(A, B) = {p | p ∈ P(A) ∪ P(B), value(p) = (A.p + B.p)/2 + ε}
+```
+where ε is random variation.
+
+**Definition 15 (Influence Score)**:
+```
+I(v) = P(v) × C_D(v) × E(v)/p
+```
+where P is power, C_D is degree centrality, E is essence, and p is the prime.
 
 ---
 
