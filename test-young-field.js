@@ -753,6 +753,249 @@ function testGodGeneratorExampleFunction() {
 }
 
 // ============================================================================
+// Extended Yoshi's Secret Tests
+// ============================================================================
+
+function testYoshisSecretBatchOperations() {
+  const secret = new YoshisSecret(31337);
+  
+  const values = [10, 20, 30, 40];
+  const encoded = secret.encodeBatch(values);
+  const decoded = secret.decodeBatch(encoded);
+  
+  assert(encoded.length === values.length, 'Batch encode should preserve length');
+  assert(decoded.length === values.length, 'Batch decode should preserve length');
+  
+  for (let i = 0; i < values.length; i++) {
+    assert(decoded[i] === values[i], `Value ${i} should match: ${values[i]} === ${decoded[i]}`);
+  }
+  
+  console.log('  ✓ Batch encoding/decoding operations');
+}
+
+function testYoshisSecretAuthentication() {
+  const secret = new YoshisSecret(31337);
+  
+  const message = "Important message";
+  const authCode = secret.authenticate(message);
+  
+  assert(typeof authCode === 'number', 'Auth code should be a number');
+  assert(secret.verifyAuthentication(message, authCode), 'Authentication should verify');
+  assert(!secret.verifyAuthentication("Wrong message", authCode), 'Wrong message should not verify');
+  
+  console.log('  ✓ Message authentication');
+}
+
+function testYoshisSecretCommitment() {
+  const secret = new YoshisSecret(31337);
+  
+  const value = 42;
+  const { commitment, randomness } = secret.commit(value);
+  
+  assert(typeof commitment === 'number', 'Commitment should be a number');
+  assert(typeof randomness === 'number', 'Randomness should be a number');
+  assert(secret.verifyCommitment(value, commitment, randomness), 'Commitment should verify');
+  assert(!secret.verifyCommitment(43, commitment, randomness), 'Wrong value should not verify');
+  
+  console.log('  ✓ Cryptographic commitments');
+}
+
+function testYoshisSecretRandomSequence() {
+  const secret = new YoshisSecret(31337);
+  
+  const seed = 12345;
+  const seq1 = secret.generateRandomSequence(seed, 10);
+  const seq2 = secret.generateRandomSequence(seed, 10);
+  
+  assert(seq1.length === 10, 'Sequence should have correct length');
+  assert(JSON.stringify(seq1) === JSON.stringify(seq2), 'Same seed should produce same sequence');
+  
+  console.log('  ✓ Deterministic random sequence generation');
+}
+
+// ============================================================================
+// Extended Bae Mathematics Tests
+// ============================================================================
+
+function testBaeMathematicsCentrality() {
+  const bae = new BaeMathematics();
+  
+  bae.addEntity('a');
+  bae.addEntity('b');
+  bae.addEntity('c');
+  
+  bae.connect('a', 'b', 0.8);
+  bae.connect('b', 'c', 0.7);
+  
+  const degCentrality = bae.degreeCentrality('b');
+  assert(degCentrality > 0, 'Degree centrality should be positive');
+  
+  const closenessCentrality = bae.closenessCentrality('b');
+  assert(closenessCentrality > 0, 'Closeness centrality should be positive');
+  
+  console.log('  ✓ Centrality measures');
+}
+
+function testBaeMathematicsPathFinding() {
+  const bae = new BaeMathematics();
+  
+  bae.addEntity('a');
+  bae.addEntity('b');
+  bae.addEntity('c');
+  bae.addEntity('d');
+  
+  bae.connect('a', 'b', 0.8);
+  bae.connect('b', 'c', 0.7);
+  bae.connect('c', 'd', 0.6);
+  
+  const paths = bae.findPaths('a', 'd', 5);
+  assert(paths.length > 0, 'Should find at least one path');
+  
+  const strongestPath = bae.strongestPath('a', 'd', 5);
+  assert(strongestPath !== null, 'Should find strongest path');
+  assert(strongestPath.path.length > 0, 'Path should have nodes');
+  
+  console.log('  ✓ Path finding and path strength');
+}
+
+function testBaeMathematicsGraphMetrics() {
+  const bae = new BaeMathematics();
+  
+  bae.addEntity('a');
+  bae.addEntity('b');
+  bae.addEntity('c');
+  
+  bae.connect('a', 'b', 0.5);
+  bae.connect('b', 'c', 0.5);
+  
+  const density = bae.graphDensity();
+  assert(density >= 0 && density <= 1, 'Density should be in [0, 1]');
+  
+  const avgStrength = bae.averageConnectionStrength();
+  assert(avgStrength >= 0 && avgStrength <= 1, 'Average strength should be in [0, 1]');
+  
+  console.log('  ✓ Graph metrics (density, average strength)');
+}
+
+function testBaeMathematicsConnectedComponents() {
+  const bae = new BaeMathematics();
+  
+  // Create two separate components
+  bae.addEntity('a');
+  bae.addEntity('b');
+  bae.addEntity('c');
+  bae.addEntity('d');
+  
+  bae.connect('a', 'b', 0.5);
+  bae.connect('c', 'd', 0.5);
+  
+  const components = bae.connectedComponents();
+  assert(components.length === 2, 'Should find 2 connected components');
+  
+  console.log('  ✓ Connected components detection');
+}
+
+// ============================================================================
+// Extended God Generator Tests
+// ============================================================================
+
+function testGodGeneratorEntitySimilarity() {
+  const generator = new GodGenerator(31337);
+  
+  const god1 = generator.generateGod({ power: 100 });
+  const god2 = generator.generateGod({ power: 110 });
+  const god3 = generator.generateGod({ power: 200 });
+  
+  const sim12 = generator.entitySimilarity(god1.id, god2.id);
+  const sim13 = generator.entitySimilarity(god1.id, god3.id);
+  
+  assert(sim12 > sim13, 'Similar entities should have higher similarity');
+  assert(sim12 >= 0 && sim12 <= 1, 'Similarity should be in [0, 1]');
+  
+  console.log('  ✓ Entity similarity calculation');
+}
+
+function testGodGeneratorEvolution() {
+  const generator = new GodGenerator(31337);
+  
+  const god = generator.generateGod({ power: 100 });
+  const originalPower = god.power;
+  
+  generator.evolveEntity(god.id, 0.1);
+  
+  assert(god.power > originalPower, 'Power should increase after evolution');
+  
+  console.log('  ✓ Entity evolution');
+}
+
+function testGodGeneratorMerge() {
+  const generator = new GodGenerator(31337);
+  
+  const god1 = generator.generateGod({ power: 100, wisdom: 50 });
+  const god2 = generator.generateGod({ power: 200, wisdom: 150 });
+  
+  const merged = generator.mergeEntities(god1.id, god2.id, 0.5);
+  
+  assert(merged !== null, 'Merge should create new entity');
+  assert(merged.type === 'god', 'Merged entity should be a god');
+  
+  console.log('  ✓ Entity merging');
+}
+
+function testGodGeneratorOffspring() {
+  const generator = new GodGenerator(31337);
+  
+  const parent1 = generator.generateGod({ power: 100 });
+  const parent2 = generator.generateGod({ power: 150 });
+  
+  const offspring = generator.generateOffspring(parent1.id, parent2.id);
+  
+  assert(offspring !== null, 'Offspring should be created');
+  assert(offspring.properties.parents.includes(parent1.id), 'Offspring should have parent1');
+  assert(offspring.properties.parents.includes(parent2.id), 'Offspring should have parent2');
+  
+  // Check offspring is connected to parents
+  const strength1 = generator.bae.getConnectionStrength(offspring.id, parent1.id);
+  const strength2 = generator.bae.getConnectionStrength(offspring.id, parent2.id);
+  assert(strength1 > 0, 'Offspring should be connected to parent1');
+  assert(strength2 > 0, 'Offspring should be connected to parent2');
+  
+  console.log('  ✓ Offspring generation');
+}
+
+function testGodGeneratorHierarchy() {
+  const generator = new GodGenerator(31337);
+  
+  generator.generateGod({ power: 50 });
+  generator.generateGod({ power: 100 });
+  generator.generateGod({ power: 75 });
+  
+  const hierarchy = generator.getEntityHierarchy();
+  
+  assert(hierarchy.length === 3, 'Hierarchy should contain all entities');
+  assert(hierarchy[0].influence >= hierarchy[1].influence, 'Hierarchy should be sorted by influence');
+  assert(hierarchy[1].influence >= hierarchy[2].influence, 'Hierarchy should be sorted by influence');
+  
+  console.log('  ✓ Entity hierarchy');
+}
+
+function testGodGeneratorStatistics() {
+  const generator = new GodGenerator(31337);
+  
+  generator.generateGod({ power: 100 });
+  generator.generateGod({ power: 200 });
+  
+  const stats = generator.getStatistics();
+  
+  assert(stats.count === 2, 'Stats should show correct count');
+  assert(stats.avgPower === 150, 'Average power should be correct');
+  assert(stats.maxPower === 200, 'Max power should be correct');
+  assert(stats.minPower === 100, 'Min power should be correct');
+  
+  console.log('  ✓ Statistics calculation');
+}
+
+// ============================================================================
 // Run All Tests
 // ============================================================================
 
@@ -803,6 +1046,12 @@ function runAllTests() {
   testSection('YoshisSecret String Encoding', testYoshisSecretStringEncoding);
   testSection('YoshisSecret Hashing', testYoshisSecretHashing);
 
+  // Extended Yoshi's Secret Tests
+  testSection('YoshisSecret Batch Operations', testYoshisSecretBatchOperations);
+  testSection('YoshisSecret Authentication', testYoshisSecretAuthentication);
+  testSection('YoshisSecret Commitment', testYoshisSecretCommitment);
+  testSection('YoshisSecret Random Sequence', testYoshisSecretRandomSequence);
+
   // Bae Mathematics Tests
   testSection('BaeMathematics Construction', testBaeMathematicsConstruction);
   testSection('BaeMathematics Entities', testBaeMathematicsEntities);
@@ -811,6 +1060,12 @@ function runAllTests() {
   testSection('BaeMathematics Bae Index', testBaeMathematicsBaeIndex);
   testSection('BaeMathematics Matrix', testBaeMathematicsMatrix);
 
+  // Extended Bae Mathematics Tests
+  testSection('BaeMathematics Centrality', testBaeMathematicsCentrality);
+  testSection('BaeMathematics Path Finding', testBaeMathematicsPathFinding);
+  testSection('BaeMathematics Graph Metrics', testBaeMathematicsGraphMetrics);
+  testSection('BaeMathematics Connected Components', testBaeMathematicsConnectedComponents);
+
   // God Generator Tests
   testSection('GodGenerator Construction', testGodGeneratorConstruction);
   testSection('GodGenerator Create God', testGodGeneratorCreateGod);
@@ -818,6 +1073,14 @@ function runAllTests() {
   testSection('GodGenerator Connect Entities', testGodGeneratorConnectEntities);
   testSection('GodGenerator Pantheon', testGodGeneratorPantheon);
   testSection('GodGenerator Most Powerful', testGodGeneratorMostPowerful);
+
+  // Extended God Generator Tests
+  testSection('GodGenerator Entity Similarity', testGodGeneratorEntitySimilarity);
+  testSection('GodGenerator Evolution', testGodGeneratorEvolution);
+  testSection('GodGenerator Merge', testGodGeneratorMerge);
+  testSection('GodGenerator Offspring', testGodGeneratorOffspring);
+  testSection('GodGenerator Hierarchy', testGodGeneratorHierarchy);
+  testSection('GodGenerator Statistics', testGodGeneratorStatistics);
 
   // New Example Functions
   testSection('Example: Yoshi\'s Secret', testYoshisSecretExampleFunction);

@@ -415,6 +415,114 @@ class YoshisSecret {
     
     return hash;
   }
+
+  /**
+   * Batch encode multiple values
+   * Definition: ∀v ∈ V : E(V) = {E(v₁), E(v₂), ..., E(vₙ)}
+   */
+  encodeBatch(values) {
+    return values.map(v => this.encode(v));
+  }
+
+  /**
+   * Batch decode multiple values
+   * Definition: ∀e ∈ E : D(E) = {D(e₁), D(e₂), ..., D(eₙ)}
+   */
+  decodeBatch(encoded) {
+    return encoded.map(e => this.decode(e));
+  }
+
+  /**
+   * Compute HMAC-like authentication code
+   * Definition: HMAC(m, k) = H((k ⊕ opad) || H((k ⊕ ipad) || m))
+   * Simplified for field operations
+   */
+  authenticate(message, key = null) {
+    const authKey = key !== null ? key : this.secretKey;
+    const innerHash = this.hash(message + authKey);
+    const outerHash = this.hash(authKey + innerHash);
+    return outerHash;
+  }
+
+  /**
+   * Verify message authentication
+   */
+  verifyAuthentication(message, authCode, key = null) {
+    const computed = this.authenticate(message, key);
+    return computed === authCode;
+  }
+
+  /**
+   * Generate a deterministic random sequence from seed
+   * Definition: Rₙ = (a × Rₙ₋₁ + c) mod p (Linear Congruential Generator)
+   */
+  generateRandomSequence(seed, length) {
+    const sequence = [];
+    let current = seed % this.prime;
+    
+    for (let i = 0; i < length; i++) {
+      current = this.field.add(
+        this.field.multiply(current, this.secretKey),
+        1337 % this.prime
+      );
+      sequence.push(current);
+    }
+    
+    return sequence;
+  }
+
+  /**
+   * XOR-like operation in finite field
+   * Definition: a ⊕ b = (a + b) mod p
+   */
+  fieldXOR(a, b) {
+    return this.field.add(a, b);
+  }
+
+  /**
+   * Compute commitment to a value (Pedersen-like commitment)
+   * Definition: C(v, r) = E(v) + r mod p
+   */
+  commit(value, randomness = null) {
+    const r = randomness !== null ? randomness : Math.floor(Math.random() * this.prime);
+    const encoded = this.encode(value);
+    const commitment = this.field.add(encoded, r % this.prime);
+    return { commitment, randomness: r };
+  }
+
+  /**
+   * Verify commitment
+   */
+  verifyCommitment(value, commitment, randomness) {
+    const encoded = this.encode(value);
+    const expected = this.field.add(encoded, randomness % this.prime);
+    return expected === commitment;
+  }
+
+  /**
+   * Oblivious transfer-like protocol setup
+   * Generate two encoded values where receiver can choose one
+   */
+  obliviousTransferSend(message0, message1) {
+    const encoded0 = this.encode(message0);
+    const encoded1 = this.encode(message1);
+    const mask = Math.floor(Math.random() * this.prime);
+    
+    return {
+      transfer0: this.field.add(encoded0, mask),
+      transfer1: this.field.add(encoded1, mask),
+      mask: mask
+    };
+  }
+
+  /**
+   * Receive from oblivious transfer
+   */
+  obliviousTransferReceive(transferPackage, choice, mask) {
+    const chosen = choice === 0 ? transferPackage.transfer0 : transferPackage.transfer1;
+    const recovered = this.field.add(chosen, this.field.multiply(-1, mask));
+    return this.decode(recovered);
+  }
 }
 
 // ============================================================================
@@ -560,6 +668,226 @@ class BaeMathematics {
     }
     
     return result;
+  }
+
+  /**
+   * Calculate clustering coefficient for an entity
+   * Definition: C(v) = (2 × edges in neighborhood) / (k × (k-1))
+   * where k is the degree (number of neighbors)
+   */
+  clusteringCoefficient(entityId) {
+    const neighbors = Array.from(this.relationships.get(entityId) || new Map()).map(([id]) => id);
+    const k = neighbors.length;
+    
+    if (k < 2) return 0;
+    
+    let edgesInNeighborhood = 0;
+    for (let i = 0; i < neighbors.length; i++) {
+      for (let j = i + 1; j < neighbors.length; j++) {
+        if (this.getConnectionStrength(neighbors[i], neighbors[j]) > 0) {
+          edgesInNeighborhood++;
+        }
+      }
+    }
+    
+    return this.field.divide(2 * edgesInNeighborhood, k * (k - 1));
+  }
+
+  /**
+   * Calculate betweenness centrality (simplified)
+   * Measures how often an entity appears on shortest paths
+   */
+  betweennessCentrality(entityId) {
+    let centrality = 0;
+    const entities = Array.from(this.entities);
+    
+    for (const source of entities) {
+      if (source === entityId) continue;
+      for (const target of entities) {
+        if (target === entityId || source === target) continue;
+        
+        // Check if entityId is on path from source to target
+        const directPath = this.getConnectionStrength(source, target);
+        const throughPath = this.field.multiply(
+          this.getConnectionStrength(source, entityId),
+          this.getConnectionStrength(entityId, target)
+        );
+        
+        if (throughPath > directPath) {
+          centrality++;
+        }
+      }
+    }
+    
+    return centrality;
+  }
+
+  /**
+   * Calculate degree centrality (normalized)
+   * Definition: C_D(v) = deg(v) / (n - 1)
+   */
+  degreeCentrality(entityId) {
+    const degree = (this.relationships.get(entityId) || new Map()).size;
+    const n = this.entities.size;
+    return n > 1 ? this.field.divide(degree, n - 1) : 0;
+  }
+
+  /**
+   * Calculate closeness centrality
+   * Definition: C_C(v) = (n - 1) / Σ d(v, u)
+   * where d(v, u) is distance between vertices
+   */
+  closenessCentrality(entityId) {
+    const entities = Array.from(this.entities);
+    let totalDistance = 0;
+    
+    for (const otherId of entities) {
+      if (otherId === entityId) continue;
+      
+      const strength = this.getConnectionStrength(entityId, otherId);
+      // Distance is inverse of strength (0 strength = infinite distance)
+      const distance = strength > 0 ? this.field.divide(1, strength) : entities.length;
+      totalDistance = this.field.add(totalDistance, distance);
+    }
+    
+    return totalDistance > 0 ? this.field.divide(entities.length - 1, totalDistance) : 0;
+  }
+
+  /**
+   * Find all paths between two entities (up to depth limit)
+   * Definition: P(s, t, d) = {p | p is path from s to t with length ≤ d}
+   */
+  findPaths(startEntity, endEntity, maxDepth = 3) {
+    const paths = [];
+    const visited = new Set();
+    
+    const dfs = (current, target, path, depth) => {
+      if (depth > maxDepth) return;
+      if (current === target && path.length > 1) {
+        paths.push([...path]);
+        return;
+      }
+      
+      visited.add(current);
+      const neighbors = this.relationships.get(current) || new Map();
+      
+      for (const [neighbor] of neighbors) {
+        if (!visited.has(neighbor)) {
+          path.push(neighbor);
+          dfs(neighbor, target, path, depth + 1);
+          path.pop();
+        }
+      }
+      
+      visited.delete(current);
+    };
+    
+    dfs(startEntity, endEntity, [startEntity], 0);
+    return paths;
+  }
+
+  /**
+   * Calculate path strength (product of edge strengths along path)
+   * Definition: S(path) = ∏ s(eᵢ) for all edges in path
+   */
+  pathStrength(path) {
+    if (path.length < 2) return 0;
+    
+    let strength = 1;
+    for (let i = 0; i < path.length - 1; i++) {
+      const edgeStrength = this.getConnectionStrength(path[i], path[i + 1]);
+      strength = this.field.multiply(strength, edgeStrength);
+    }
+    
+    return strength;
+  }
+
+  /**
+   * Find strongest path between two entities
+   */
+  strongestPath(startEntity, endEntity, maxDepth = 3) {
+    const paths = this.findPaths(startEntity, endEntity, maxDepth);
+    if (paths.length === 0) return null;
+    
+    let maxStrength = 0;
+    let bestPath = null;
+    
+    for (const path of paths) {
+      const strength = this.pathStrength(path);
+      if (strength > maxStrength) {
+        maxStrength = strength;
+        bestPath = path;
+      }
+    }
+    
+    return { path: bestPath, strength: maxStrength };
+  }
+
+  /**
+   * Calculate graph density
+   * Definition: D = (2 × |E|) / (|V| × (|V| - 1))
+   */
+  graphDensity() {
+    const n = this.entities.size;
+    if (n < 2) return 0;
+    
+    let edgeCount = 0;
+    for (const [_, connections] of this.relationships) {
+      edgeCount += connections.size;
+    }
+    
+    // Divide by 2 because edges are bidirectional
+    edgeCount = edgeCount / 2;
+    
+    return this.field.divide(2 * edgeCount, n * (n - 1));
+  }
+
+  /**
+   * Get connected components (groups of connected entities)
+   */
+  connectedComponents() {
+    const visited = new Set();
+    const components = [];
+    
+    const dfs = (entityId, component) => {
+      visited.add(entityId);
+      component.push(entityId);
+      
+      const neighbors = this.relationships.get(entityId) || new Map();
+      for (const [neighbor] of neighbors) {
+        if (!visited.has(neighbor)) {
+          dfs(neighbor, component);
+        }
+      }
+    };
+    
+    for (const entityId of this.entities) {
+      if (!visited.has(entityId)) {
+        const component = [];
+        dfs(entityId, component);
+        components.push(component);
+      }
+    }
+    
+    return components;
+  }
+
+  /**
+   * Calculate average connection strength across all relationships
+   */
+  averageConnectionStrength() {
+    let total = 0;
+    let count = 0;
+    
+    for (const [_, connections] of this.relationships) {
+      for (const [_, strength] of connections) {
+        total = this.field.add(total, strength);
+        count++;
+      }
+    }
+    
+    // Divide by 2 because relationships are bidirectional
+    return count > 0 ? this.field.divide(total, count / 2) : 0;
   }
 }
 
@@ -733,6 +1061,268 @@ class GodGenerator {
     }
     
     return mostPowerful;
+  }
+
+  /**
+   * Calculate entity similarity based on properties
+   * Definition: sim(A, B) = 1 - |P(A) - P(B)| / max(P(A), P(B))
+   */
+  entitySimilarity(entity1Id, entity2Id) {
+    const e1 = this.entities.get(entity1Id);
+    const e2 = this.entities.get(entity2Id);
+    
+    if (!e1 || !e2) return 0;
+    
+    const powerDiff = Math.abs(e1.power - e2.power);
+    const maxPower = Math.max(e1.power, e2.power, 1);
+    
+    return 1 - this.field.divide(powerDiff, maxPower);
+  }
+
+  /**
+   * Evolve an entity's properties over time
+   * Definition: P(t+1) = P(t) × (1 + growth_rate)
+   */
+  evolveEntity(entityId, growthRate = 0.1) {
+    const entity = this.entities.get(entityId);
+    if (!entity) return null;
+    
+    // Evolve power
+    entity.power = this.field.multiply(entity.power, 1 + growthRate);
+    
+    // Update encoded properties
+    for (const [key, value] of Object.entries(entity.properties)) {
+      if (typeof value === 'number') {
+        const evolved = this.field.multiply(value, 1 + growthRate);
+        entity.properties[key] = evolved;
+        entity.encodedProperties[key] = this.secret.encode(evolved);
+      }
+    }
+    
+    // Recalculate essence
+    entity.essence = this._calculateEssence(entity.properties);
+    
+    return entity;
+  }
+
+  /**
+   * Merge two entities into a new hybrid entity
+   * Definition: H(A, B) = {p | p ∈ P(A) ∪ P(B), value = weighted_avg(A.p, B.p)}
+   */
+  mergeEntities(entity1Id, entity2Id, weight = 0.5) {
+    const e1 = this.entities.get(entity1Id);
+    const e2 = this.entities.get(entity2Id);
+    
+    if (!e1 || !e2) return null;
+    
+    // Merge properties with weighted average
+    const mergedProperties = {};
+    const allKeys = new Set([
+      ...Object.keys(e1.properties),
+      ...Object.keys(e2.properties)
+    ]);
+    
+    for (const key of allKeys) {
+      const v1 = e1.properties[key];
+      const v2 = e2.properties[key];
+      
+      if (typeof v1 === 'number' && typeof v2 === 'number') {
+        mergedProperties[key] = this.field.add(
+          this.field.multiply(v1, weight),
+          this.field.multiply(v2, 1 - weight)
+        );
+      } else if (typeof v1 === 'string' && typeof v2 === 'string') {
+        mergedProperties[key] = weight > 0.5 ? v1 : v2;
+      } else {
+        mergedProperties[key] = v1 || v2;
+      }
+    }
+    
+    mergedProperties.name = `Merged_${this.nextId}`;
+    mergedProperties.origin = [entity1Id, entity2Id];
+    
+    return this.generateGod(mergedProperties);
+  }
+
+  /**
+   * Calculate entity influence score
+   * Definition: I(v) = P(v) × C_D(v) × E(v)
+   * where P is power, C_D is degree centrality, E is essence
+   */
+  calculateInfluence(entityId) {
+    const entity = this.entities.get(entityId);
+    if (!entity) return 0;
+    
+    const centrality = this.bae.degreeCentrality(entityId);
+    const normalizedEssence = entity.essence / this.secret.prime;
+    
+    return this.field.multiply(
+      this.field.multiply(entity.power, centrality),
+      normalizedEssence
+    );
+  }
+
+  /**
+   * Find entity hierarchy (most influential at top)
+   */
+  getEntityHierarchy() {
+    const hierarchy = [];
+    
+    for (const [id, entity] of this.entities) {
+      const influence = this.calculateInfluence(id);
+      hierarchy.push({ id, entity, influence });
+    }
+    
+    hierarchy.sort((a, b) => b.influence - a.influence);
+    return hierarchy;
+  }
+
+  /**
+   * Generate offspring from two parent entities
+   * Definition: O(A, B) = new entity with inherited traits
+   */
+  generateOffspring(parent1Id, parent2Id) {
+    const p1 = this.entities.get(parent1Id);
+    const p2 = this.entities.get(parent2Id);
+    
+    if (!p1 || !p2) return null;
+    
+    // Inherit properties with variation
+    const offspringProperties = {};
+    const allKeys = new Set([
+      ...Object.keys(p1.properties),
+      ...Object.keys(p2.properties)
+    ]);
+    
+    for (const key of allKeys) {
+      const v1 = p1.properties[key];
+      const v2 = p2.properties[key];
+      
+      if (typeof v1 === 'number' && typeof v2 === 'number') {
+        // Average with random variation
+        const avg = this.field.divide(this.field.add(v1, v2), 2);
+        const variation = (Math.random() - 0.5) * 0.2 * avg;
+        offspringProperties[key] = Math.max(0, avg + variation);
+      } else {
+        // Random choice for non-numeric properties
+        offspringProperties[key] = Math.random() > 0.5 ? v1 : v2;
+      }
+    }
+    
+    offspringProperties.name = `Offspring_${this.nextId}`;
+    offspringProperties.parents = [parent1Id, parent2Id];
+    offspringProperties.generation = 2;
+    
+    const offspring = this.generateGod(offspringProperties);
+    
+    // Offspring connected to both parents
+    this.connectEntities(offspring.id, parent1Id, 0.8);
+    this.connectEntities(offspring.id, parent2Id, 0.8);
+    
+    return offspring;
+  }
+
+  /**
+   * Simulate entity interactions and update relationships
+   * Definition: R(A, B, t+1) = R(A, B, t) + Δ(sim(A, B))
+   */
+  simulateInteraction(entity1Id, entity2Id) {
+    const similarity = this.entitySimilarity(entity1Id, entity2Id);
+    const currentStrength = this.bae.getConnectionStrength(entity1Id, entity2Id);
+    
+    // Update relationship based on similarity
+    const delta = (similarity - 0.5) * 0.1; // Similarity affects relationship
+    const newStrength = Math.max(0, Math.min(1, currentStrength + delta));
+    
+    this.connectEntities(entity1Id, entity2Id, newStrength);
+    
+    return { oldStrength: currentStrength, newStrength, delta };
+  }
+
+  /**
+   * Get entity lineage (ancestors and descendants)
+   */
+  getLineage(entityId) {
+    const entity = this.entities.get(entityId);
+    if (!entity) return null;
+    
+    const lineage = {
+      entity: entityId,
+      parents: entity.properties.parents || [],
+      offspring: [],
+      ancestors: []
+    };
+    
+    // Find offspring
+    for (const [id, e] of this.entities) {
+      if (e.properties.parents && e.properties.parents.includes(entityId)) {
+        lineage.offspring.push(id);
+      }
+    }
+    
+    // Find ancestors recursively
+    const findAncestors = (id, ancestors = new Set()) => {
+      const e = this.entities.get(id);
+      if (e && e.properties.parents) {
+        for (const parentId of e.properties.parents) {
+          if (!ancestors.has(parentId)) {
+            ancestors.add(parentId);
+            findAncestors(parentId, ancestors);
+          }
+        }
+      }
+      return ancestors;
+    };
+    
+    lineage.ancestors = Array.from(findAncestors(entityId));
+    
+    return lineage;
+  }
+
+  /**
+   * Calculate pantheon harmony (average relationship strength)
+   */
+  pantheonHarmony() {
+    return this.bae.averageConnectionStrength();
+  }
+
+  /**
+   * Find natural clusters/factions within entities
+   */
+  findFactions() {
+    return this.bae.connectedComponents();
+  }
+
+  /**
+   * Get entity statistics summary
+   */
+  getStatistics() {
+    const entities = Array.from(this.entities.values());
+    
+    if (entities.length === 0) {
+      return {
+        count: 0,
+        avgPower: 0,
+        maxPower: 0,
+        minPower: 0,
+        avgEssence: 0,
+        density: 0,
+        harmony: 0
+      };
+    }
+    
+    const powers = entities.map(e => e.power);
+    const essences = entities.map(e => e.essence);
+    
+    return {
+      count: entities.length,
+      avgPower: powers.reduce((a, b) => a + b, 0) / powers.length,
+      maxPower: Math.max(...powers),
+      minPower: Math.min(...powers),
+      avgEssence: essences.reduce((a, b) => a + b, 0) / essences.length,
+      density: this.bae.graphDensity(),
+      harmony: this.pantheonHarmony()
+    };
   }
 }
 
