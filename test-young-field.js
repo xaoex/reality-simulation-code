@@ -1,10 +1,17 @@
 /**
  * Young Field Test Suite
- * Tests for Young Ring and Young Field implementations
- * Based on WHITEPAPER_YOUNG_SITUATION.md Section 10
+ * Tests for Young Ring, Young Field, and Young Situation implementations
+ * Based on WHITEPAPER_YOUNG_SITUATION.md Sections 3 and 10
  */
 
 const {
+  YoungSituation,
+  createCommonYoungSituation,
+  defineYoungArea,
+  createLinearYoungSituation,
+  createBranchingYoungSituation,
+  youngSituationExample,
+  youngAreaExample,
   YoungRing,
   YoungField,
   createRationalField,
@@ -12,7 +19,13 @@ const {
   createSituationValuationField,
   normalizedSituationExample,
   youngFieldOperationsExample,
-  finiteFieldExample
+  finiteFieldExample,
+  YoshisSecret,
+  yoshisSecretExample,
+  BaeMathematics,
+  baeMathematicsExample,
+  GodGenerator,
+  godGeneratorExample
 } = require('./index.js');
 
 // ============================================================================
@@ -43,6 +56,204 @@ function testSection(name, testFn) {
     console.error(error.message);
     process.exit(1);
   }
+}
+
+// ============================================================================
+// Young Situation Tests (Section 3)
+// ============================================================================
+
+function testYoungSituationConstruction() {
+  const states = new Set(['s1', 's2', 's3']);
+  const relation = new Set([['s1', 's2'], ['s2', 's3']]);
+  const valuation = (s) => ({ 's1': 0, 's2': 10, 's3': 20 }[s]);
+  const transition = (s, a) => s;
+  const finalStates = new Set(['s3']);
+  
+  const situation = new YoungSituation(states, relation, valuation, transition, finalStates);
+  
+  assert(situation.S.size === 3, 'Should have 3 states');
+  assert(situation.F.has('s3'), 'Should have s3 as final state');
+  assert(situation.valuation('s2') === 10, 'Valuation should work');
+  
+  console.log('  ✓ YoungSituation construction');
+}
+
+function testYoungSituationAxiomY1() {
+  // Test non-emptiness
+  try {
+    new YoungSituation(new Set(), new Set(), () => 0, () => {}, new Set());
+    throw new Error('Should fail with empty states');
+  } catch (e) {
+    assert(e.message.includes('Axiom Y1'), 'Should enforce non-empty states');
+  }
+  
+  // Test final states subset
+  try {
+    const states = new Set(['s1', 's2']);
+    const relation = new Set([['s1', 's2']]);
+    const valuation = (s) => 0;
+    const transition = (s, a) => s;
+    const finalStates = new Set(['s3']); // s3 not in states
+    
+    new YoungSituation(states, relation, valuation, transition, finalStates);
+    throw new Error('Should fail with invalid final states');
+  } catch (e) {
+    assert(e.message.includes('Axiom Y1'), 'Should enforce final states subset');
+  }
+  
+  console.log('  ✓ Axiom Y1: Non-emptiness');
+}
+
+function testYoungSituationAxiomY2() {
+  // Test completeness - all non-final states must have outgoing transitions
+  try {
+    const states = new Set(['s1', 's2', 's3']);
+    const relation = new Set([['s1', 's2']]); // s2 has no outgoing transition
+    const valuation = (s) => 0;
+    const transition = (s, a) => s;
+    const finalStates = new Set(['s3']);
+    
+    new YoungSituation(states, relation, valuation, transition, finalStates);
+    throw new Error('Should fail with incomplete transitions');
+  } catch (e) {
+    assert(e.message.includes('Axiom Y2'), 'Should enforce completeness');
+  }
+  
+  console.log('  ✓ Axiom Y2: Completeness');
+}
+
+function testYoungSituationAxiomY3() {
+  // Test valuation monotonicity - valuations must not decrease
+  try {
+    const states = new Set(['s1', 's2', 's3']);
+    const relation = new Set([['s1', 's2'], ['s2', 's3']]);
+    const valuation = (s) => ({ 's1': 20, 's2': 10, 's3': 30 }[s]); // s1->s2 decreases!
+    const transition = (s, a) => s;
+    const finalStates = new Set(['s3']);
+    
+    new YoungSituation(states, relation, valuation, transition, finalStates);
+    throw new Error('Should fail with non-monotonic valuations');
+  } catch (e) {
+    assert(e.message.includes('Axiom Y3'), 'Should enforce monotonicity');
+  }
+  
+  console.log('  ✓ Axiom Y3: Valuation Monotonicity');
+}
+
+function testYoungSituationReachability() {
+  const situation = createCommonYoungSituation();
+  const reachable = situation.getReachableStates('initial');
+  
+  assert(reachable.has('initial'), 'Should include start state');
+  assert(reachable.has('optimal'), 'Should reach final state');
+  assert(reachable.size >= 3, 'Should reach multiple states');
+  
+  console.log('  ✓ YoungSituation reachability');
+}
+
+function testYoungSituationOptimalPath() {
+  const situation = createCommonYoungSituation();
+  const path = situation.findOptimalPath('initial');
+  
+  assert(path !== null, 'Should find a path');
+  assert(path[0] === 'initial', 'Path should start at initial');
+  assert(path[path.length - 1] === 'optimal', 'Path should end at optimal');
+  assert(path.length > 1, 'Path should have multiple steps');
+  
+  // Verify monotonicity along path
+  for (let i = 0; i < path.length - 1; i++) {
+    const val1 = situation.valuation(path[i]);
+    const val2 = situation.valuation(path[i + 1]);
+    assert(val1 <= val2, `Valuation should not decrease along path: ${path[i]} -> ${path[i+1]}`);
+  }
+  
+  console.log('  ✓ YoungSituation optimal path finding');
+}
+
+function testCommonYoungSituation() {
+  const situation = createCommonYoungSituation();
+  
+  assert(situation.S.size === 5, 'Should have 5 states');
+  assert(situation.F.size === 1, 'Should have 1 final state');
+  assert(situation.F.has('optimal'), 'Final state should be optimal');
+  assert(situation.valuation('initial') === 0, 'Initial valuation should be 0');
+  assert(situation.valuation('optimal') === 40, 'Optimal valuation should be 40');
+  
+  console.log('  ✓ Common Young Situation creation');
+}
+
+function testLinearYoungSituation() {
+  const situation = createLinearYoungSituation(4);
+  
+  assert(situation.S.size === 4, 'Should have 4 states');
+  assert(situation.F.has('state_3'), 'Final state should be state_3');
+  
+  const path = situation.findOptimalPath('state_0');
+  assert(path.length === 4, 'Path should have 4 states');
+  assert(path[0] === 'state_0', 'Should start at state_0');
+  assert(path[3] === 'state_3', 'Should end at state_3');
+  
+  console.log('  ✓ Linear Young Situation creation');
+}
+
+function testBranchingYoungSituation() {
+  const situation = createBranchingYoungSituation();
+  
+  assert(situation.S.size === 6, 'Should have 6 states');
+  assert(situation.F.has('end'), 'Final state should be end');
+  
+  const path = situation.findOptimalPath('start');
+  assert(path !== null, 'Should find a path');
+  assert(path[0] === 'start', 'Should start at start');
+  assert(path[path.length - 1] === 'end', 'Should end at end');
+  
+  console.log('  ✓ Branching Young Situation creation');
+}
+
+function testYoungAreaDefinition() {
+  const area = defineYoungArea();
+  
+  assert(area.name === 'Young Area', 'Area should have name');
+  assert(area.stateCategories, 'Area should have state categories');
+  assert(area.actionTypes.length > 0, 'Area should have action types');
+  assert(area.constraints, 'Area should have constraints');
+  assert(area.metrics, 'Area should have metrics');
+  
+  // Test metrics
+  assert(typeof area.metrics.efficiency === 'function', 'Should have efficiency metric');
+  assert(typeof area.metrics.optimality === 'function', 'Should have optimality metric');
+  assert(typeof area.metrics.convergence === 'function', 'Should have convergence metric');
+  
+  console.log('  ✓ Young Area definition');
+}
+
+function testYoungSituationExample() {
+  const result = youngSituationExample();
+  
+  assert(result.totalStates > 0, 'Should have states');
+  assert(result.finalStates.length > 0, 'Should have final states');
+  assert(result.optimalPath.length > 0, 'Should have optimal path');
+  assert(result.pathValuations.length === result.optimalPath.length, 'Valuations match path');
+  
+  console.log('  ✓ Example: youngSituationExample()');
+  console.log(`    Total states: ${result.totalStates}`);
+  console.log(`    Path length: ${result.pathLength}`);
+  console.log(`    Path: ${result.optimalPath.join(' -> ')}`);
+}
+
+function testYoungAreaExample() {
+  const result = youngAreaExample();
+  
+  assert(result.areaName === 'Young Area', 'Should have area name');
+  assert(result.stateCategories.length > 0, 'Should have state categories');
+  assert(result.availableActions.length > 0, 'Should have actions');
+  assert(result.situationMetrics, 'Should have metrics');
+  assert(typeof result.situationMetrics.efficiency === 'number', 'Should have efficiency value');
+  
+  console.log('  ✓ Example: youngAreaExample()');
+  console.log(`    Efficiency: ${result.situationMetrics.efficiency.toFixed(3)}`);
+  console.log(`    Optimality: ${result.situationMetrics.optimality.toFixed(3)}`);
+  console.log(`    Convergence: ${result.situationMetrics.convergence.toFixed(3)}`);
 }
 
 // ============================================================================
@@ -456,14 +667,562 @@ function testFiniteFieldExampleFunction() {
 }
 
 // ============================================================================
+// Yoshi's Secret Tests
+// ============================================================================
+
+function testYoshisSecretConstruction() {
+  const secret = new YoshisSecret(31337);
+  
+  assert(secret.prime === 31337, 'Prime should be set correctly');
+  assert(secret.secretKey !== null, 'Secret key should be generated');
+  
+  console.log('  ✓ YoshisSecret construction');
+}
+
+function testYoshisSecretEncoding() {
+  const secret = new YoshisSecret(31337);
+  
+  // Test number encoding/decoding
+  const original = 42;
+  const encoded = secret.encode(original);
+  const decoded = secret.decode(encoded);
+  
+  assert(decoded === original, `Encoding/decoding should be reversible: ${original} -> ${encoded} -> ${decoded}`);
+  assert(encoded !== original, 'Encoded value should differ from original');
+  
+  console.log('  ✓ YoshisSecret number encoding/decoding');
+}
+
+function testYoshisSecretStringEncoding() {
+  const secret = new YoshisSecret(31337);
+  
+  // Test string encoding/decoding
+  const message = "Hello World!";
+  const encoded = secret.encodeString(message);
+  const decoded = secret.decodeString(encoded);
+  
+  assert(decoded === message, `String encoding/decoding should be reversible: "${message}" -> "${decoded}"`);
+  assert(Array.isArray(encoded), 'Encoded string should be an array');
+  assert(encoded.length === message.length, 'Encoded array length should match message length');
+  
+  console.log('  ✓ YoshisSecret string encoding/decoding');
+}
+
+function testYoshisSecretHashing() {
+  const secret = new YoshisSecret(31337);
+  
+  // Test hashing
+  const data1 = "test data";
+  const data2 = "test data";
+  const data3 = "different data";
+  
+  const hash1 = secret.hash(data1);
+  const hash2 = secret.hash(data2);
+  const hash3 = secret.hash(data3);
+  
+  assert(hash1 === hash2, 'Same data should produce same hash');
+  assert(hash1 !== hash3, 'Different data should produce different hash');
+  assert(typeof hash1 === 'number', 'Hash should be a number');
+  
+  console.log('  ✓ YoshisSecret hashing');
+}
+
+// ============================================================================
+// Bae Mathematics Tests
+// ============================================================================
+
+function testBaeMathematicsConstruction() {
+  const bae = new BaeMathematics();
+  
+  assert(bae.entities.size === 0, 'Should start with no entities');
+  assert(bae.relationships.size === 0, 'Should start with no relationships');
+  
+  console.log('  ✓ BaeMathematics construction');
+}
+
+function testBaeMathematicsEntities() {
+  const bae = new BaeMathematics();
+  
+  const entity = bae.addEntity('entity1', { name: 'Test' });
+  
+  assert(entity.id === 'entity1', 'Entity should have correct ID');
+  assert(bae.entities.has('entity1'), 'Entity should be added to set');
+  
+  console.log('  ✓ BaeMathematics entity management');
+}
+
+function testBaeMathematicsConnections() {
+  const bae = new BaeMathematics();
+  
+  bae.addEntity('a');
+  bae.addEntity('b');
+  
+  const strength = bae.connect('a', 'b', 0.75);
+  
+  assert(strength === 0.75, 'Connection strength should be set');
+  assert(bae.getConnectionStrength('a', 'b') === 0.75, 'Should retrieve connection strength');
+  assert(bae.getConnectionStrength('b', 'a') === 0.75, 'Connection should be bidirectional');
+  
+  console.log('  ✓ BaeMathematics connections');
+}
+
+function testBaeMathematicsTransitiveConnection() {
+  const bae = new BaeMathematics();
+  
+  bae.addEntity('a');
+  bae.addEntity('b');
+  bae.addEntity('c');
+  
+  bae.connect('a', 'b', 0.8);
+  bae.connect('b', 'c', 0.6);
+  
+  const transitive = bae.transitiveConnection('a', 'c');
+  
+  assert(transitive > 0, 'Transitive connection should exist');
+  assertAlmostEqual(transitive, 0.48, 1e-6, 'Transitive connection should be product of strengths');
+  
+  console.log('  ✓ BaeMathematics transitive connections');
+}
+
+function testBaeMathematicsBaeIndex() {
+  const bae = new BaeMathematics();
+  
+  bae.addEntity('main');
+  bae.addEntity('friend1');
+  bae.addEntity('friend2');
+  
+  bae.connect('main', 'friend1', 0.6);
+  bae.connect('main', 'friend2', 0.9);
+  
+  const baeIndex = bae.getBaeIndex('main');
+  
+  assert(baeIndex.bae === 'friend2', 'Bae should be strongest connection');
+  assert(baeIndex.strength === 0.9, 'Bae strength should be 0.9');
+  
+  console.log('  ✓ BaeMathematics bae index');
+}
+
+function testBaeMathematicsMatrix() {
+  const bae = new BaeMathematics();
+  
+  bae.addEntity('a');
+  bae.addEntity('b');
+  bae.addEntity('c');
+  
+  bae.connect('a', 'b', 0.5);
+  bae.connect('b', 'c', 0.7);
+  
+  const matrix = bae.getRelationshipMatrix();
+  
+  assert(matrix.entities.length === 3, 'Matrix should have 3 entities');
+  assert(matrix.matrix.length === 3, 'Matrix should be 3x3');
+  assert(matrix.matrix[0].length === 3, 'Each row should have 3 elements');
+  
+  console.log('  ✓ BaeMathematics relationship matrix');
+}
+
+// ============================================================================
+// God Generator Tests
+// ============================================================================
+
+function testGodGeneratorConstruction() {
+  const generator = new GodGenerator(31337);
+  
+  assert(generator.secret !== null, 'Should have YoshisSecret instance');
+  assert(generator.bae !== null, 'Should have BaeMathematics instance');
+  assert(generator.entities.size === 0, 'Should start with no entities');
+  
+  console.log('  ✓ GodGenerator construction');
+}
+
+function testGodGeneratorCreateGod() {
+  const generator = new GodGenerator(31337);
+  
+  const god = generator.generateGod({
+    name: 'TestGod',
+    power: 100,
+    wisdom: 50
+  });
+  
+  assert(god.type === 'god', 'Entity should be of type god');
+  assert(god.id.startsWith('god_'), 'ID should have god prefix');
+  assert(god.power > 0, 'Power should be calculated');
+  assert(god.essence !== undefined, 'Essence should be calculated');
+  assert(god.encodedProperties !== undefined, 'Properties should be encoded');
+  
+  console.log('  ✓ GodGenerator create god');
+}
+
+function testGodGeneratorDecoding() {
+  const generator = new GodGenerator(31337);
+  
+  const god = generator.generateGod({
+    name: 'Zeus',
+    level: 100
+  });
+  
+  const decoded = generator.decodeEntity(god.id);
+  
+  assert(decoded !== null, 'Should decode entity');
+  assert(decoded.decodedProperties.name === 'Zeus', 'Name should decode correctly');
+  assert(decoded.decodedProperties.level === 100, 'Level should decode correctly');
+  
+  console.log('  ✓ GodGenerator decoding');
+}
+
+function testGodGeneratorConnectEntities() {
+  const generator = new GodGenerator(31337);
+  
+  const god1 = generator.generateGod({ name: 'God1' });
+  const god2 = generator.generateGod({ name: 'God2' });
+  
+  const strength = generator.connectEntities(god1.id, god2.id, 0.8);
+  
+  assert(strength === 0.8, 'Connection strength should be set');
+  assert(generator.bae.getConnectionStrength(god1.id, god2.id) === 0.8, 'Should retrieve connection');
+  
+  console.log('  ✓ GodGenerator connect entities');
+}
+
+function testGodGeneratorPantheon() {
+  const generator = new GodGenerator(31337);
+  
+  const pantheon = generator.generatePantheon(3, { realm: 'Olympus' });
+  
+  assert(pantheon.length === 3, 'Should generate 3 gods');
+  assert(pantheon[0].type === 'god', 'All should be gods');
+  
+  // Check that relationships exist
+  const matrix = generator.getRelationshipGraph();
+  assert(matrix.entities.length === 3, 'All gods should be in relationship graph');
+  
+  console.log('  ✓ GodGenerator pantheon generation');
+}
+
+function testGodGeneratorMostPowerful() {
+  const generator = new GodGenerator(31337);
+  
+  generator.generateGod({ power: 50 });
+  generator.generateGod({ power: 100 });
+  generator.generateGod({ power: 75 });
+  
+  const mostPowerful = generator.getMostPowerful();
+  
+  assert(mostPowerful !== null, 'Should find most powerful');
+  assert(mostPowerful.power === 100, 'Should find the one with power 100');
+  
+  console.log('  ✓ GodGenerator most powerful');
+}
+
+// ============================================================================
+// Example Function Tests
+// ============================================================================
+
+function testYoshisSecretExampleFunction() {
+  const result = yoshisSecretExample();
+  
+  assert(result.original === result.decoded, 'Example should encode/decode correctly');
+  assert(result.encoded !== undefined, 'Should have encoded representation');
+  assert(typeof result.hash === 'number', 'Should have hash');
+  
+  console.log('  ✓ Example: yoshisSecretExample()');
+  console.log(`    Original: "${result.original}"`);
+  console.log(`    Decoded: "${result.decoded}"`);
+  console.log(`    Hash: ${result.hash}`);
+}
+
+function testBaeMathematicsExampleFunction() {
+  const result = baeMathematicsExample();
+  
+  assert(result.aliceBob === 0.9, 'Alice-Bob connection should be 0.9');
+  assert(result.bobCharlie === 0.7, 'Bob-Charlie connection should be 0.7');
+  assert(result.aliceBae.bae === 'bob', 'Alice bae should be Bob');
+  
+  console.log('  ✓ Example: baeMathematicsExample()');
+  console.log(`    Alice-Bob: ${result.aliceBob}`);
+  console.log(`    Bob-Charlie: ${result.bobCharlie}`);
+  console.log(`    Alice's Bae: ${result.aliceBae.bae} (strength: ${result.aliceBae.strength})`);
+}
+
+function testGodGeneratorExampleFunction() {
+  const result = godGeneratorExample();
+  
+  assert(result.singleGod.type === 'god', 'Should generate a god');
+  assert(result.pantheonCount === 3, 'Should generate pantheon of 3');
+  assert(result.relationshipMatrix !== undefined, 'Should have relationship matrix');
+  
+  console.log('  ✓ Example: godGeneratorExample()');
+  console.log(`    God ID: ${result.singleGod.id}`);
+  console.log(`    God Power: ${result.singleGod.power}`);
+  console.log(`    Pantheon Count: ${result.pantheonCount}`);
+}
+
+// ============================================================================
+// Extended Yoshi's Secret Tests
+// ============================================================================
+
+function testYoshisSecretBatchOperations() {
+  const secret = new YoshisSecret(31337);
+  
+  const values = [10, 20, 30, 40];
+  const encoded = secret.encodeBatch(values);
+  const decoded = secret.decodeBatch(encoded);
+  
+  assert(encoded.length === values.length, 'Batch encode should preserve length');
+  assert(decoded.length === values.length, 'Batch decode should preserve length');
+  
+  for (let i = 0; i < values.length; i++) {
+    assert(decoded[i] === values[i], `Value ${i} should match: ${values[i]} === ${decoded[i]}`);
+  }
+  
+  console.log('  ✓ Batch encoding/decoding operations');
+}
+
+function testYoshisSecretAuthentication() {
+  const secret = new YoshisSecret(31337);
+  
+  const message = "Important message";
+  const authCode = secret.authenticate(message);
+  
+  assert(typeof authCode === 'number', 'Auth code should be a number');
+  assert(secret.verifyAuthentication(message, authCode), 'Authentication should verify');
+  assert(!secret.verifyAuthentication("Wrong message", authCode), 'Wrong message should not verify');
+  
+  console.log('  ✓ Message authentication');
+}
+
+function testYoshisSecretCommitment() {
+  const secret = new YoshisSecret(31337);
+  
+  const value = 42;
+  const { commitment, randomness } = secret.commit(value);
+  
+  assert(typeof commitment === 'number', 'Commitment should be a number');
+  assert(typeof randomness === 'number', 'Randomness should be a number');
+  assert(secret.verifyCommitment(value, commitment, randomness), 'Commitment should verify');
+  assert(!secret.verifyCommitment(43, commitment, randomness), 'Wrong value should not verify');
+  
+  console.log('  ✓ Cryptographic commitments');
+}
+
+function testYoshisSecretRandomSequence() {
+  const secret = new YoshisSecret(31337);
+  
+  const seed = 12345;
+  const seq1 = secret.generateRandomSequence(seed, 10);
+  const seq2 = secret.generateRandomSequence(seed, 10);
+  
+  assert(seq1.length === 10, 'Sequence should have correct length');
+  assert(JSON.stringify(seq1) === JSON.stringify(seq2), 'Same seed should produce same sequence');
+  
+  console.log('  ✓ Deterministic random sequence generation');
+}
+
+// ============================================================================
+// Extended Bae Mathematics Tests
+// ============================================================================
+
+function testBaeMathematicsCentrality() {
+  const bae = new BaeMathematics();
+  
+  bae.addEntity('a');
+  bae.addEntity('b');
+  bae.addEntity('c');
+  
+  bae.connect('a', 'b', 0.8);
+  bae.connect('b', 'c', 0.7);
+  
+  const degCentrality = bae.degreeCentrality('b');
+  assert(degCentrality > 0, 'Degree centrality should be positive');
+  
+  const closenessCentrality = bae.closenessCentrality('b');
+  assert(closenessCentrality > 0, 'Closeness centrality should be positive');
+  
+  console.log('  ✓ Centrality measures');
+}
+
+function testBaeMathematicsPathFinding() {
+  const bae = new BaeMathematics();
+  
+  bae.addEntity('a');
+  bae.addEntity('b');
+  bae.addEntity('c');
+  bae.addEntity('d');
+  
+  bae.connect('a', 'b', 0.8);
+  bae.connect('b', 'c', 0.7);
+  bae.connect('c', 'd', 0.6);
+  
+  const paths = bae.findPaths('a', 'd', 5);
+  assert(paths.length > 0, 'Should find at least one path');
+  
+  const strongestPath = bae.strongestPath('a', 'd', 5);
+  assert(strongestPath !== null, 'Should find strongest path');
+  assert(strongestPath.path.length > 0, 'Path should have nodes');
+  
+  console.log('  ✓ Path finding and path strength');
+}
+
+function testBaeMathematicsGraphMetrics() {
+  const bae = new BaeMathematics();
+  
+  bae.addEntity('a');
+  bae.addEntity('b');
+  bae.addEntity('c');
+  
+  bae.connect('a', 'b', 0.5);
+  bae.connect('b', 'c', 0.5);
+  
+  const density = bae.graphDensity();
+  assert(density >= 0 && density <= 1, 'Density should be in [0, 1]');
+  
+  const avgStrength = bae.averageConnectionStrength();
+  assert(avgStrength >= 0 && avgStrength <= 1, 'Average strength should be in [0, 1]');
+  
+  console.log('  ✓ Graph metrics (density, average strength)');
+}
+
+function testBaeMathematicsConnectedComponents() {
+  const bae = new BaeMathematics();
+  
+  // Create two separate components
+  bae.addEntity('a');
+  bae.addEntity('b');
+  bae.addEntity('c');
+  bae.addEntity('d');
+  
+  bae.connect('a', 'b', 0.5);
+  bae.connect('c', 'd', 0.5);
+  
+  const components = bae.connectedComponents();
+  assert(components.length === 2, 'Should find 2 connected components');
+  
+  console.log('  ✓ Connected components detection');
+}
+
+// ============================================================================
+// Extended God Generator Tests
+// ============================================================================
+
+function testGodGeneratorEntitySimilarity() {
+  const generator = new GodGenerator(31337);
+  
+  const god1 = generator.generateGod({ power: 100 });
+  const god2 = generator.generateGod({ power: 110 });
+  const god3 = generator.generateGod({ power: 200 });
+  
+  const sim12 = generator.entitySimilarity(god1.id, god2.id);
+  const sim13 = generator.entitySimilarity(god1.id, god3.id);
+  
+  assert(sim12 > sim13, 'Similar entities should have higher similarity');
+  assert(sim12 >= 0 && sim12 <= 1, 'Similarity should be in [0, 1]');
+  
+  console.log('  ✓ Entity similarity calculation');
+}
+
+function testGodGeneratorEvolution() {
+  const generator = new GodGenerator(31337);
+  
+  const god = generator.generateGod({ power: 100 });
+  const originalPower = god.power;
+  
+  generator.evolveEntity(god.id, 0.1);
+  
+  assert(god.power > originalPower, 'Power should increase after evolution');
+  
+  console.log('  ✓ Entity evolution');
+}
+
+function testGodGeneratorMerge() {
+  const generator = new GodGenerator(31337);
+  
+  const god1 = generator.generateGod({ power: 100, wisdom: 50 });
+  const god2 = generator.generateGod({ power: 200, wisdom: 150 });
+  
+  const merged = generator.mergeEntities(god1.id, god2.id, 0.5);
+  
+  assert(merged !== null, 'Merge should create new entity');
+  assert(merged.type === 'god', 'Merged entity should be a god');
+  
+  console.log('  ✓ Entity merging');
+}
+
+function testGodGeneratorOffspring() {
+  const generator = new GodGenerator(31337);
+  
+  const parent1 = generator.generateGod({ power: 100 });
+  const parent2 = generator.generateGod({ power: 150 });
+  
+  const offspring = generator.generateOffspring(parent1.id, parent2.id);
+  
+  assert(offspring !== null, 'Offspring should be created');
+  assert(offspring.properties.parents.includes(parent1.id), 'Offspring should have parent1');
+  assert(offspring.properties.parents.includes(parent2.id), 'Offspring should have parent2');
+  
+  // Check offspring is connected to parents
+  const strength1 = generator.bae.getConnectionStrength(offspring.id, parent1.id);
+  const strength2 = generator.bae.getConnectionStrength(offspring.id, parent2.id);
+  assert(strength1 > 0, 'Offspring should be connected to parent1');
+  assert(strength2 > 0, 'Offspring should be connected to parent2');
+  
+  console.log('  ✓ Offspring generation');
+}
+
+function testGodGeneratorHierarchy() {
+  const generator = new GodGenerator(31337);
+  
+  generator.generateGod({ power: 50 });
+  generator.generateGod({ power: 100 });
+  generator.generateGod({ power: 75 });
+  
+  const hierarchy = generator.getEntityHierarchy();
+  
+  assert(hierarchy.length === 3, 'Hierarchy should contain all entities');
+  assert(hierarchy[0].influence >= hierarchy[1].influence, 'Hierarchy should be sorted by influence');
+  assert(hierarchy[1].influence >= hierarchy[2].influence, 'Hierarchy should be sorted by influence');
+  
+  console.log('  ✓ Entity hierarchy');
+}
+
+function testGodGeneratorStatistics() {
+  const generator = new GodGenerator(31337);
+  
+  generator.generateGod({ power: 100 });
+  generator.generateGod({ power: 200 });
+  
+  const stats = generator.getStatistics();
+  
+  assert(stats.count === 2, 'Stats should show correct count');
+  assert(stats.avgPower === 150, 'Average power should be correct');
+  assert(stats.maxPower === 200, 'Max power should be correct');
+  assert(stats.minPower === 100, 'Min power should be correct');
+  
+  console.log('  ✓ Statistics calculation');
+}
+
+// ============================================================================
 // Run All Tests
 // ============================================================================
 
 function runAllTests() {
   console.log('\n' + '='.repeat(70));
   console.log('YOUNG FIELD TEST SUITE');
-  console.log('Based on WHITEPAPER_YOUNG_SITUATION.md Section 10');
+  console.log('Based on WHITEPAPER_YOUNG_SITUATION.md Sections 3 and 10');
   console.log('='.repeat(70));
+
+  // Young Situation Tests (Section 3)
+  testSection('Young Situation Construction', testYoungSituationConstruction);
+  testSection('Young Situation Axiom Y1: Non-emptiness', testYoungSituationAxiomY1);
+  testSection('Young Situation Axiom Y2: Completeness', testYoungSituationAxiomY2);
+  testSection('Young Situation Axiom Y3: Monotonicity', testYoungSituationAxiomY3);
+  testSection('Young Situation Reachability', testYoungSituationReachability);
+  testSection('Young Situation Optimal Path', testYoungSituationOptimalPath);
+  testSection('Common Young Situation', testCommonYoungSituation);
+  testSection('Linear Young Situation', testLinearYoungSituation);
+  testSection('Branching Young Situation', testBranchingYoungSituation);
+  testSection('Young Area Definition', testYoungAreaDefinition);
+  testSection('Example: Young Situation', testYoungSituationExample);
+  testSection('Example: Young Area', testYoungAreaExample);
 
   // Young Ring Tests
   testSection('Young Ring Construction', testYoungRingConstruction);
@@ -499,6 +1258,53 @@ function runAllTests() {
   testSection('Example: Normalized Situations', testNormalizedSituationExample);
   testSection('Example: Field Operations', testYoungFieldOperationsExample);
   testSection('Example: Finite Field', testFiniteFieldExampleFunction);
+
+  // Yoshi's Secret Tests
+  testSection('YoshisSecret Construction', testYoshisSecretConstruction);
+  testSection('YoshisSecret Encoding', testYoshisSecretEncoding);
+  testSection('YoshisSecret String Encoding', testYoshisSecretStringEncoding);
+  testSection('YoshisSecret Hashing', testYoshisSecretHashing);
+
+  // Extended Yoshi's Secret Tests
+  testSection('YoshisSecret Batch Operations', testYoshisSecretBatchOperations);
+  testSection('YoshisSecret Authentication', testYoshisSecretAuthentication);
+  testSection('YoshisSecret Commitment', testYoshisSecretCommitment);
+  testSection('YoshisSecret Random Sequence', testYoshisSecretRandomSequence);
+
+  // Bae Mathematics Tests
+  testSection('BaeMathematics Construction', testBaeMathematicsConstruction);
+  testSection('BaeMathematics Entities', testBaeMathematicsEntities);
+  testSection('BaeMathematics Connections', testBaeMathematicsConnections);
+  testSection('BaeMathematics Transitive Connection', testBaeMathematicsTransitiveConnection);
+  testSection('BaeMathematics Bae Index', testBaeMathematicsBaeIndex);
+  testSection('BaeMathematics Matrix', testBaeMathematicsMatrix);
+
+  // Extended Bae Mathematics Tests
+  testSection('BaeMathematics Centrality', testBaeMathematicsCentrality);
+  testSection('BaeMathematics Path Finding', testBaeMathematicsPathFinding);
+  testSection('BaeMathematics Graph Metrics', testBaeMathematicsGraphMetrics);
+  testSection('BaeMathematics Connected Components', testBaeMathematicsConnectedComponents);
+
+  // God Generator Tests
+  testSection('GodGenerator Construction', testGodGeneratorConstruction);
+  testSection('GodGenerator Create God', testGodGeneratorCreateGod);
+  testSection('GodGenerator Decoding', testGodGeneratorDecoding);
+  testSection('GodGenerator Connect Entities', testGodGeneratorConnectEntities);
+  testSection('GodGenerator Pantheon', testGodGeneratorPantheon);
+  testSection('GodGenerator Most Powerful', testGodGeneratorMostPowerful);
+
+  // Extended God Generator Tests
+  testSection('GodGenerator Entity Similarity', testGodGeneratorEntitySimilarity);
+  testSection('GodGenerator Evolution', testGodGeneratorEvolution);
+  testSection('GodGenerator Merge', testGodGeneratorMerge);
+  testSection('GodGenerator Offspring', testGodGeneratorOffspring);
+  testSection('GodGenerator Hierarchy', testGodGeneratorHierarchy);
+  testSection('GodGenerator Statistics', testGodGeneratorStatistics);
+
+  // New Example Functions
+  testSection('Example: Yoshi\'s Secret', testYoshisSecretExampleFunction);
+  testSection('Example: Bae Mathematics', testBaeMathematicsExampleFunction);
+  testSection('Example: God Generator', testGodGeneratorExampleFunction);
 
   console.log('\n' + '='.repeat(70));
   console.log('ALL TESTS PASSED ✓');
