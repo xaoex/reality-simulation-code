@@ -17,6 +17,9 @@ on:
   workflow_dispatch:
     # Manual trigger for immediate sync
 
+permissions:
+  contents: read
+
 jobs:
   reality-sync:
     name: Sync All Repos Into Reality
