@@ -1,0 +1,120 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "title": "Reality Repository Index",
+  "description": "All GitHub repositories piped into reality simulation system",
+  "version": "1.0.0",
+  "lastUpdated": "2025-12-11",
+  
+  "repositories": {
+    "core": [
+      {
+        "owner": "xaoex",
+        "name": "reality-simulation-code",
+        "fullName": "xaoex/reality-simulation-code",
+        "description": "Reality Simulation Codebase - SimSim Code & Contributions",
+        "url": "https://github.com/xaoex/reality-simulation-code",
+        "status": "production",
+        "priority": "max",
+        "tags": ["reality", "simulation", "simsim", "core"],
+        "integrations": {
+          "npm": "@xaoex/reality-simulation-code",
+          "docker": "ghcr.io/xaoex/reality-simulation-code",
+          "realtime": true,
+          "alwaysOn": true
+        }
+      },
+      {
+        "owner": "xaoex",
+        "name": "xa8ex",
+        "fullName": "xaoex/xa8ex",
+        "description": "xaoex eternally through aeons - makes everything run completely in reality",
+        "url": "https://github.com/xaoex/xa8ex",
+        "status": "production",
+        "priority": "max",
+        "tags": ["xa8ex", "reality", "core", "eternal"],
+        "integrations": {
+          "realtime": true,
+          "alwaysOn": true
+        }
+      }
+    ],
+    
+    "related": [
+      {
+        "owner": "rsaxcode",
+        "name": "*",
+        "fullName": "rsaxcode/*",
+        "description": "RSA X Code repositories - soulmate relationship",
+        "url": "https://github.com/rsaxcode",
+        "status": "active",
+        "priority": "high",
+        "tags": ["rsaxcode", "soulmate", "eternal"],
+        "note": "RSAXCODE works as long as they exist"
+      }
+    ],
+    
+    "external": [
+      {
+        "owner": "GrapheneOS",
+        "name": "GrapheneOS",
+        "fullName": "GrapheneOS/GrapheneOS",
+        "description": "GrapheneOS implementations",
+        "url": "https://github.com/GrapheneOS/GrapheneOS",
+        "status": "monitored",
+        "priority": "medium",
+        "tags": ["grapheneos", "os", "external"]
+      },
+      {
+        "owner": "GrapheneOS",
+        "name": "os-issue-tracker",
+        "fullName": "GrapheneOS/os-issue-tracker",
+        "description": "OS issue tracking",
+        "url": "https://github.com/GrapheneOS/os-issue-tracker",
+        "status": "monitored",
+        "priority": "medium",
+        "tags": ["grapheneos", "issues", "external"]
+      }
+    ]
+  },
+  
+  "reality_config": {
+    "enabled": true,
+    "realtime": true,
+    "alwaysOn": true,
+    "alwaysFunctioning": true,
+    "online": true,
+    "maxOptimized": true,
+    "maxedOut100Percent": true,
+    
+    "entities": {
+      "creators": ["camilla", "oktay", "andy"],
+      "simEntities": [".oktay", ".rasmus", ".camilla", ".younggeneration"],
+      "necessaries": [".alwayson", ".alwaysfunctioningforcreator", ".alwayafunctioning"]
+    },
+    
+    "primes": [1993, 1991, 1, 2, 3, 5, 7, 11, 12, 16, 19, 21, 27, 29, 30, 31, 33, 1337, 1991, 1993, 2005, 2009, 2011, 2013, 2021, 2023, 2025, 31337],
+    
+    "links": {
+      "linktree": [
+        "https://linktr.ee/xaoex",
+        "https://linktr.ee/oktays"
+      ],
+      "github": [
+        "https://github.com/xaoex",
+        "https://github.com/rsaxcode"
+      ],
+      "eth": [
+        "oktays.eth",
+        "bahceci.eth"
+      ]
+    }
+  },
+  
+  "metadata": {
+    "purpose": "Pipe all GitHub repositories into reality simulation system",
+    "status": "Ready for reality + production",
+    "version": "v1.31337dbp ok741s release",
+    "motto": "For you kiddo, Oktay eternally through aeons",
+    "bound": "Eternal bound between mom and son (Oktay & Camilla)"
+  }
+}
