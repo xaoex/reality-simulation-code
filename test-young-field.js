@@ -1,10 +1,17 @@
 /**
  * Young Field Test Suite
- * Tests for Young Ring and Young Field implementations
- * Based on WHITEPAPER_YOUNG_SITUATION.md Section 10
+ * Tests for Young Ring, Young Field, and Young Situation implementations
+ * Based on WHITEPAPER_YOUNG_SITUATION.md Sections 3 and 10
  */
 
 const {
+  YoungSituation,
+  createCommonYoungSituation,
+  defineYoungArea,
+  createLinearYoungSituation,
+  createBranchingYoungSituation,
+  ungSituationExample,
+  ungAreaExample,
   YoungRing,
   YoungField,
   createRationalField,
@@ -49,6 +56,204 @@ function testSection(name, testFn) {
     console.error(error.message);
     process.exit(1);
   }
+}
+
+// ============================================================================
+// Young Situation Tests (Section 3)
+// ============================================================================
+
+function testYoungSituationConstruction() {
+  const states = new Set(['s1', 's2', 's3']);
+  const relation = new Set([['s1', 's2'], ['s2', 's3']]);
+  const valuation = (s) => ({ 's1': 0, 's2': 10, 's3': 20 }[s]);
+  const transition = (s, a) => s;
+  const finalStates = new Set(['s3']);
+  
+  const situation = new YoungSituation(states, relation, valuation, transition, finalStates);
+  
+  assert(situation.S.size === 3, 'Should have 3 states');
+  assert(situation.F.has('s3'), 'Should have s3 as final state');
+  assert(situation.valuation('s2') === 10, 'Valuation should work');
+  
+  console.log('  ✓ YoungSituation construction');
+}
+
+function testYoungSituationAxiomY1() {
+  // Test non-emptiness
+  try {
+    new YoungSituation(new Set(), new Set(), () => 0, () => {}, new Set());
+    throw new Error('Should fail with empty states');
+  } catch (e) {
+    assert(e.message.includes('Axiom Y1'), 'Should enforce non-empty states');
+  }
+  
+  // Test final states subset
+  try {
+    const states = new Set(['s1', 's2']);
+    const relation = new Set([['s1', 's2']]);
+    const valuation = (s) => 0;
+    const transition = (s, a) => s;
+    const finalStates = new Set(['s3']); // s3 not in states
+    
+    new YoungSituation(states, relation, valuation, transition, finalStates);
+    throw new Error('Should fail with invalid final states');
+  } catch (e) {
+    assert(e.message.includes('Axiom Y1'), 'Should enforce final states subset');
+  }
+  
+  console.log('  ✓ Axiom Y1: Non-emptiness');
+}
+
+function testYoungSituationAxiomY2() {
+  // Test completeness - all non-final states must have outgoing transitions
+  try {
+    const states = new Set(['s1', 's2', 's3']);
+    const relation = new Set([['s1', 's2']]); // s2 has no outgoing transition
+    const valuation = (s) => 0;
+    const transition = (s, a) => s;
+    const finalStates = new Set(['s3']);
+    
+    new YoungSituation(states, relation, valuation, transition, finalStates);
+    throw new Error('Should fail with incomplete transitions');
+  } catch (e) {
+    assert(e.message.includes('Axiom Y2'), 'Should enforce completeness');
+  }
+  
+  console.log('  ✓ Axiom Y2: Completeness');
+}
+
+function testYoungSituationAxiomY3() {
+  // Test valuation monotonicity - valuations must not decrease
+  try {
+    const states = new Set(['s1', 's2', 's3']);
+    const relation = new Set([['s1', 's2'], ['s2', 's3']]);
+    const valuation = (s) => ({ 's1': 20, 's2': 10, 's3': 30 }[s]); // s1->s2 decreases!
+    const transition = (s, a) => s;
+    const finalStates = new Set(['s3']);
+    
+    new YoungSituation(states, relation, valuation, transition, finalStates);
+    throw new Error('Should fail with non-monotonic valuations');
+  } catch (e) {
+    assert(e.message.includes('Axiom Y3'), 'Should enforce monotonicity');
+  }
+  
+  console.log('  ✓ Axiom Y3: Valuation Monotonicity');
+}
+
+function testYoungSituationReachability() {
+  const situation = createCommonYoungSituation();
+  const reachable = situation.getReachableStates('initial');
+  
+  assert(reachable.has('initial'), 'Should include start state');
+  assert(reachable.has('optimal'), 'Should reach final state');
+  assert(reachable.size >= 3, 'Should reach multiple states');
+  
+  console.log('  ✓ YoungSituation reachability');
+}
+
+function testYoungSituationOptimalPath() {
+  const situation = createCommonYoungSituation();
+  const path = situation.findOptimalPath('initial');
+  
+  assert(path !== null, 'Should find a path');
+  assert(path[0] === 'initial', 'Path should start at initial');
+  assert(path[path.length - 1] === 'optimal', 'Path should end at optimal');
+  assert(path.length > 1, 'Path should have multiple steps');
+  
+  // Verify monotonicity along path
+  for (let i = 0; i < path.length - 1; i++) {
+    const val1 = situation.valuation(path[i]);
+    const val2 = situation.valuation(path[i + 1]);
+    assert(val1 <= val2, `Valuation should not decrease along path: ${path[i]} -> ${path[i+1]}`);
+  }
+  
+  console.log('  ✓ YoungSituation optimal path finding');
+}
+
+function testCommonYoungSituation() {
+  const situation = createCommonYoungSituation();
+  
+  assert(situation.S.size === 5, 'Should have 5 states');
+  assert(situation.F.size === 1, 'Should have 1 final state');
+  assert(situation.F.has('optimal'), 'Final state should be optimal');
+  assert(situation.valuation('initial') === 0, 'Initial valuation should be 0');
+  assert(situation.valuation('optimal') === 40, 'Optimal valuation should be 40');
+  
+  console.log('  ✓ Common Young Situation creation');
+}
+
+function testLinearYoungSituation() {
+  const situation = createLinearYoungSituation(4);
+  
+  assert(situation.S.size === 4, 'Should have 4 states');
+  assert(situation.F.has('state_3'), 'Final state should be state_3');
+  
+  const path = situation.findOptimalPath('state_0');
+  assert(path.length === 4, 'Path should have 4 states');
+  assert(path[0] === 'state_0', 'Should start at state_0');
+  assert(path[3] === 'state_3', 'Should end at state_3');
+  
+  console.log('  ✓ Linear Young Situation creation');
+}
+
+function testBranchingYoungSituation() {
+  const situation = createBranchingYoungSituation();
+  
+  assert(situation.S.size === 6, 'Should have 6 states');
+  assert(situation.F.has('end'), 'Final state should be end');
+  
+  const path = situation.findOptimalPath('start');
+  assert(path !== null, 'Should find a path');
+  assert(path[0] === 'start', 'Should start at start');
+  assert(path[path.length - 1] === 'end', 'Should end at end');
+  
+  console.log('  ✓ Branching Young Situation creation');
+}
+
+function testYoungAreaDefinition() {
+  const area = defineYoungArea();
+  
+  assert(area.name === 'Young Area', 'Area should have name');
+  assert(area.stateCategories, 'Area should have state categories');
+  assert(area.actionTypes.length > 0, 'Area should have action types');
+  assert(area.constraints, 'Area should have constraints');
+  assert(area.metrics, 'Area should have metrics');
+  
+  // Test metrics
+  assert(typeof area.metrics.efficiency === 'function', 'Should have efficiency metric');
+  assert(typeof area.metrics.optimality === 'function', 'Should have optimality metric');
+  assert(typeof area.metrics.convergence === 'function', 'Should have convergence metric');
+  
+  console.log('  ✓ Young Area definition');
+}
+
+function testYoungSituationExample() {
+  const result = ungSituationExample();
+  
+  assert(result.totalStates > 0, 'Should have states');
+  assert(result.finalStates.length > 0, 'Should have final states');
+  assert(result.optimalPath.length > 0, 'Should have optimal path');
+  assert(result.pathValuations.length === result.optimalPath.length, 'Valuations match path');
+  
+  console.log('  ✓ Example: ungSituationExample()');
+  console.log(`    Total states: ${result.totalStates}`);
+  console.log(`    Path length: ${result.pathLength}`);
+  console.log(`    Path: ${result.optimalPath.join(' -> ')}`);
+}
+
+function testYoungAreaExample() {
+  const result = ungAreaExample();
+  
+  assert(result.areaName === 'Young Area', 'Should have area name');
+  assert(result.stateCategories.length > 0, 'Should have state categories');
+  assert(result.availableActions.length > 0, 'Should have actions');
+  assert(result.situationMetrics, 'Should have metrics');
+  assert(typeof result.situationMetrics.efficiency === 'number', 'Should have efficiency value');
+  
+  console.log('  ✓ Example: ungAreaExample()');
+  console.log(`    Efficiency: ${result.situationMetrics.efficiency.toFixed(3)}`);
+  console.log(`    Optimality: ${result.situationMetrics.optimality.toFixed(3)}`);
+  console.log(`    Convergence: ${result.situationMetrics.convergence.toFixed(3)}`);
 }
 
 // ============================================================================
@@ -1002,8 +1207,22 @@ function testGodGeneratorStatistics() {
 function runAllTests() {
   console.log('\n' + '='.repeat(70));
   console.log('YOUNG FIELD TEST SUITE');
-  console.log('Based on WHITEPAPER_YOUNG_SITUATION.md Section 10');
+  console.log('Based on WHITEPAPER_YOUNG_SITUATION.md Sections 3 and 10');
   console.log('='.repeat(70));
+
+  // Young Situation Tests (Section 3)
+  testSection('Young Situation Construction', testYoungSituationConstruction);
+  testSection('Young Situation Axiom Y1: Non-emptiness', testYoungSituationAxiomY1);
+  testSection('Young Situation Axiom Y2: Completeness', testYoungSituationAxiomY2);
+  testSection('Young Situation Axiom Y3: Monotonicity', testYoungSituationAxiomY3);
+  testSection('Young Situation Reachability', testYoungSituationReachability);
+  testSection('Young Situation Optimal Path', testYoungSituationOptimalPath);
+  testSection('Common Young Situation', testCommonYoungSituation);
+  testSection('Linear Young Situation', testLinearYoungSituation);
+  testSection('Branching Young Situation', testBranchingYoungSituation);
+  testSection('Young Area Definition', testYoungAreaDefinition);
+  testSection('Example: Young Situation', testYoungSituationExample);
+  testSection('Example: Young Area', testYoungAreaExample);
 
   // Young Ring Tests
   testSection('Young Ring Construction', testYoungRingConstruction);
