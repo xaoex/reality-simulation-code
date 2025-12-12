@@ -7,7 +7,7 @@ FROM node:20-alpine
 # Metadata labels
 LABEL org.opencontainers.image.source="https://github.com/xaoex/reality-simulation-code"
 LABEL org.opencontainers.image.description="Reality Simulation Codebase - Complete xaoex package with Young Situation, Young Field, Yoshi's Secret, and Bae Mathematics"
-LABEL org.opencontainers.image.licenses="MIT"
+LABEL org.opencontainers.image.licenses="XPSL-1.0"
 LABEL org.opencontainers.image.authors="xaoex <https://linktr.ee/xaoex>"
 LABEL org.opencontainers.image.url="https://github.com/xaoex/reality-simulation-code"
 LABEL org.opencontainers.image.documentation="https://github.com/xaoex/reality-simulation-code#readme"
@@ -34,6 +34,7 @@ COPY demo.js ./
 
 # Copy documentation
 COPY README.md ./
+COPY LICENSE ./
 COPY PACKAGE.md ./
 COPY YOUNG_SITUATION.md ./
 COPY YOUNG_FIELD.md ./
