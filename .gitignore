@@ -7,3 +7,8 @@ node_modules/
 npm-debug.log
 package-lock.json
 *.tgz
+
+# Build artifacts
+build/
+*.o
+placeholder_build
