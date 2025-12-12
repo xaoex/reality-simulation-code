@@ -3,36 +3,60 @@
 .github
 .gitignore
 
-# Docker
+# Docker (exclude from npm, include in Docker)
 Dockerfile
+docker-compose.yml
 .dockerignore
 
 # C source files (not part of npm package)
-# Only exclude C files in root directory
 /*.c
 
-# Development and configuration files
+# Build artifacts and logs
+node_modules
+npm-debug.log
+yarn-error.log
+*.log
+
+# Development and configuration files (not needed in npm package)
 .DS_Store
 .ar
 .gists
 .include
-.necessaries
 .oktaybahceci
-.online
 .osboost
 .osmax
 .qa
 .rasmusalpsjo
-.realtime
 .scripts
 .security
 .sim
 .vaoev
 .woke
+.electronatomjsxaoex
+.osxaoexdistpackageenterprise
+.xaoexphoneos
+.xxgrapheneos
+.unggeneration
+.yungsituation
+.necessaries
+.online
+.realtime
 
-# Directories
+# Directories not needed in npm package
 people/
 xaoex.github.io/
+data/
+tmp/
 
-# Documentation (keep README.md)
-SECURITY.md
+# Keep these in the package:
+# README.md
+# PACKAGE.md
+# YOUNG_SITUATION.md
+# YOUNG_FIELD.md
+# YOSHIS_SECRET_BAE_MATH.md
+# WHITEPAPER_YOUNG_SITUATION.md
+# IMPLEMENTATION_SUMMARY.md
+# index.js
+# demo.js
+# test-ung-field.js (included for testing)
+# LICENSE
