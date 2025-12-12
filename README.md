@@ -76,6 +76,17 @@ docker-compose logs -f
 docker-compose down
 ```
 
+## 📤 Publishing Packages
+
+To publish updated packages to GitHub Packages, see [PUBLISHING.md](PUBLISHING.md) for detailed instructions.
+
+**Quick publish** (after merging to main/production):
+```bash
+./publish-packages.sh --trigger
+```
+
+Or manually trigger workflows from [GitHub Actions](https://github.com/xaoex/reality-simulation-code/actions).
+
 ## Usage
 
 ### Basic Usage
