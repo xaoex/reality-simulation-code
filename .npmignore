@@ -48,9 +48,6 @@ xaoex.github.io/
 data/
 tmp/
 
-# Test files (users can run from source if needed)
-# test-ung-field.js
-
 # Keep these in the package:
 # README.md
 # PACKAGE.md
@@ -61,4 +58,5 @@ tmp/
 # IMPLEMENTATION_SUMMARY.md
 # index.js
 # demo.js
+# test-ung-field.js (included for testing)
 # LICENSE
