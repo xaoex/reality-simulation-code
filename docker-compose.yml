@@ -11,7 +11,7 @@ services:
       - REALITY_SIMULATION_VERSION=1.0.0
     volumes:
       # Mount for data persistence if needed
-      - ./data:/app/data
+      - reality-data:/app/data
     # Uncomment if exposing a port
     # ports:
     #   - "3000:3000"
