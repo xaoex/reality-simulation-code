@@ -17,6 +17,7 @@ This is the **comprehensive xaoex package** that includes all implementations in
 - 💕 **Bae Mathematics** - Relationship and connection modeling
 - 🌟 **God Generator** - Advanced entity creation system
 - 🎯 **Reality CSEMS** - Git-like layer system with 100% maxopt injection
+- 🔮 **Anonymous Package** - Lambda calculus + BAES + COOLEMS for transformations
 
 **Package Features:**
 - 🚀 Available via npm (npmjs.org and GitHub Packages)
@@ -26,8 +27,45 @@ This is the **comprehensive xaoex package** that includes all implementations in
 - 🔄 Realtime enabled and always on
 - 🔒 Security-focused with CodeQL scanning
 - ⚡ 100% maxopt optimization always
+- 🧮 Lambda/Anonymous calculus for data transformations
+- 🎲 Bayesian common situations for pattern discovery
 
 For detailed package information, see [PACKAGE.md](PACKAGE.md).
+
+## 🔮 Anonymous Package - Lambda Calculus + BAES + COOLEMS
+
+**Anonymous Package** provides anonymous/lambda calculus mapping tools with ETL transformations, Bayesian situations, and multi-language support:
+
+- **Anonymous Calculus** (`.anonymouscalc`): Lambda/Anonymous calculus for pure functional transformations
+- **BAES** (`.baes`): Bayesian common situations - use anything as tool for maximize+optimize+discover
+- **COOLEMS** (`.coolems`): Reality + CS integration with predictive models and Xcode situation
+
+### Quick Start
+
+```javascript
+const { etl, polypipes, logToCommonBayes, BAESSystem } = require('reality-simulation-code').AnonymousPackage;
+
+// ETL Transform
+const pipeline = etl(
+  data => data.filter(x => x > 0),  // Extract
+  data => data.map(x => x * 2),     // Transform
+  data => data.reduce((a, b) => a + b, 0)  // Load
+);
+const result = pipeline([1, -2, 3, -4, 5]); // 18
+
+// Polypipes - parallel pipelines
+const results = polypipes(
+  [x => x * 2, x => x + 1],
+  [x => x / 2]
+)([10]); // [[21], [5]]
+
+// BAES - Bayesian common situations
+const baes = new BAESSystem({ maxopt: true });
+const maximized = baes.maximize([1, 2, 3]); // [1.5, 3, 4.5]
+baes.logToCommonBayes({ experiment: 'test' });
+```
+
+For complete documentation, see [ANONYMOUS_PACKAGE.md](ANONYMOUS_PACKAGE.md).
 
 ## 🎯 Reality CSEMS - Layer System
 
