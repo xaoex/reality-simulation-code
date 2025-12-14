@@ -85,12 +85,15 @@ class MaxoptInjector {
     });
     
     // Memory management optimizations
-    if (typeof global !== 'undefined' && global.gc) {
-      setInterval(() => {
-        if (this.options.eternal) {
-          global.gc();
-        }
-      }, 60000); // Periodic GC for eternal optimization
+    if (typeof global !== 'undefined' && global.gc && this.options.eternal) {
+      // Use a singleton interval to avoid multiple GC intervals
+      if (!global.MAXOPT_GC_INTERVAL) {
+        global.MAXOPT_GC_INTERVAL = setInterval(() => {
+          if (global.gc) {
+            global.gc();
+          }
+        }, 60000); // Periodic GC for eternal optimization
+      }
     }
   }
   
