@@ -1,7 +1,10 @@
 {
   "name": "reality-simulation-code",
-  "version": "1.0.0",
-  "description": "Reality Simulation Codebase - SimSim Code & Contributions by xaoex - Comprehensive package including Young Situation, Young Field, Yoshi's Secret, Bae Mathematics, Reality CSEMS, and Anonymous Package (Lambda Calculus + BAES + COOLEMS)",
+  "version": "1.0.0-template",
+  "description": "Reality Simulation Codebase Template - Draft/AB Test/First Version - Reference implementations for Young Situation, Young Field, Yoshi's Secret, Bae Mathematics, Reality CSEMS, and Anonymous Package (Lambda Calculus + BAES + COOLEMS)",
+  "templateVersion": "1.0.0",
+  "templateStatus": "draft-abtest-v1",
+  "templateType": "reference",
   "main": "index.js",
   "bin": {
     "realitycsems": "./realitycsems-cli.js"
@@ -25,6 +28,9 @@
     "url": "git+https://github.com/xaoex/reality-simulation-code.git"
   },
   "keywords": [
+    "template",
+    "reference-implementation",
+    "delegation",
     "reality",
     "simulation",
     "simsim",
@@ -87,6 +93,9 @@
     ".coolems/",
     "README.md",
     "LICENSE",
+    "TEMPLATE_VERSION.md",
+    "COMPONENT_REFERENCE.md",
+    "DELEGATION_MAP.md",
     "REALITYCSEMS.md",
     "ANONYMOUS_PACKAGE.md",
     "YOUNG_SITUATION.md",
