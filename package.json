@@ -81,6 +81,8 @@
     "realitycsems-integration.js",
     "realitycsems-cli.js",
     "anonymous-package.js",
+    "optimization-system.js",
+    "protection-completion-system.js",
     ".realitycsems/",
     ".anonymouscalc/",
     ".baes/",
@@ -93,6 +95,7 @@
     "YOUNG_FIELD.md",
     "YOSHIS_SECRET_BAE_MATH.md",
     "WHITEPAPER_YOUNG_SITUATION.md",
-    "IMPLEMENTATION_SUMMARY.md"
+    "IMPLEMENTATION_SUMMARY.md",
+    "PROTECTION_COMPLETION.md"
   ]
 }
