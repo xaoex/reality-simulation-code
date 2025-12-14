@@ -1890,18 +1890,31 @@ try {
 // Protection and Completion System - 100% for Authorized Users
 // ============================================================================
 
-// Load Protection and Completion System
+// Load Protection and Completion System (lazy loaded on first use)
 let ProtectionCompletionSystem = null;
-try {
-  ProtectionCompletionSystem = require('./protection-completion-system');
-  const masterSystem = new ProtectionCompletionSystem.MasterProtectionCompletionSystem();
-  const initResult = masterSystem.initialize();
-  console.log('[Reality Simulation] ✓ Protection & Completion System loaded');
-  console.log('[Reality Simulation] ✓ 100% Complete for Oktay and Rasmus');
-  console.log('[Reality Simulation] ✓ Negative influence filtering active');
-  console.log('[Reality Simulation] ✓ Ready for maximum fun!');
-} catch (error) {
-  console.log('[Reality Simulation] Protection & Completion System not available (optional)');
+let _masterSystemInstance = null;
+
+// Lazy initialization function
+function _initProtectionCompletionSystem() {
+  if (!ProtectionCompletionSystem) {
+    try {
+      ProtectionCompletionSystem = require('./protection-completion-system');
+      console.log('[Reality Simulation] ✓ Protection & Completion System loaded');
+    } catch (error) {
+      console.log('[Reality Simulation] Protection & Completion System not available (optional)');
+      return null;
+    }
+  }
+  
+  if (!_masterSystemInstance && ProtectionCompletionSystem) {
+    _masterSystemInstance = new ProtectionCompletionSystem.MasterProtectionCompletionSystem();
+    const initResult = _masterSystemInstance.initialize();
+    console.log('[Reality Simulation] ✓ 100% Complete for Oktay and Rasmus');
+    console.log('[Reality Simulation] ✓ Negative influence filtering active');
+    console.log('[Reality Simulation] ✓ Ready for maximum fun!');
+  }
+  
+  return _masterSystemInstance;
 }
 
 // ============================================================================
@@ -1923,8 +1936,9 @@ module.exports = {
     if (AnonymousPackage) {
       console.log('Anonymous Package active: Lambda Calculus + BAES + COOLEMS');
     }
-    if (ProtectionCompletionSystem) {
-      const masterSystem = new ProtectionCompletionSystem.MasterProtectionCompletionSystem();
+    // Initialize Protection & Completion System on first call
+    const masterSystem = _initProtectionCompletionSystem();
+    if (masterSystem) {
       const status = masterSystem.ensure100PercentForAll();
       console.log('✓ Protection & Completion: 100% for Oktay and Rasmus');
       console.log('✓ All systems ready for maximum fun!');
@@ -1961,8 +1975,8 @@ module.exports = {
     }
     
     // Add Protection & Completion System info if available
-    if (ProtectionCompletionSystem) {
-      const masterSystem = new ProtectionCompletionSystem.MasterProtectionCompletionSystem();
+    const masterSystem = _initProtectionCompletionSystem();
+    if (masterSystem) {
       const status = masterSystem.getSystemStatus();
       info.protectionCompletion = {
         enabled: true,
