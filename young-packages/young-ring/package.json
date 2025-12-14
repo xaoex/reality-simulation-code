@@ -1,0 +1,21 @@
+{
+  "name": "@xaoex/young-ring",
+  "version": "1.0.0-template",
+  "description": "Young Ring - Abstract mathematical ring combining relational algebra with group and ring theory",
+  "main": "index.js",
+  "keywords": [
+    "ring",
+    "algebra",
+    "mathematics",
+    "relational-algebra",
+    "young-ring",
+    "template"
+  ],
+  "author": "xaoex",
+  "license": "XPSL-1.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/xaoex/reality-simulation-code.git",
+    "directory": "young-packages/young-ring"
+  }
+}

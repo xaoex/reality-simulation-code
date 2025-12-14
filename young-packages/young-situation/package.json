@@ -1,0 +1,20 @@
+{
+  "name": "@xaoex/young-situation",
+  "version": "1.0.0-template",
+  "description": "Young Situation - Dynamic enterprise modeling and state optimization framework",
+  "main": "index.js",
+  "keywords": [
+    "situation",
+    "state-machine",
+    "optimization",
+    "young-situation",
+    "template"
+  ],
+  "author": "xaoex",
+  "license": "XPSL-1.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/xaoex/reality-simulation-code.git",
+    "directory": "young-packages/young-situation"
+  }
+}
