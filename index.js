@@ -1874,6 +1874,20 @@ try {
 }
 
 // ============================================================================
+// CoolProcess Integration (Process Management + Floppies + Cases)
+// ============================================================================
+
+// Load CoolProcess if available
+let CoolProcess = null;
+try {
+  const CoolProcessModule = require('./.coolprocess/modules/coolprocess-system');
+  CoolProcess = CoolProcessModule.CoolProcessSystem;
+  console.log('[Reality Simulation] ✓ CoolProcess loaded (Process Management + Floppies + Cases)');
+} catch (error) {
+  console.log('[Reality Simulation] CoolProcess not available (optional)');
+}
+
+// ============================================================================
 // Module Exports
 // ============================================================================
 
@@ -1891,6 +1905,9 @@ module.exports = {
     }
     if (AnonymousPackage) {
       console.log('Anonymous Package active: Lambda Calculus + BAES + COOLEMS');
+    }
+    if (CoolProcess) {
+      console.log('CoolProcess active: Process Management + Floppies + Cases');
     }
     return true;
   },
@@ -1920,6 +1937,15 @@ module.exports = {
       info.anonymousPackage = {
         enabled: true,
         status: AnonymousPackage.getStatus()
+      };
+    }
+    
+    // Add CoolProcess info if available
+    if (CoolProcess) {
+      const instance = new CoolProcess({ verbose: false });
+      info.coolProcess = {
+        enabled: true,
+        status: instance.status()
       };
     }
     
@@ -1965,5 +1991,8 @@ module.exports = {
   RealityCSEMS,
   
   // Anonymous Package - Lambda Calculus + BAES + COOLEMS (if available)
-  AnonymousPackage
+  AnonymousPackage,
+  
+  // CoolProcess - Process Management + Floppies + Cases (if available)
+  CoolProcessSystem: CoolProcess
 };
