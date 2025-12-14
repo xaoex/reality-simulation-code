@@ -12,19 +12,19 @@ const path = require('path');
 let AnonymousCalculus, BAESSystem, COOLEMSSystem;
 
 try {
-  AnonymousCalculus = require('./.anonymouscalc/lambdas/anonymous-calculus.js').AnonymousCalculus;
+  AnonymousCalculus = require('./.anonymouscalc/lib/anonymous-calculus.js').AnonymousCalculus;
 } catch (error) {
   console.warn('[AnonymousPackage] AnonymousCalculus not available');
 }
 
 try {
-  BAESSystem = require('./.baes/situations/baes-system.js').BAESSystem;
+  BAESSystem = require('./.baes/lib/baes-system.js').BAESSystem;
 } catch (error) {
   console.warn('[AnonymousPackage] BAESSystem not available');
 }
 
 try {
-  COOLEMSSystem = require('./.coolems/modules/coolems-system.js').COOLEMSSystem;
+  COOLEMSSystem = require('./.coolems/lib/coolems-system.js').COOLEMSSystem;
 } catch (error) {
   console.warn('[AnonymousPackage] COOLEMSSystem not available');
 }
