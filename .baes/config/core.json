@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "title": "BAES Configuration",
+  "description": "Bayes-based common situation system for maximization and optimization",
+  "version": "1.0.0",
+  "created": "2025-12-14",
+  
+  "system": {
+    "name": ".baes",
+    "type": "bayes-situation-system",
+    "purpose": "Use anything as tool for maximize+optimize+discover+formulate",
+    "status": "production",
+    "maxopt": true,
+    "cool": true,
+    "patented": true
+  },
+  
+  "approach": {
+    "thinking": "original and patented way",
+    "method": "formulating/formulizing any area/thing/thought",
+    "goals": [
+      "decent",
+      "forward-progressive",
+      "HCI",
+      "sustainable",
+      "sustainable-dev"
+    ]
+  },
+  
+  "bayesian": {
+    "enabled": true,
+    "priorUpdate": true,
+    "posteriorCalculation": true,
+    "likelihoodEstimation": true,
+    "commonSituation": true
+  },
+  
+  "areas": {
+    "reality": true,
+    "computerScience": true,
+    "mathematics": true,
+    "polytechnic": true,
+    "orgKnowledge": true
+  },
+  
+  "tools": {
+    "anyAsHoe": true,
+    "maximize": true,
+    "optimize": true,
+    "discover": true,
+    "formulate": true,
+    "findNew": true,
+    "circlejerk": true,
+    "relearn": true
+  },
+  
+  "patterns": {
+    "areaAsTool": true,
+    "relearningOnPurpose": true,
+    "alwaysDiscover": true,
+    "commonSituation": true
+  },
+  
+  "integration": {
+    "anonymouscalc": true,
+    "realitycsems": true,
+    "coolems": true,
+    "ungSituation": true,
+    "baeMathematics": true
+  },
+  
+  "optimization": {
+    "maxopt": true,
+    "level": 100,
+    "always": true
+  }
+}
