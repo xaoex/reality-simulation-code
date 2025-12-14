@@ -1874,6 +1874,19 @@ try {
 }
 
 // ============================================================================
+// Optimization System (Calculated Opt + General Opt Light Situation)
+// ============================================================================
+
+// Load Optimization System
+let OptimizationSystem = null;
+try {
+  OptimizationSystem = require('./optimization-system');
+  console.log('[Reality Simulation] ✓ Optimization System loaded (Calculated Opt + General Opt Light)');
+} catch (error) {
+  console.log('[Reality Simulation] Optimization System not available (optional)');
+}
+
+// ============================================================================
 // Module Exports
 // ============================================================================
 
@@ -1965,5 +1978,9 @@ module.exports = {
   RealityCSEMS,
   
   // Anonymous Package - Lambda Calculus + BAES + COOLEMS (if available)
-  AnonymousPackage
+  AnonymousPackage,
+  
+  // Optimization System - Calculated Opt + General Opt Light (if available)
+  OptimizationCalculator: OptimizationSystem ? OptimizationSystem.OptimizationCalculator : null,
+  GeneralOptSituation: OptimizationSystem ? OptimizationSystem.GeneralOptSituation : null
 };
