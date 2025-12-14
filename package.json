@@ -10,6 +10,7 @@
     "test": "node test-young-field.js",
     "build": "echo \"Build complete\" && exit 0",
     "demo": "node demo.js",
+    "demo:protection": "node demo-protection-completion.js",
     "start": "node index.js",
     "csems:status": "node realitycsems-cli.js status",
     "csems:layers": "node realitycsems-cli.js layers",
@@ -77,6 +78,7 @@
   "files": [
     "index.js",
     "demo.js",
+    "demo-protection-completion.js",
     "test-young-field.js",
     "realitycsems-integration.js",
     "realitycsems-cli.js",
