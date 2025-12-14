@@ -61,8 +61,9 @@ class MaxoptInjector:
             'description': 'Performance optimized to maximum'
         })
         
-        # Set Python optimization flags
-        sys.flags.optimize = 2  # Maximum optimization
+        # Set Python optimization via environment variable
+        # Note: sys.flags is immutable, so we use environment variable
+        os.environ['PYTHONOPTIMIZE'] = '2'
     
     def _optimize_memory(self) -> None:
         """Optimize memory usage"""
@@ -75,7 +76,10 @@ class MaxoptInjector:
         
         # Enable aggressive garbage collection
         gc.enable()
-        gc.set_threshold(700, 10, 10)  # More aggressive GC
+        # Set GC threshold values: (threshold0, threshold1, threshold2)
+        # Lower thresholds mean more aggressive collection
+        # Default is (700, 10, 10) - making it more aggressive
+        gc.set_threshold(700, 10, 10)
         
         if self.eternal:
             # Periodic GC for eternal optimization

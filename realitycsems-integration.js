@@ -99,9 +99,9 @@ class RealityCSEMSManager {
   _initializeMaxopt() {
     try {
       const maxoptPath = path.join(PACKAGES_DIR, 'maxopt-injector', 'javascript', 'index.js');
-      const MaxoptInjector = require(maxoptPath);
+      const MaxoptModule = require(maxoptPath);
       
-      this.maxoptInjector = MaxoptInjector.injector;
+      this.maxoptInjector = MaxoptModule.injector;
       
       // Verify maxopt injection
       const verification = this.maxoptInjector.verify();
