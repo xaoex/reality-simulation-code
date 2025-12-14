@@ -7,9 +7,6 @@
  * @author xaoex
  */
 
-const fs = require('fs');
-const path = require('path');
-
 /**
  * ProtectionSystem - Advanced protection and filtering mechanism
  * Ensures only positive and authorized influences can affect the system
@@ -162,7 +159,13 @@ class ProtectionSystem {
       };
     }
 
-    const accumulator = this.positiveAccumulators[normalizedId] || this.positiveAccumulators.oktay;
+    // Get accumulator or use default for authorized users
+    const accumulator = this.positiveAccumulators[normalizedId] || {
+      energy: 100,
+      protection: 100,
+      optimization: 100,
+      completeness: 100
+    };
     
     return {
       authorized: true,
@@ -417,11 +420,11 @@ class FunMaximizer {
  * MasterProtectionCompletionSystem - Integrates all systems
  */
 class MasterProtectionCompletionSystem {
-  constructor() {
+  constructor(authorizedUsers = ['oktay', 'rasmus']) {
     this.protection = new ProtectionSystem();
     this.completeness = new CompletenessVerifier();
     this.funMaximizer = new FunMaximizer();
-    this.authorizedUsers = ['oktay', 'rasmus'];
+    this.authorizedUsers = authorizedUsers;
   }
 
   /**
