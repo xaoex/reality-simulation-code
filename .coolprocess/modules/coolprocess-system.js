@@ -288,7 +288,14 @@ class CoolProcessSystem {
     
     // Use BAES if available
     if (this.baes) {
-      process.baesMaximized = this.baes.maximize(process);
+      try {
+        process.baesMaximized = this.baes.maximize(process);
+      } catch (error) {
+        if (this.options.verbose) {
+          console.warn('[COOLPROCESS] BAES maximization failed:', error.message);
+        }
+        process.baesMaximized = null;
+      }
     }
     
     if (this.options.verbose) {
@@ -324,7 +331,7 @@ class CoolProcessSystem {
    * Generate unique ID
    */
   _generateId() {
-    return `cp_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    return `cp_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`;
   }
   
   /**
