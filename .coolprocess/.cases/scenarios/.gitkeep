@@ -1,0 +1,17 @@
+# Scenarios Directory
+
+This directory contains test scenario definitions.
+
+Example scenario structure:
+
+```javascript
+{
+  name: "scenario-name",
+  description: "What this scenario tests",
+  setup: () => { /* setup code */ },
+  execute: () => { /* test code */ },
+  validate: (result) => { /* validation */ }
+}
+```
+
+Reserved for scenario definitions.

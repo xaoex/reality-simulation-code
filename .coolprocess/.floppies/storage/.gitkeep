@@ -1,0 +1,7 @@
+# Storage Directory
+
+This directory stores primary data for the coolprocess system.
+
+Data is stored via the `storeInFloppies()` method.
+
+Reserved for system use.
