@@ -1,0 +1,24 @@
+{
+  "name": "@xaoex/young-field",
+  "version": "1.0.0-template",
+  "description": "Young Field - Mathematical field with division operations extending Young Ring",
+  "main": "index.js",
+  "keywords": [
+    "field",
+    "algebra",
+    "mathematics",
+    "division",
+    "young-field",
+    "template"
+  ],
+  "author": "xaoex",
+  "license": "XPSL-1.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/xaoex/reality-simulation-code.git",
+    "directory": "young-packages/young-field"
+  },
+  "dependencies": {
+    "@xaoex/young-ring": "1.0.0-template"
+  }
+}

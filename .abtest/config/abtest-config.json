@@ -1,0 +1,101 @@
+{
+  "abtest": {
+    "enabled": true,
+    "framework": "template",
+    "version": "1.0.0-template",
+    
+    "tests": {
+      "baseline": "main",
+      "runOnCommit": true,
+      "runScheduled": true,
+      "scheduleInterval": "daily"
+    },
+    
+    "variants": {
+      "enabled": true,
+      "generateVariants": true,
+      "maxVariants": 5
+    },
+    
+    "metrics": {
+      "track": [
+        "execution-time",
+        "memory-usage",
+        "test-pass-rate",
+        "code-coverage",
+        "code-complexity"
+      ],
+      "threshold": {
+        "improvement": 0.05,
+        "degradation": 0.10
+      }
+    },
+    
+    "learning": {
+      "enabled": true,
+      "collectData": true,
+      "trainModel": true,
+      "applyLearnings": true,
+      "sources": [
+        "test-results",
+        "code-changes",
+        "performance-metrics",
+        "user-feedback"
+      ]
+    },
+    
+    "refactoring": {
+      "enabled": true,
+      "automatic": false,
+      "requireApproval": true,
+      "createPR": true,
+      "minImprovement": 0.10
+    },
+    
+    "ml": {
+      "enabled": true,
+      "model": "template-v1",
+      "training": {
+        "testCode": true,
+        "implementations": true,
+        "results": true,
+        "patterns": true
+      },
+      "generation": {
+        "tests": true,
+        "code": false,
+        "refactorings": true,
+        "documentation": true
+      },
+      "teachAI": {
+        "enabled": true,
+        "useTestCode": true,
+        "learnPatterns": true,
+        "improveCodeQuality": true
+      }
+    },
+    
+    "actions": {
+      "github": {
+        "enabled": true,
+        "workflows": [
+          "ab-test-on-commit",
+          "learn-from-results",
+          "refactor-if-improved",
+          "train-ml-model"
+        ]
+      }
+    },
+    
+    "genericTestSituation": {
+      "enabled": true,
+      "generateTests": true,
+      "testPatterns": [
+        "unit-tests",
+        "integration-tests",
+        "performance-tests",
+        "edge-cases"
+      ]
+    }
+  }
+}

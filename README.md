@@ -27,6 +27,8 @@ This is the **comprehensive xaoex template package** that includes all reference
 **Package Features:**
 - 📋 **Template Reference**: Complete API definitions and reference implementations
 - 🎯 **Delegation Ready**: Clear patterns for reality-optimized implementations
+- 🧪 **AB Test Ready**: Integrated AB testing and ML learning framework
+- 📦 **Partitioned Components**: Young packages available independently
 - 🚀 Available via npm (npmjs.org and GitHub Packages)
 - 🐳 Available as Docker container (GitHub Container Registry)
 - 📚 Complete documentation with component references
@@ -37,11 +39,14 @@ This is the **comprehensive xaoex template package** that includes all reference
 - 🧮 Lambda/Anonymous calculus for data transformations
 - 🎲 Bayesian common situations for pattern discovery
 - 🔗 Component partitioning and cross-references
+- 🤖 AI teaching through test code + ML
 
 For detailed package information, see [PACKAGE.md](PACKAGE.md).  
 For template version details, see [TEMPLATE_VERSION.md](TEMPLATE_VERSION.md).  
 For component reference, see [COMPONENT_REFERENCE.md](COMPONENT_REFERENCE.md).  
-For delegation patterns, see [DELEGATION_MAP.md](DELEGATION_MAP.md).
+For delegation patterns, see [DELEGATION_MAP.md](DELEGATION_MAP.md).  
+For Young packages, see [young-packages/README.md](young-packages/README.md).  
+For AB testing, see [.abtest/README.md](.abtest/README.md).
 
 ## 🔮 Anonymous Package - Lambda Calculus + BAES + COOLEMS
 
@@ -484,5 +489,115 @@ Production systems should:
 2. Implement reality-optimized versions
 3. Delegate to template when appropriate
 4. Report improvements back to template
+
+--------------------
+
+## 📦 Young Packages - Partitioned Components
+
+The "Young" mathematical framework has been partitioned into independent packages that can be used standalone or composed together. This enables:
+
+- **Independent Usage**: Use only what you need
+- **Rings of Packages**: Multiple instances running simultaneously
+- **Selective Best Parts**: Import optimal components only
+- **Compositional Power**: Combine packages as needed
+
+### Available Young Packages
+
+1. **@xaoex/young-ring** - Abstract mathematical ring
+   - Location: `./young-packages/young-ring/`
+   - Ring operations, relational algebra
+   - Foundational component
+
+2. **@xaoex/young-field** - Mathematical field with division
+   - Location: `./young-packages/young-field/`
+   - Extends Young Ring
+   - Division, normalization, probability distributions
+
+3. **@xaoex/young-situation** - Dynamic enterprise modeling
+   - Location: `./young-packages/young-situation/`
+   - State management, optimal path finding
+   - Can use Young Field for valuations
+
+### Usage Examples
+
+```javascript
+// Standalone usage
+const { YoungRing } = require('@xaoex/young-ring');
+const ring = new YoungRing([1, 2, 3]);
+
+// Compositional usage
+const { createRationalField } = require('@xaoex/young-field');
+const { YoungSituation } = require('@xaoex/young-situation');
+const field = createRationalField();
+const situation = new YoungSituation(/* ... */);
+
+// Multiple rings (rings of rings)
+const ring1 = new YoungRing([1, 2, 3]);
+const ring2 = new YoungRing([4, 5, 6]);
+```
+
+See [young-packages/README.md](young-packages/README.md) for complete documentation.
+
+### Why Partition?
+
+Partitioning enables interesting scenarios:
+- **Rings of Rings**: YoungRing instances managing other rings
+- **Field of Situations**: YoungField operations on situation valuations
+- **Selective Evolution**: Individual packages evolve at different rates
+- **Best Parts Selection**: Use only optimal components
+
+--------------------
+
+## 🧪 AB Testing & ML Learning
+
+This template includes an integrated AB testing framework that enables continuous learning and improvement through machine learning.
+
+### Features
+
+- **AB Testing**: Run baseline vs variant code with metrics
+- **Learning**: Extract patterns from test results
+- **Refactoring**: Automatically refactor based on learnings
+- **Teaching AI**: Use test code + ML to teach AI to code better
+
+### Quick Start
+
+```javascript
+const { ABTest } = require('./.abtest/ab-test');
+const { MLLearner } = require('./.abtest/ml/learner');
+
+// Run AB test
+const test = new ABTest({
+  name: 'young-field-optimization',
+  baseline: './young-packages/young-field/index.js',
+  variant: './young-packages/young-field/index-optimized.js'
+});
+
+const results = await test.run();
+// { winner: 'variant', improvement: '33%' }
+
+// Learn from results
+const learner = new MLLearner({
+  testResults: './.abtest/results/',
+  codebase: './young-packages/'
+});
+
+const learnings = await learner.analyze();
+// { patterns: ['use-early-return'], improvements: ['caching'] }
+```
+
+### Integration with Actions
+
+The AB test framework integrates with GitHub Actions to:
+- Run tests on every commit
+- Learn from test results
+- Automatically refactor when improvements found
+- Train ML models continuously
+- Generate new tests
+
+### Generic Test Situation
+
+Supports a "generic test situation" - baseline test environments that can be generated for any codebase, enabling teaching AI how to code by showing test code examples and learning which implementations pass.
+
+See [.abtest/README.md](.abtest/README.md) for complete documentation.
 
 --------------------
