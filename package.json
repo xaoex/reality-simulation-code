@@ -1,7 +1,7 @@
 {
   "name": "reality-simulation-code",
   "version": "1.0.0",
-  "description": "Reality Simulation Codebase - SimSim Code & Contributions by xaoex - Comprehensive package including Young Situation, Young Field, Yoshi's Secret, Bae Mathematics, Reality CSEMS, Anonymous Package (Lambda Calculus + BAES + COOLEMS), and CoolProcess (Process Management + Floppies + Cases)",
+  "description": "Reality Simulation Codebase - SimSim Code & Contributions by xaoex - Comprehensive package including Young Situation, Young Field, Yoshi's Secret, Bae Mathematics, Reality CSEMS, and Anonymous Package (Lambda Calculus + BAES + COOLEMS)",
   "main": "index.js",
   "bin": {
     "realitycsems": "./realitycsems-cli.js"
@@ -39,9 +39,6 @@
     "lambda-calculus",
     "baes",
     "coolems",
-    "coolprocess",
-    "process-management",
-    "workflow-engine",
     "bayesian",
     "etl",
     "polypipes",
@@ -88,12 +85,10 @@
     ".anonymouscalc/",
     ".baes/",
     ".coolems/",
-    ".coolprocess/",
     "README.md",
     "LICENSE",
     "REALITYCSEMS.md",
     "ANONYMOUS_PACKAGE.md",
-    "COOLPROCESS.md",
     "YOUNG_SITUATION.md",
     "YOUNG_FIELD.md",
     "YOSHIS_SECRET_BAE_MATH.md",
