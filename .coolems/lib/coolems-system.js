@@ -31,7 +31,7 @@ class COOLEMSSystem {
   _initialize() {
     // Load Anonymous Calculus integration
     try {
-      const AnonymousCalculus = require('../.anonymouscalc/lambdas/anonymous-calculus.js');
+      const AnonymousCalculus = require('../.anonymouscalc/lib/anonymous-calculus.js');
       this.anonymousCalc = new AnonymousCalculus.AnonymousCalculus({ maxopt: true, verbose: false });
     } catch (error) {
       console.warn('[COOLEMS] AnonymousCalculus not available');
@@ -39,7 +39,7 @@ class COOLEMSSystem {
     
     // Load BAES integration
     try {
-      const BAES = require('../.baes/situations/baes-system.js');
+      const BAES = require('../.baes/lib/baes-system.js');
       this.baes = new BAES.BAESSystem({ maxopt: true, verbose: false });
     } catch (error) {
       console.warn('[COOLEMS] BAES not available');

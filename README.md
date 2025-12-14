@@ -32,34 +32,6 @@ This is the **comprehensive xaoex package** that includes all implementations in
 
 For detailed package information, see [PACKAGE.md](PACKAGE.md).
 
-## 🔧 CoolProcess - Process Management System
-
-**CoolProcess** (`.coolprocess`) provides organized process management with heavy work situation support:
-
-- **Floppies** (`.floppies`): Data storage and process archival system
-- **Cases** (`.cases`): Test cases, scenarios, and workflow definitions
-- **Process Management**: Create, execute, monitor, and optimize processes
-- **Workflow Engine**: Sequential, parallel, and conditional workflows
-
-Quick example:
-
-```javascript
-const { CoolProcessSystem } = require('reality-simulation-code');
-const coolProcess = new CoolProcessSystem({ maxopt: true });
-
-// Create process and store data
-const process = coolProcess.createProcess('data-processing', { priority: 'high' });
-coolProcess.storeInFloppies('data-001', { values: [1, 2, 3] });
-
-// Execute workflow
-const workflow = coolProcess.createWorkflow('pipeline', [
-  () => ({ data: [1, 2, 3] }),
-  (input) => input.data.map(x => x * 2)
-]);
-```
-
-For complete documentation, see [COOLPROCESS.md](COOLPROCESS.md) and [.coolprocess/README.md](.coolprocess/README.md).
-
 ## 🔮 Anonymous Package - Lambda Calculus + BAES + COOLEMS
 
 **Anonymous Package** provides anonymous/lambda calculus mapping tools with ETL transformations, Bayesian situations, and multi-language support:
