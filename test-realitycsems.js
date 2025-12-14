@@ -106,10 +106,10 @@ test('Reality CSEMS HEAD Reference', () => {
 });
 
 test('Maxopt Injector Package - JavaScript', () => {
-  const maxoptPath = '.realitycsems/packages/maxopt-injector/javascript/index.js';
+  const maxoptPath = path.resolve('.realitycsems/packages/maxopt-injector/javascript/index.js');
   assert(fs.existsSync(maxoptPath), 'JavaScript maxopt injector should exist');
   
-  const { MaxoptInjector, verify } = require('./'+maxoptPath);
+  const { MaxoptInjector, verify } = require(maxoptPath);
   assert(typeof MaxoptInjector === 'function', 'MaxoptInjector should be a class');
   
   const verification = verify();
