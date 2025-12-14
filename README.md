@@ -58,7 +58,7 @@ const workflow = coolProcess.createWorkflow('pipeline', [
 ]);
 ```
 
-For complete documentation, see [.coolprocess/README.md](.coolprocess/README.md).
+For complete documentation, see [COOLPROCESS.md](COOLPROCESS.md) and [.coolprocess/README.md](.coolprocess/README.md).
 
 ## 🔮 Anonymous Package - Lambda Calculus + BAES + COOLEMS
 
