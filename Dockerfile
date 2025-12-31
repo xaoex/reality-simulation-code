@@ -31,6 +31,19 @@ RUN npm install --omit=dev --omit=optional --ignore-scripts && \
 # Copy application files
 COPY index.js ./
 COPY demo.js ./
+COPY realitycsems-integration.js ./
+COPY realitycsems-cli.js ./
+COPY anonymous-package.js ./
+COPY optimization-system.js ./
+
+# Copy lib directory with all modules
+COPY lib/ ./lib/
+
+# Copy supporting directories
+COPY .realitycsems/ ./.realitycsems/
+COPY .anonymouscalc/ ./.anonymouscalc/
+COPY .baes/ ./.baes/
+COPY .coolems/ ./.coolems/
 
 # Copy documentation
 COPY README.md ./
@@ -41,6 +54,8 @@ COPY YOUNG_FIELD.md ./
 COPY YOSHIS_SECRET_BAE_MATH.md ./
 COPY WHITEPAPER_YOUNG_SITUATION.md ./
 COPY IMPLEMENTATION_SUMMARY.md ./
+COPY REALITYCSEMS.md ./
+COPY ANONYMOUS_PACKAGE.md ./
 
 # Copy configuration files needed for runtime
 COPY .realtime .online .necessaries ./
