@@ -38,6 +38,7 @@
       "parent": "reality-main",
       "status": "stable",
       "protected": true,
+      "optimization": "100%",
       "created": "2025-12-14T00:00:00Z"
     },
     
