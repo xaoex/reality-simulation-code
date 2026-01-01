@@ -182,6 +182,8 @@ module.exports = {
   fourPartSituationExample: MathematicalBeautyModule.fourPartSituationExample,
   mathematicalBeautyExample: MathematicalBeautyModule.mathematicalBeautyExample,
   beautySituationExample: MathematicalBeautyModule.beautySituationExample,
+  beautyTransformExample: MathematicalBeautyModule.beautyTransformExample,
+  advancedTemporalExample: MathematicalBeautyModule.advancedTemporalExample,
   
   // ============================================================================
   // External System Exports
