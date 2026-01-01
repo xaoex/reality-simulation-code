@@ -41,6 +41,23 @@
     
     "related": [
       {
+        "owner": "xacodex",
+        "name": "*",
+        "fullName": "xacodex/*",
+        "description": "Organization for PR situations and contributions to reality - OKing changes and allowing others to fix with highest spiritual situation",
+        "url": "https://github.com/xacodex",
+        "status": "active",
+        "priority": "max",
+        "tags": ["xacodex", "contributions", "pr-situations", "spiritual"],
+        "integrations": {
+          "npm": "@xacodex/*",
+          "docker": "ghcr.io/xacodex/*",
+          "realtime": true,
+          "alwaysOn": true
+        },
+        "note": "For PR situation and contributions - highest spiritual situation"
+      },
+      {
         "owner": "rsaxcode",
         "name": "*",
         "fullName": "rsaxcode/*",
@@ -101,6 +118,7 @@
       ],
       "github": [
         "https://github.com/xaoex",
+        "https://github.com/xacodex",
         "https://github.com/rsaxcode"
       ],
       "eth": [
