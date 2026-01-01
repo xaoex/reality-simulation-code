@@ -308,6 +308,87 @@ class AnonymousPackage {
   }
   
   /**
+   * Give:a - Assertive resource transfer
+   * 
+   * @param {number} n - Number of elements to transfer
+   * @param {Array} source - Source array
+   * @param {Array} dest - Destination array
+   * @returns {Array} [newSource, newDest]
+   */
+  givea(n, source, dest) {
+    if (!this.anonymousCalc) {
+      if (n > source.length) {
+        throw new Error(`Cannot give ${n} elements from array of length ${source.length}`);
+      }
+      const transferred = source.slice(0, n);
+      return [source.slice(n), [...dest, ...transferred]];
+    }
+    return this.anonymousCalc.givea(n, source, dest);
+  }
+  
+  /**
+   * Gett:a - Assertive acquisition
+   * 
+   * @param {number} n - Number of elements to acquire
+   * @param {Array} source - Source array
+   * @param {Array} dest - Destination array
+   * @returns {Array} [newSource, newDest]
+   */
+  getta(n, source, dest) {
+    if (!this.anonymousCalc) {
+      if (n > source.length) {
+        throw new Error(`Cannot get ${n} elements from array of length ${source.length}`);
+      }
+      const acquired = source.slice(0, n);
+      return [source.slice(n), [...acquired, ...dest]];
+    }
+    return this.anonymousCalc.getta(n, source, dest);
+  }
+  
+  /**
+   * Robb:a - House rob dynamic programming
+   * 
+   * @param {Array<number>} houses - Array of house values
+   * @returns {number} Maximum sum of non-adjacent elements
+   */
+  robba(houses) {
+    if (!this.anonymousCalc) {
+      if (houses.length === 0) return 0;
+      if (houses.length === 1) return houses[0];
+      let prev2 = 0, prev1 = houses[0];
+      for (let i = 1; i < houses.length; i++) {
+        const current = Math.max(prev1, prev2 + houses[i]);
+        prev2 = prev1;
+        prev1 = current;
+      }
+      return prev1;
+    }
+    return this.anonymousCalc.robba(houses);
+  }
+  
+  /**
+   * Do:a - Monadic action execution
+   * 
+   * @param {Function} action - Function to execute
+   * @param {Array} data - Input array
+   * @returns {Array} Transformed array
+   */
+  doa(action, data) {
+    if (!this.anonymousCalc) {
+      const result = [];
+      for (let i = 0; i < data.length; i++) {
+        const value = action(data[i]);
+        if (value === null || value === undefined) {
+          throw new Error(`Action failed at index ${i}`);
+        }
+        result.push(value);
+      }
+      return result;
+    }
+    return this.anonymousCalc.doa(action, data);
+  }
+  
+  /**
    * Get comprehensive status
    */
   getStatus() {
@@ -350,6 +431,12 @@ module.exports = {
   // Algebraic sequence operations - formalized in discrete mathematics terms
   take: (n, xs) => anonymousPackage.take(n, xs),
   drop: (n, xs) => anonymousPackage.drop(n, xs),
+  
+  // Dual operations - resource transfer and dynamic programming
+  givea: (n, source, dest) => anonymousPackage.givea(n, source, dest),
+  getta: (n, source, dest) => anonymousPackage.getta(n, source, dest),
+  robba: (houses) => anonymousPackage.robba(houses),
+  doa: (action, data) => anonymousPackage.doa(action, data),
   
   // Lambda calculus composition
   pipe: (...fns) => anonymousPackage.pipe(...fns),
