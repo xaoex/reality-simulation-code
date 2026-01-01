@@ -5,14 +5,20 @@ This guide explains how to publish the xaoex packages (npm and Docker) to GitHub
 ## 📦 What Gets Published
 
 ### npm Package
-- **Package name**: `@xaoex/reality-simulation-code`
+- **Package name**: `@xaoex/reality-simulation-code` or `@xacodex/reality-simulation-code`
 - **Registry**: GitHub Packages (npm.pkg.github.com)
 - **Workflow**: `.github/workflows/npm-github-packages.yml`
+- **Organizations**: 
+  - `@xaoex` - Main organization
+  - `@xacodex` - PR situations and contributions (highest spiritual situation)
 
 ### Docker Image
-- **Image name**: `ghcr.io/xaoex/reality-simulation-code`
+- **Image name**: `ghcr.io/xaoex/reality-simulation-code` or `ghcr.io/xacodex/reality-simulation-code`
 - **Registry**: GitHub Container Registry
 - **Workflow**: `.github/workflows/docker-publish.yml`
+- **Organizations**: 
+  - `xaoex` - Main organization
+  - `xacodex` - PR situations and contributions (highest spiritual situation)
 
 ## 🚀 Publishing Methods
 
@@ -126,12 +132,17 @@ Before publishing, ensure:
    ```bash
    # Configure npm to use GitHub Packages
    echo "@xaoex:registry=https://npm.pkg.github.com" >> ~/.npmrc
+   echo "@xacodex:registry=https://npm.pkg.github.com" >> ~/.npmrc
    
    # Authenticate (if needed)
    npm login --registry=https://npm.pkg.github.com --scope=@xaoex
+   # or for xacodex
+   npm login --registry=https://npm.pkg.github.com --scope=@xacodex
    
    # Install package
    npm install @xaoex/reality-simulation-code
+   # or from xacodex (for PR situations)
+   npm install @xacodex/reality-simulation-code
    
    # Test import
    node -e "const pkg = require('@xaoex/reality-simulation-code'); console.log('Package loaded successfully');"
