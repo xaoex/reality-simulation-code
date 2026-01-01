@@ -760,8 +760,340 @@ The connection to Poisson distributions via "The Fame" parameter bridges discret
 
 ---
 
+## 14. Extended Operators and Notations
+
+### 14.1 Relational Take Operators (Issue #776)
+
+Building upon the basic take operator, we define relational variants using comparison operators.
+
+**Definition 14.1 (Take-While with Predicate):**
+```
+takeWhile: (α → Bool) × List(α) → List(α)
+takeWhile(p, xs) = { xᵢ | i ∈ [0, k) ∧ ∀j < i : p(xⱼ) }
+where k = min({ i | ¬p(xᵢ) } ∪ {|xs|})
+```
+
+**Definition 14.2 (Relational Take Operators):**
+
+For a relation R ∈ {<, >, ≤, ≥, =, ≠} and threshold value t:
+```
+take_R(t, xs) = takeWhile(x => x R t, xs)
+```
+
+Specifically:
+- `take_<(t, xs)` = take while elements are less than t
+- `take_>(t, xs)` = take while elements are greater than t
+- `take_~(t, xs)` = take while elements approximately equal t (within ε)
+
+**Definition 14.3 (Tilde Operator - Approximate Take):**
+For ε > 0:
+```
+take_~(t, ε, xs) = takeWhile(x => |x - t| < ε, xs)
+```
+
+This extends take to support fuzzy matching in continuous domains.
+
+### 14.2 Poisson Distribution Variants (Issue #777)
+
+We formalize extended notations for Poisson-distributed take operations.
+
+**Definition 14.4 (Questioning Operator - Stochastic Query):**
+```
+X ? Poi(The Fame) : denotes sampling query
+```
+
+Formally:
+```
+take_?(xs) = take(X, xs) where X ~ Poi(λ) with probability query P(X = k)
+```
+
+Returns the taken elements with associated probability distribution.
+
+**Definition 14.5 (Double Question - Marginal Query):**
+```
+X ?? Poi(The Fame, More)
+```
+
+Denotes marginalization over parameter space:
+```
+take_??(xs) = ∫ take(X_λ, xs) P(λ | data) dλ
+where X_λ ~ Poi(λ)
+```
+
+**Definition 14.6 (Exclamation - Deterministic Extraction):**
+```
+X ! Poi(The Fame) : denotes "go get" - deterministic extraction at mode
+```
+
+Formally:
+```
+take_!(xs) = take(⌊The Fame⌋, xs)
+```
+
+Takes at the floor of the expected value (most likely outcome for discrete distribution).
+
+**Definition 14.7 (Double Exclamation - Gaussian Approximation):**
+```
+X !! Poi(The Fame) : denotes Gaussian approximation
+```
+
+For large λ, Poi(λ) ≈ N(λ, λ). Thus:
+```
+take_!!(xs) = take(⌊λ + √λ · Z⌋, xs) where Z ~ N(0,1)
+```
+
+**Definition 14.8 (Plus-Tilde - Taken From):**
+As clarified in Issue #777, `X +~ Poi(The Fame)` denotes extraction:
+```
+X +~ Poi(The Fame) : "X has taken from Poisson(The Fame)"
+```
+
+Formally:
+```
+take_+~(xs, λ) = xs ∖ drop(X, xs) where X ~ Poi(λ)
+```
+
+Represents the set of elements extracted from xs according to Poisson sampling.
+
+**Definition 14.9 (Evaluation Operator):**
+```
+X Eval Poi(The Fame) : evaluates to concrete distribution
+```
+
+Returns:
+```
+eval(X ~ Poi(λ)) = { (k, P(X=k)) | k ∈ ℕ, P(X=k) = (λᵏe⁻ᵏ)/k! }
+```
+
+### 14.3 Takea - Exception-Throwing Variant (Issue #538)
+
+**Definition 14.10 (Takea - Assertive Take):**
+```
+takea: ℕ × List(α) → List(α) ⊥
+```
+
+Where `⊥` denotes potential exception/bottom.
+
+**Formal Semantics:**
+```
+takea(n, xs) = if n ≤ |xs| then take(n, xs)
+               else ⊥ (throws LengthException)
+```
+
+**Type-Theoretic Formulation:**
+```
+takea: (n: ℕ) → (xs: List(α)) → { ys: List(α) | n ≤ |xs| }
+```
+
+This is a dependent type that enforces the precondition.
+
+**Theorem 14.1 (Takea Totality):**
+takea is a partial function that becomes total when restricted to valid inputs:
+```
+∀n ∈ ℕ, ∀xs ∈ List(α) : n ≤ |xs| ⟹ takea(n, xs) = take(n, xs)
+```
+
+**Use Case:**
+Takea models situations where insufficient data is a critical error:
+```
+takea_xaoex_situation(n, trajectory) throws when trajectory insufficient
+```
+
+### 14.4 DOA - Dead or Alive Operator (Issue #768)
+
+**Definition 14.11 (DOA - Decidability Operator):**
+```
+doa: List(α) × (α → Bool) → Either(List(α), ⊥)
+```
+
+Categorizes elements as "alive" (satisfying predicate) or "dead" (failing).
+
+**Formal Definition:**
+```
+doa(xs, p) = Left(filter(p, xs)) if ∃x ∈ xs : p(x)
+           = Right(⊥) otherwise ("dead" - no valid elements)
+```
+
+**Theorem 14.2 (DOA Partition):**
+```
+doa_alive(xs, p) ∪ doa_dead(xs, p) = xs
+doa_alive(xs, p) ∩ doa_dead(xs, p) = ∅
+```
+
+where:
+```
+doa_alive(xs, p) = filter(p, xs)
+doa_dead(xs, p) = filter(¬p, xs)
+```
+
+**Integration with Take:**
+```
+take_doa(n, xs, p) = take(n, doa_alive(xs, p))
+```
+
+Takes first n "alive" elements.
+
+### 14.5 The Drop - Theoretical CS Arguments (Issue #38)
+
+**Definition 14.12 (Extended Drop with Epistemic Operators):**
+
+The drop operator is extended with theoretical CS concepts:
+
+**Wager Operator:**
+```
+drop_wager(n, xs, confidence) = 
+  drop(n, xs) with probability confidence
+  xs with probability (1 - confidence)
+```
+
+**Bet Operator (Decision-Theoretic):**
+```
+drop_bet(n, xs, utility) = 
+  argmax_{k∈ℕ} E[utility(drop(k, xs))]
+```
+
+**Venture Operator (Risk-Adjusted):**
+```
+drop_venture(n, xs, risk) = 
+  drop(n · (1 + risk_factor), xs)
+```
+
+**Speculate Operator (Probabilistic):**
+```
+drop_speculate(xs) = drop(X, xs) where X ~ Prior_Distribution
+```
+
+**Chance Operator (Uniform Random):**
+```
+drop_chance(xs) = drop(U, xs) where U ~ Uniform(0, |xs|)
+```
+
+**Future Operator (Temporal Projection):**
+```
+drop_future(t, xs_trajectory) = 
+  drop(states_until(current_time + t), xs_trajectory)
+```
+
+**Theorem 14.3 (EEP Package Soundness):**
+The Extended Epistemic Package (EEP) maintains statistical soundness:
+
+For all epistemic operators op ∈ {wager, bet, venture, speculate, chance, future}:
+```
+E[|drop_op(xs)|] ≤ |xs|
+P(drop_op(xs) is well-defined) ≥ confidence_threshold
+```
+
+### 14.6 Inductive Formulations (Issue #777)
+
+**Definition 14.13 (Inductive Take Family):**
+Given base operator `X ~ Poi(The Fame)`, generate family:
+
+**Base Case:**
+```
+take_0(xs) = []
+```
+
+**Inductive Step:**
+```
+take_{n+1}(xs) = if |xs| > 0 
+                 then head(xs) :: take_n(tail(xs))
+                 else []
+```
+
+**Theorem 14.4 (Inductive Characterization):**
+```
+∀n ∈ ℕ, ∀xs ∈ List(α) : take_n(xs) = take(n, xs)
+```
+
+**Proof by Induction:**
+Base: take_0(xs) = [] = take(0, xs) ✓
+Step: Assume take_n(xs) = take(n, xs)
+Then take_{n+1}(xs) = head(xs) :: take_n(tail(xs))
+                     = head(xs) :: take(n, tail(xs))
+                     = take(n+1, xs) ✓
+∎
+
+**Meta-Formula Generation:**
+```
+If we know X ? Poi(The Fame), 
+then we can derive X ?? Poi(The Fame, More) by:
+```
+
+Let F be a functor from Poi to Poi:
+```
+F(X ~ Poi(λ)) = ∫ (X' ~ Poi(λ')) P(λ' | data, λ) dλ'
+```
+
+This generates the family of related distributions.
+
+### 14.7 Division and Composition (Issue #777)
+
+**Definition 14.14 (Quotient Operator):**
+```
+X / Y where X, Y ~ Poi(λ₁), Poi(λ₂)
+```
+
+Defines division of Poisson processes:
+```
+take_{X/Y}(xs) = take(⌊E[X]/E[Y]⌋, xs) = take(⌊λ₁/λ₂⌋, xs)
+```
+
+**Definition 14.15 (Cross-Product Operator):**
+```
+(Z / X) × (@: what_to_get)
+```
+
+Where @ is a meta-operator specifying extraction criteria:
+```
+take_{Z/X × @}(xs) = filter(@, take(⌊E[Z]/E[X]⌋, xs))
+```
+
+**Theorem 14.5 (Compositional Correctness):**
+```
+∀ operators op₁, op₂ : 
+  take_{op₁ ∘ op₂} = (take_{op₁}) ∘ (take_{op₂})
+```
+
+When operators are compatible (composable).
+
+---
+
+## 15. Conclusion (Extended)
+
+This white paper has established comprehensive mathematical foundations for take and drop operators, including:
+
+1. **Core operators** with rigorous set-theoretic and type-theoretic definitions
+2. **Stochastic interpretations** via Poisson distributions with parameter "The Fame"
+3. **Extended notations** addressing GitHub issues #776, #777, #538, #768, #38
+4. **Relational operators** (`~`, `<`, `>`) for predicate-based extraction
+5. **Epistemic operators** (wager, bet, venture, speculate, chance, future) for decision-theoretic reasoning
+6. **Exception-aware variants** (takea) with dependent types
+7. **DOA categorization** for decidability analysis
+8. **Inductive formulations** for systematic operator generation
+
+These operators provide a complete formal framework for sequence manipulation in the Reality Simulation Code ecosystem, bridging discrete mathematics, probability theory, type theory, and decision theory.
+
+The mathematical rigor ensures correctness while the extended notations provide expressiveness for complex real-world scenarios in Young Situation modeling, ZMT/DMT transformations, and stochastic event simulation.
+
+---
+
+## 16. References (Extended)
+
+1. Bird, R., & Wadler, P. (1988). *Introduction to Functional Programming*. Prentice Hall.
+2. Mac Lane, S. (1971). *Categories for the Working Mathematician*. Springer.
+3. Knuth, D. E. (1997). *The Art of Computer Programming, Volume 1: Fundamental Algorithms*. Addison-Wesley.
+4. Ross, S. M. (2014). *Introduction to Probability Models*. Academic Press.
+5. Pierce, B. C. (2002). *Types and Programming Languages*. MIT Press.
+6. Reality Simulation Code Contributors. (2025). *Young Situation: A Formal Mathematical Framework*. White Paper v1.0.
+7. Savage, L. J. (1972). *The Foundations of Statistics*. Dover Publications.
+8. von Neumann, J., & Morgenstern, O. (1944). *Theory of Games and Economic Behavior*. Princeton University Press.
+9. Rabin, M. O. (1963). "Probabilistic Automata." *Information and Control*, 6(3), 230-245.
+10. GitHub Issues xaoex/reality-simulation-code: #776 (Relational Operators), #777 (Poisson Variants), #538 (Takea), #768 (DOA), #38 (The Drop).
+
+---
+
 **For you kiddo, Oktay eternally through aeons.**
 
 ---
 
-*This white paper provides the theoretical foundation for the take and drop operators. For implementation details and code examples, see the separate implementation documentation.*
+*This white paper provides the theoretical foundation for the take and drop operators with extended notations addressing natural language elaborations from GitHub issues. For implementation details and code examples, see the separate implementation documentation.*
