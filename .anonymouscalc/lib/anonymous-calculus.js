@@ -50,6 +50,33 @@ class AnonymousCalculus {
     // Pipe: λfs.λx.pipe(fs, x)
     this.lambda('pipe', (...fs) => x => fs.reduce((acc, f) => f(acc), x));
     
+    // Take: λn.λxs.take(n, xs) - Takes first n elements from sequence
+    // Formalized as: take: ℕ × List(α) → List(α)
+    // Mathematical definition: take(n, [x₁, x₂, ..., xₘ]) = [x₁, x₂, ..., xₖ] where k = min(n, m)
+    this.lambda('take', n => xs => {
+      if (!Array.isArray(xs)) {
+        throw new TypeError('take expects an array');
+      }
+      if (typeof n !== 'number' || n < 0 || !Number.isInteger(n)) {
+        throw new TypeError('take expects a non-negative integer');
+      }
+      return xs.slice(0, n);
+    });
+    
+    // Drop: λn.λxs.drop(n, xs) - Drops first n elements from sequence
+    // Formalized as: drop: ℕ × List(α) → List(α)
+    // Mathematical definition: drop(n, [x₁, x₂, ..., xₘ]) = [xₙ₊₁, xₙ₊₂, ..., xₘ] where n < m
+    // Complementary to take: take(n, xs) ⊕ drop(n, xs) = xs (concatenation property)
+    this.lambda('drop', n => xs => {
+      if (!Array.isArray(xs)) {
+        throw new TypeError('drop expects an array');
+      }
+      if (typeof n !== 'number' || n < 0 || !Number.isInteger(n)) {
+        throw new TypeError('drop expects a non-negative integer');
+      }
+      return xs.slice(n);
+    });
+    
     if (this.options.verbose) {
       console.log('[AnonymousCalculus] Core lambdas initialized');
     }
@@ -168,6 +195,92 @@ class AnonymousCalculus {
       return Object.values(data).reduce(fn, initial);
     }
     return initial;
+  }
+  
+  /**
+   * Take - Algebraic operation for sequence prefix extraction
+   * 
+   * Formal Definition:
+   *   take: ℕ × List(α) → List(α)
+   *   take(n, xs) = { xᵢ | i ∈ [0, min(n, |xs|)) }
+   * 
+   * Properties (Discrete Mathematics):
+   *   1. Length invariant: |take(n, xs)| = min(n, |xs|)
+   *   2. Prefix property: ∀i < min(n, |xs|): take(n, xs)[i] = xs[i]
+   *   3. Idempotence: take(n, take(m, xs)) = take(min(n, m), xs)
+   *   4. Empty preservation: take(n, []) = []
+   *   5. Zero property: take(0, xs) = []
+   *   6. Identity on length: n ≥ |xs| ⟹ take(n, xs) = xs
+   *   7. Monotonicity: n ≤ m ⟹ take(n, xs) ⊆ take(m, xs)
+   * 
+   * Algebraic Laws:
+   *   - Concatenation decomposition: xs = take(n, xs) ⊕ drop(n, xs)
+   *   - Associativity with composition: take(n) ∘ take(m) = take(min(n, m))
+   *   - Distributivity over concatenation: take(n, xs ⊕ ys) = 
+   *       if n ≤ |xs| then take(n, xs)
+   *       else xs ⊕ take(n - |xs|, ys)
+   * 
+   * @param {number} n - Non-negative integer count of elements to take
+   * @param {Array} data - Input sequence
+   * @returns {Array} First n elements of the sequence
+   */
+  take(n, data) {
+    if (!Array.isArray(data)) {
+      throw new TypeError('take expects an array as second argument');
+    }
+    if (typeof n !== 'number' || n < 0 || !Number.isInteger(n)) {
+      throw new TypeError('take expects a non-negative integer as first argument');
+    }
+    
+    if (this.options.verbose) {
+      console.log(`[AnonymousCalculus.take] Taking ${n} elements from array of length ${data.length}`);
+    }
+    
+    return data.slice(0, n);
+  }
+  
+  /**
+   * Drop - Algebraic operation for sequence suffix extraction
+   * 
+   * Formal Definition:
+   *   drop: ℕ × List(α) → List(α)
+   *   drop(n, xs) = { xᵢ | i ∈ [min(n, |xs|), |xs|) }
+   * 
+   * Properties (Discrete Mathematics):
+   *   1. Length invariant: |drop(n, xs)| = max(0, |xs| - n)
+   *   2. Suffix property: ∀i ≥ min(n, |xs|): drop(n, xs)[i - n] = xs[i]
+   *   3. Idempotence: drop(n, drop(m, xs)) = drop(n + m, xs)
+   *   4. Empty preservation: drop(n, []) = []
+   *   5. Zero property: drop(0, xs) = xs
+   *   6. Absorption: n ≥ |xs| ⟹ drop(n, xs) = []
+   *   7. Antimonotonicity: n ≤ m ⟹ drop(m, xs) ⊆ drop(n, xs)
+   * 
+   * Algebraic Laws:
+   *   - Concatenation decomposition: xs = take(n, xs) ⊕ drop(n, xs)
+   *   - Associativity with composition: drop(n) ∘ drop(m) = drop(n + m)
+   *   - Distributivity over concatenation: drop(n, xs ⊕ ys) =
+   *       if n ≥ |xs| then drop(n - |xs|, ys)
+   *       else drop(n, xs) ⊕ ys
+   *   - Complementarity: take(n, xs) ∩ drop(n, xs) = ∅ (disjoint sets)
+   *   - Duality: drop(n, xs) = take(|xs| - n, reverse(xs)) when properly reversed
+   * 
+   * @param {number} n - Non-negative integer count of elements to drop
+   * @param {Array} data - Input sequence
+   * @returns {Array} Remaining elements after dropping first n
+   */
+  drop(n, data) {
+    if (!Array.isArray(data)) {
+      throw new TypeError('drop expects an array as second argument');
+    }
+    if (typeof n !== 'number' || n < 0 || !Number.isInteger(n)) {
+      throw new TypeError('drop expects a non-negative integer as first argument');
+    }
+    
+    if (this.options.verbose) {
+      console.log(`[AnonymousCalculus.drop] Dropping ${n} elements from array of length ${data.length}`);
+    }
+    
+    return data.slice(n);
   }
   
   /**
@@ -302,6 +415,43 @@ module.exports = {
       }
       return (...moreArgs) => curried(...args, ...moreArgs);
     };
+  },
+  
+  // Algebraic sequence operations
+  /**
+   * Take - Extract prefix of sequence
+   * Formalized as: take: ℕ × List(α) → List(α)
+   * 
+   * @param {number} n - Number of elements to take
+   * @param {Array} xs - Input sequence
+   * @returns {Array} First n elements
+   */
+  take: (n, xs) => {
+    if (!Array.isArray(xs)) {
+      throw new TypeError('take expects an array as second argument');
+    }
+    if (typeof n !== 'number' || n < 0 || !Number.isInteger(n)) {
+      throw new TypeError('take expects a non-negative integer as first argument');
+    }
+    return xs.slice(0, n);
+  },
+  
+  /**
+   * Drop - Extract suffix of sequence
+   * Formalized as: drop: ℕ × List(α) → List(α)
+   * 
+   * @param {number} n - Number of elements to drop
+   * @param {Array} xs - Input sequence
+   * @returns {Array} Remaining elements after dropping first n
+   */
+  drop: (n, xs) => {
+    if (!Array.isArray(xs)) {
+      throw new TypeError('drop expects an array as second argument');
+    }
+    if (typeof n !== 'number' || n < 0 || !Number.isInteger(n)) {
+      throw new TypeError('drop expects a non-negative integer as first argument');
+    }
+    return xs.slice(n);
   }
 };
 

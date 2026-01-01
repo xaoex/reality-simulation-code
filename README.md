@@ -56,7 +56,7 @@ Each module is self-contained with comprehensive documentation and examples. See
 ### Quick Start
 
 ```javascript
-const { etl, polypipes, logToCommonBayes, BAESSystem } = require('reality-simulation-code').AnonymousPackage;
+const { etl, polypipes, logToCommonBayes, BAESSystem, take, drop } = require('reality-simulation-code').AnonymousPackage;
 
 // ETL Transform
 const pipeline = etl(
@@ -76,6 +76,13 @@ const results = polypipes(
 const baes = new BAESSystem({ maxopt: true });
 const maximized = baes.maximize([1, 2, 3]); // [1.5, 3, 4.5]
 baes.logToCommonBayes({ experiment: 'test' });
+
+// Algebraic sequence operations - formalized in discrete mathematics
+const data = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+const firstFive = take(5, data);      // [1, 2, 3, 4, 5]
+const afterFive = drop(5, data);      // [6, 7, 8, 9, 10]
+// Concatenation law: take(n, xs) ⊕ drop(n, xs) = xs
+console.log([...firstFive, ...afterFive]); // [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
 ```
 
 For complete documentation, see [ANONYMOUS_PACKAGE.md](ANONYMOUS_PACKAGE.md).
