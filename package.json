@@ -1,0 +1,101 @@
+{
+  "name": "reality-simulation-code",
+  "version": "1.0.0",
+  "description": "Reality Simulation Codebase - SimSim Code & Contributions by xaoex - Comprehensive package including Young Situation, Young Field, Yoshi's Secret, Bae Mathematics, Reality CSEMS, and Anonymous Package (Lambda Calculus + BAES + COOLEMS)",
+  "main": "index.js",
+  "bin": {
+    "realitycsems": "./realitycsems-cli.js"
+  },
+  "scripts": {
+    "test": "node test-young-field.js",
+    "build": "echo \"Build complete\" && exit 0",
+    "demo": "node demo.js",
+    "start": "node index.js",
+    "csems:status": "node realitycsems-cli.js status",
+    "csems:layers": "node realitycsems-cli.js layers",
+    "csems:maxopt": "node realitycsems-cli.js maxopt",
+    "docker:build": "docker build -t xaoex/reality-simulation-code:latest .",
+    "docker:run": "docker run xaoex/reality-simulation-code:latest",
+    "docker:publish": "docker push xaoex/reality-simulation-code:latest",
+    "package": "npm pack",
+    "prepublishOnly": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xaoex/reality-simulation-code.git"
+  },
+  "keywords": [
+    "reality",
+    "simulation",
+    "simsim",
+    "xaoex",
+    "young-situation",
+    "young-field",
+    "young-ring",
+    "yoshis-secret",
+    "bae-mathematics",
+    "reality-csems",
+    "anonymous-calculus",
+    "lambda-calculus",
+    "baes",
+    "coolems",
+    "bayesian",
+    "etl",
+    "polypipes",
+    "maxopt",
+    "layer-system",
+    "optimization",
+    "cryptography",
+    "mathematics",
+    "dynamic-enterprise",
+    "graph-theory",
+    "field-theory",
+    "xa8ex",
+    "eternal"
+  ],
+  "author": {
+    "name": "xaoex",
+    "url": "https://linktr.ee/xaoex"
+  },
+  "contributors": [
+    {
+      "name": "Oktay",
+      "url": "https://linktr.ee/oktays"
+    }
+  ],
+  "license": "XPSL-1.0",
+  "bugs": {
+    "url": "https://github.com/xaoex/reality-simulation-code/issues"
+  },
+  "homepage": "https://github.com/xaoex/reality-simulation-code#readme",
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "files": [
+    "index.js",
+    "demo.js",
+    "test-young-field.js",
+    "realitycsems-integration.js",
+    "realitycsems-cli.js",
+    "anonymous-package.js",
+    "optimization-system.js",
+    "lib/",
+    ".realitycsems/",
+    ".anonymouscalc/",
+    ".baes/",
+    ".coolems/",
+    "README.md",
+    "LICENSE",
+    "PACKAGE.md",
+    "REALITYCSEMS.md",
+    "ANONYMOUS_PACKAGE.md",
+    "YOUNG_SITUATION.md",
+    "YOUNG_FIELD.md",
+    "YOSHIS_SECRET_BAE_MATH.md",
+    "WHITEPAPER_YOUNG_SITUATION.md",
+    "IMPLEMENTATION_SUMMARY.md"
+  ]
+}
