@@ -1,5 +1,0 @@
--/ssh-auth
-./xx-keyring.sh
-./candi.sh
-./compute.sh
-./snus.sh
