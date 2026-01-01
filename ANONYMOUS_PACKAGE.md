@@ -293,11 +293,11 @@ console.log(take(100, data)); // [1, 2, 3, 4, 5, 6, 7, 8, 9, 10] - identity on l
 console.log(drop(100, data)); // [] - absorption
 
 // Use with lambda calculus
-const { pipe, map } = require('reality-simulation-code').AnonymousPackage;
+const { pipe } = require('reality-simulation-code').AnonymousPackage;
 
 const firstThreeDoubled = pipe(
   xs => take(3, xs),
-  xs => map(x => x * 2, xs)
+  xs => xs.map(x => x * 2)
 );
 
 console.log(firstThreeDoubled(data));  // [2, 4, 6]

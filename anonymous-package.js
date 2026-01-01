@@ -282,6 +282,32 @@ class AnonymousPackage {
   }
   
   /**
+   * Pipe - Compose functions left to right
+   * 
+   * @param {...Function} fns - Functions to pipe
+   * @returns {Function} Piped function
+   */
+  pipe(...fns) {
+    if (!this.anonymousCalc) {
+      return x => fns.reduce((acc, fn) => fn(acc), x);
+    }
+    return this.anonymousCalc.pipe(...fns);
+  }
+  
+  /**
+   * Compose - Compose functions right to left
+   * 
+   * @param {...Function} fns - Functions to compose
+   * @returns {Function} Composed function
+   */
+  compose(...fns) {
+    if (!this.anonymousCalc) {
+      return x => fns.reduceRight((acc, fn) => fn(acc), x);
+    }
+    return this.anonymousCalc.compose(...fns);
+  }
+  
+  /**
    * Get comprehensive status
    */
   getStatus() {
@@ -324,6 +350,10 @@ module.exports = {
   // Algebraic sequence operations - formalized in discrete mathematics terms
   take: (n, xs) => anonymousPackage.take(n, xs),
   drop: (n, xs) => anonymousPackage.drop(n, xs),
+  
+  // Lambda calculus composition
+  pipe: (...fns) => anonymousPackage.pipe(...fns),
+  compose: (...fns) => anonymousPackage.compose(...fns),
   
   // Direct system exports
   AnonymousCalculus: AnonymousCalculus,
