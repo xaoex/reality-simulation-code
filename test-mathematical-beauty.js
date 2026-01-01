@@ -263,7 +263,7 @@ function testBeautySituationExample() {
 
 console.log('\n' + '='.repeat(70));
 console.log('MATHEMATICAL BEAUTY TEST SUITE');
-console.log('Four-Part Situation: pre, post, current, lore, prepre');
+console.log('Four-Part Situation: prepre, pre, current, post, lore');
 console.log('='.repeat(70));
 
 // Mathematical Beauty Series
