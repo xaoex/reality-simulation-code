@@ -284,6 +284,169 @@ class AnonymousCalculus {
   }
   
   /**
+   * Give:a - Assertive resource transfer operator
+   * 
+   * Formal Definition:
+   *   give:a: ℕ × List(α) × List(α) → (List(α) × List(α)) ⊥
+   *   give:a(n, source, dest) = (drop(n, source), dest ⊕ take(n, source))
+   * 
+   * Properties:
+   *   - Conservation: |src'| + |dst'| = |src| + |dst|
+   *   - Assertion: throws if n > |source|
+   * 
+   * @param {number} n - Number of elements to transfer
+   * @param {Array} source - Source array
+   * @param {Array} dest - Destination array
+   * @returns {Array} [newSource, newDest]
+   * @throws {Error} If n > source.length
+   */
+  givea(n, source, dest) {
+    if (!Array.isArray(source) || !Array.isArray(dest)) {
+      throw new TypeError('givea expects arrays as second and third arguments');
+    }
+    if (typeof n !== 'number' || n < 0 || !Number.isInteger(n)) {
+      throw new TypeError('givea expects a non-negative integer as first argument');
+    }
+    if (n > source.length) {
+      throw new Error(`InsufficientElementsException: Cannot give ${n} elements from array of length ${source.length}`);
+    }
+    
+    const transferred = this.take(n, source);
+    const newSource = this.drop(n, source);
+    const newDest = [...dest, ...transferred];
+    
+    if (this.options.verbose) {
+      console.log(`[AnonymousCalculus.givea] Transferred ${n} elements: ${source.length} -> ${newSource.length}, ${dest.length} -> ${newDest.length}`);
+    }
+    
+    return [newSource, newDest];
+  }
+  
+  /**
+   * Gett:a - Assertive acquisition operator
+   * 
+   * Formal Definition:
+   *   gett:a: ℕ × List(α) × List(α) → (List(α) × List(α)) ⊥
+   *   gett:a(n, source, dest) = (drop(n, source), take(n, source) ⊕ dest)
+   * 
+   * Difference from give:a: prepends to destination instead of appending
+   * 
+   * @param {number} n - Number of elements to acquire
+   * @param {Array} source - Source array
+   * @param {Array} dest - Destination array
+   * @returns {Array} [newSource, newDest]
+   * @throws {Error} If n > source.length
+   */
+  getta(n, source, dest) {
+    if (!Array.isArray(source) || !Array.isArray(dest)) {
+      throw new TypeError('getta expects arrays as second and third arguments');
+    }
+    if (typeof n !== 'number' || n < 0 || !Number.isInteger(n)) {
+      throw new TypeError('getta expects a non-negative integer as first argument');
+    }
+    if (n > source.length) {
+      throw new Error(`AcquisitionException: Cannot get ${n} elements from array of length ${source.length}`);
+    }
+    
+    const acquired = this.take(n, source);
+    const newSource = this.drop(n, source);
+    const newDest = [...acquired, ...dest];
+    
+    if (this.options.verbose) {
+      console.log(`[AnonymousCalculus.getta] Acquired ${n} elements: ${source.length} -> ${newSource.length}, ${dest.length} -> ${newDest.length}`);
+    }
+    
+    return [newSource, newDest];
+  }
+  
+  /**
+   * Robb:a - House rob dynamic programming
+   * 
+   * Formal Definition:
+   *   robb:a: List(ℕ) → ℕ
+   *   Computes maximum sum of non-adjacent elements
+   * 
+   * Recurrence: rob(xs) = max(rob(take(n-1, xs)), xs[n-1] + rob(take(n-2, xs)))
+   * 
+   * Properties:
+   *   - Optimality: Returns global maximum for non-adjacent subsequence
+   *   - Complexity: O(n) time, O(1) space
+   * 
+   * @param {Array<number>} houses - Array of house values
+   * @returns {number} Maximum sum of non-adjacent elements
+   */
+  robba(houses) {
+    if (!Array.isArray(houses)) {
+      throw new TypeError('robba expects an array');
+    }
+    if (houses.length === 0) return 0;
+    if (houses.length === 1) return houses[0];
+    
+    // Dynamic programming with space optimization
+    let prev2 = 0;
+    let prev1 = houses[0];
+    
+    for (let i = 1; i < houses.length; i++) {
+      const current = Math.max(prev1, prev2 + houses[i]);
+      prev2 = prev1;
+      prev1 = current;
+    }
+    
+    if (this.options.verbose) {
+      console.log(`[AnonymousCalculus.robba] Maximum rob value from ${houses.length} houses: ${prev1}`);
+    }
+    
+    return prev1;
+  }
+  
+  /**
+   * Do:a - Monadic action execution operator
+   * 
+   * Formal Definition:
+   *   do:a: (α → β ⊥) × List(α) → List(β) ⊥
+   *   Executes action on each element with short-circuit on failure
+   * 
+   * Properties:
+   *   - Fail-fast: Returns error on first failure
+   *   - Monadic: Corresponds to mapM in Haskell
+   * 
+   * @param {Function} action - Function that may throw or return null/undefined
+   * @param {Array} data - Input array
+   * @returns {Array} Transformed array
+   * @throws {Error} If any action fails
+   */
+  doa(action, data) {
+    if (typeof action !== 'function') {
+      throw new TypeError('doa expects a function as first argument');
+    }
+    if (!Array.isArray(data)) {
+      throw new TypeError('doa expects an array as second argument');
+    }
+    
+    const result = [];
+    for (let i = 0; i < data.length; i++) {
+      try {
+        const value = action(data[i]);
+        if (value === null || value === undefined) {
+          throw new Error(`ActionFailedException: Action failed at index ${i}`);
+        }
+        result.push(value);
+      } catch (error) {
+        if (this.options.verbose) {
+          console.log(`[AnonymousCalculus.doa] Action failed at index ${i}:`, error.message);
+        }
+        throw error;
+      }
+    }
+    
+    if (this.options.verbose) {
+      console.log(`[AnonymousCalculus.doa] Successfully executed action on ${data.length} elements`);
+    }
+    
+    return result;
+  }
+  
+  /**
    * ETL Transform - Extract, Transform, Load
    */
   etl(extractFn, transformFn, loadFn) {
@@ -452,6 +615,102 @@ module.exports = {
       throw new TypeError('drop expects a non-negative integer as first argument');
     }
     return xs.slice(n);
+  },
+  
+  /**
+   * Give:a - Assertive resource transfer
+   * Formalized as: give:a: ℕ × List(α) × List(α) → (List(α) × List(α)) ⊥
+   * 
+   * @param {number} n - Number of elements to transfer
+   * @param {Array} source - Source array
+   * @param {Array} dest - Destination array
+   * @returns {Array} [newSource, newDest]
+   */
+  givea: (n, source, dest) => {
+    if (!Array.isArray(source) || !Array.isArray(dest)) {
+      throw new TypeError('givea expects arrays');
+    }
+    if (typeof n !== 'number' || n < 0 || !Number.isInteger(n)) {
+      throw new TypeError('givea expects a non-negative integer');
+    }
+    if (n > source.length) {
+      throw new Error(`Cannot give ${n} elements from array of length ${source.length}`);
+    }
+    const transferred = source.slice(0, n);
+    return [source.slice(n), [...dest, ...transferred]];
+  },
+  
+  /**
+   * Gett:a - Assertive acquisition
+   * Formalized as: gett:a: ℕ × List(α) × List(α) → (List(α) × List(α)) ⊥
+   * 
+   * @param {number} n - Number of elements to acquire
+   * @param {Array} source - Source array
+   * @param {Array} dest - Destination array
+   * @returns {Array} [newSource, newDest]
+   */
+  getta: (n, source, dest) => {
+    if (!Array.isArray(source) || !Array.isArray(dest)) {
+      throw new TypeError('getta expects arrays');
+    }
+    if (typeof n !== 'number' || n < 0 || !Number.isInteger(n)) {
+      throw new TypeError('getta expects a non-negative integer');
+    }
+    if (n > source.length) {
+      throw new Error(`Cannot get ${n} elements from array of length ${source.length}`);
+    }
+    const acquired = source.slice(0, n);
+    return [source.slice(n), [...acquired, ...dest]];
+  },
+  
+  /**
+   * Robb:a - House rob dynamic programming
+   * Formalized as: robb:a: List(ℕ) → ℕ
+   * 
+   * @param {Array<number>} houses - Array of house values
+   * @returns {number} Maximum sum of non-adjacent elements
+   */
+  robba: (houses) => {
+    if (!Array.isArray(houses)) {
+      throw new TypeError('robba expects an array');
+    }
+    if (houses.length === 0) return 0;
+    if (houses.length === 1) return houses[0];
+    
+    let prev2 = 0, prev1 = houses[0];
+    for (let i = 1; i < houses.length; i++) {
+      const current = Math.max(prev1, prev2 + houses[i]);
+      prev2 = prev1;
+      prev1 = current;
+    }
+    return prev1;
+  },
+  
+  /**
+   * Do:a - Monadic action execution
+   * Formalized as: do:a: (α → β ⊥) × List(α) → List(β) ⊥
+   * 
+   * @param {Function} action - Function to execute
+   * @param {Array} data - Input array
+   * @returns {Array} Transformed array
+   */
+  doa: (action, data) => {
+    if (typeof action !== 'function') {
+      throw new TypeError('doa expects a function');
+    }
+    if (!Array.isArray(data)) {
+      throw new TypeError('doa expects an array');
+    }
+    
+    const result = [];
+    for (let i = 0; i < data.length; i++) {
+      const value = action(data[i]);
+      if (value === null || value === undefined) {
+        throw new Error(`Action failed at index ${i}`);
+      }
+      result.push(value);
+    }
+    return result;
   }
 };
 
