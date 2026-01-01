@@ -220,6 +220,68 @@ class AnonymousPackage {
   }
   
   /**
+   * Take - Algebraically formalized sequence prefix extraction
+   * 
+   * Formal Definition (Discrete Mathematics):
+   *   take: ℕ × List(α) → List(α)
+   *   take(n, xs) = { xᵢ | i ∈ [0, min(n, |xs|)) }
+   * 
+   * Algebraic Properties:
+   *   - Length invariant: |take(n, xs)| = min(n, |xs|)
+   *   - Idempotence: take(n, take(m, xs)) = take(min(n, m), xs)
+   *   - Concatenation law: xs = take(n, xs) ⊕ drop(n, xs)
+   * 
+   * @param {number} n - Number of elements to take
+   * @param {Array} data - Input sequence
+   * @returns {Array} First n elements
+   */
+  take(n, data) {
+    if (!this.anonymousCalc) {
+      // Fallback implementation
+      if (!Array.isArray(data)) {
+        throw new TypeError('take expects an array');
+      }
+      if (typeof n !== 'number' || n < 0 || !Number.isInteger(n)) {
+        throw new TypeError('take expects a non-negative integer');
+      }
+      return data.slice(0, n);
+    }
+    
+    return this.anonymousCalc.take(n, data);
+  }
+  
+  /**
+   * Drop - Algebraically formalized sequence suffix extraction
+   * 
+   * Formal Definition (Discrete Mathematics):
+   *   drop: ℕ × List(α) → List(α)
+   *   drop(n, xs) = { xᵢ | i ∈ [min(n, |xs|), |xs|) }
+   * 
+   * Algebraic Properties:
+   *   - Length invariant: |drop(n, xs)| = max(0, |xs| - n)
+   *   - Composition law: drop(n, drop(m, xs)) = drop(n + m, xs)
+   *   - Complementarity: take(n, xs) ∩ drop(n, xs) = ∅
+   * 
+   * @param {number} n - Number of elements to drop
+   * @param {Array} data - Input sequence
+   * @returns {Array} Remaining elements
+   */
+  drop(n, data) {
+    if (!this.anonymousCalc) {
+      // Fallback implementation
+      if (!Array.isArray(data)) {
+        throw new TypeError('drop expects an array');
+      }
+      if (typeof n !== 'number' || n < 0 || !Number.isInteger(n)) {
+        throw new TypeError('drop expects a non-negative integer');
+      }
+      return data.slice(n);
+    }
+    
+    return this.anonymousCalc.drop(n, data);
+  }
+  
+  /**
    * Get comprehensive status
    */
   getStatus() {
@@ -258,6 +320,10 @@ module.exports = {
   areaAsTool: (area, config) => anonymousPackage.areaAsTool(area, config),
   buildWorld: (config) => anonymousPackage.buildWorld(config),
   getStatus: () => anonymousPackage.getStatus(),
+  
+  // Algebraic sequence operations - formalized in discrete mathematics terms
+  take: (n, xs) => anonymousPackage.take(n, xs),
+  drop: (n, xs) => anonymousPackage.drop(n, xs),
   
   // Direct system exports
   AnonymousCalculus: AnonymousCalculus,
