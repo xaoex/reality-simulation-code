@@ -47,23 +47,29 @@ Or add to your `package.json`:
 
 #### From GitHub Packages
 
-First, configure npm to use GitHub Packages for @xaoex scope:
+First, configure npm to use GitHub Packages for @xaoex or @xacodex scope:
 
 ```bash
 # Create or edit ~/.npmrc
 echo "@xaoex:registry=https://npm.pkg.github.com" >> ~/.npmrc
+# or for xacodex organization (PR situations and contributions)
+echo "@xacodex:registry=https://npm.pkg.github.com" >> ~/.npmrc
 ```
 
 Authenticate with GitHub:
 
 ```bash
 npm login --registry=https://npm.pkg.github.com --scope=@xaoex
+# or for xacodex
+npm login --registry=https://npm.pkg.github.com --scope=@xacodex
 ```
 
 Then install:
 
 ```bash
 npm install @xaoex/reality-simulation-code
+# or from xacodex (for PR situations and contributions)
+npm install @xacodex/reality-simulation-code
 ```
 
 ### Docker Installation
@@ -72,6 +78,8 @@ npm install @xaoex/reality-simulation-code
 
 ```bash
 docker pull ghcr.io/xaoex/reality-simulation-code:latest
+# or from xacodex organization (PR situations and contributions)
+docker pull ghcr.io/xacodex/reality-simulation-code:latest
 ```
 
 #### Run Container
