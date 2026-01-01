@@ -24,6 +24,7 @@ const YoungFieldModule = require('./lib/young-field');
 const YoshisSecretModule = require('./lib/yoshis-secret');
 const BaeMathematicsModule = require('./lib/bae-mathematics');
 const GodGeneratorModule = require('./lib/god-generator');
+const MathematicalBeautyModule = require('./lib/mathematical-beauty');
 
 // ============================================================================
 // Reality CSEMS Integration
@@ -170,6 +171,17 @@ module.exports = {
   
   GodGenerator: GodGeneratorModule.GodGenerator,
   godGeneratorExample: GodGeneratorModule.godGeneratorExample,
+  
+  // ============================================================================
+  // Mathematical Beauty Module Exports (Pre/Post/Current/Lore)
+  // ============================================================================
+  
+  MathematicalBeauty: MathematicalBeautyModule.MathematicalBeauty,
+  FourPartSituation: MathematicalBeautyModule.FourPartSituation,
+  createBeautySituation: MathematicalBeautyModule.createBeautySituation,
+  fourPartSituationExample: MathematicalBeautyModule.fourPartSituationExample,
+  mathematicalBeautyExample: MathematicalBeautyModule.mathematicalBeautyExample,
+  beautySituationExample: MathematicalBeautyModule.beautySituationExample,
   
   // ============================================================================
   // External System Exports
