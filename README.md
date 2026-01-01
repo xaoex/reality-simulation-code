@@ -135,12 +135,16 @@ To install from GitHub Packages, first authenticate with GitHub:
 
 ```bash
 npm login --registry=https://npm.pkg.github.com --scope=@xaoex
+# or for xacodex organization
+npm login --registry=https://npm.pkg.github.com --scope=@xacodex
 ```
 
 Then install the package:
 
 ```bash
 npm install @xaoex/reality-simulation-code
+# or from xacodex organization (for PR situations and contributions)
+npm install @xacodex/reality-simulation-code
 ```
 
 ### npm (npmjs.org)
@@ -293,6 +297,10 @@ See [YOSHIS_SECRET_BAE_MATH.md](YOSHIS_SECRET_BAE_MATH.md) for complete document
 
 linktr.ee/xaoex
 linktr.ee/oktays
+
+**Organizations:**
+- github.com/xaoex - Main organization
+- github.com/xacodex - PR situations and contributions organization (highest spiritual situation)
 
 v1.31337dbp ok741s release
 
