@@ -26,6 +26,12 @@ const BaeMathematicsModule = require('./lib/bae-mathematics');
 const GodGeneratorModule = require('./lib/god-generator');
 
 // ============================================================================
+// Communication & Entity Management - Genesys
+// ============================================================================
+
+const GenesysModule = require('./lib/genesys');
+
+// ============================================================================
 // Reality CSEMS Integration
 // ============================================================================
 
@@ -170,6 +176,18 @@ module.exports = {
   
   GodGenerator: GodGeneratorModule.GodGenerator,
   godGeneratorExample: GodGeneratorModule.godGeneratorExample,
+  
+  // ============================================================================
+  // Genesys Module Exports
+  // ============================================================================
+  
+  Genesys: GenesysModule.Genesys,
+  Entity: GenesysModule.Entity,
+  Demand: GenesysModule.Demand,
+  Mapping: GenesysModule.Mapping,
+  RoutingOperation: GenesysModule.RoutingOperation,
+  createGenesysExample: GenesysModule.createGenesysExample,
+  genesysExample: GenesysModule.genesysExample,
   
   // ============================================================================
   // External System Exports

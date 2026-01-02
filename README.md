@@ -18,6 +18,7 @@ This is the **comprehensive xaoex package** that includes all implementations in
 - 🌟 **God Generator** - Advanced entity creation system
 - 🎯 **Reality CSEMS** - Git-like layer system with 100% maxopt injection
 - 🔮 **Anonymous Package** - Lambda calculus + BAES + COOLEMS for transformations
+- 🌐 **Genesys** - Entity demand management and communication system
 
 **Package Features:**
 - 🚀 Available via npm (npmjs.org and GitHub Packages)
@@ -42,6 +43,7 @@ The codebase is now organized into maintainable, well-documented modules in the 
 - 📁 **[lib/yoshis-secret/](lib/yoshis-secret/)** - Cryptographic encoding framework
 - 📁 **[lib/bae-mathematics/](lib/bae-mathematics/)** - Relationship and graph modeling
 - 📁 **[lib/god-generator/](lib/god-generator/)** - Advanced entity creation system
+- 📁 **[lib/genesys/](lib/genesys/)** - Entity demand management and communication system
 
 Each module is self-contained with comprehensive documentation and examples. See [lib/README.md](lib/README.md) for complete architecture overview.
 
