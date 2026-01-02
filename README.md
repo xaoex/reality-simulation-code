@@ -18,6 +18,7 @@ This is the **comprehensive xaoex package** that includes all implementations in
 - 🌟 **God Generator** - Advanced entity creation system
 - 🎯 **Reality CSEMS** - Git-like layer system with 100% maxopt injection
 - 🔮 **Anonymous Package** - Lambda calculus + BAES + COOLEMS for transformations
+- 🔍 **Veronica Analysis** - Veronica Mars x Law & Order style data analysis with graphs and plots
 
 **Package Features:**
 - 🚀 Available via npm (npmjs.org and GitHub Packages)
@@ -29,6 +30,7 @@ This is the **comprehensive xaoex package** that includes all implementations in
 - ⚡ 100% maxopt optimization always
 - 🧮 Lambda/Anonymous calculus for data transformations
 - 🎲 Bayesian common situations for pattern discovery
+- 📊 Narrative-driven data analysis for intelligence work
 
 For detailed package information, see [PACKAGE.md](PACKAGE.md).
 
@@ -42,6 +44,7 @@ The codebase is now organized into maintainable, well-documented modules in the 
 - 📁 **[lib/yoshis-secret/](lib/yoshis-secret/)** - Cryptographic encoding framework
 - 📁 **[lib/bae-mathematics/](lib/bae-mathematics/)** - Relationship and graph modeling
 - 📁 **[lib/god-generator/](lib/god-generator/)** - Advanced entity creation system
+- 📁 **[lib/veronica-analysis/](lib/veronica-analysis/)** - Veronica Mars x Law & Order style data analysis
 
 Each module is self-contained with comprehensive documentation and examples. See [lib/README.md](lib/README.md) for complete architecture overview.
 
@@ -293,6 +296,56 @@ console.log(god.essence); // Cryptographic hash of properties
 ```
 
 See [YOSHIS_SECRET_BAE_MATH.md](YOSHIS_SECRET_BAE_MATH.md) for complete documentation and examples.
+
+### Veronica Analysis Usage
+
+```javascript
+const {
+  VeronicaAnalysis,
+  PlotGenerator
+} = require('reality-simulation-code');
+
+// Create an investigation
+const analysis = new VeronicaAnalysis({
+  narrator: 'Veronica Mars',
+  style: 'mars',
+  verbose: true
+});
+
+// Load dataset
+const suspectData = [
+  { name: 'Suspect A', alibi: 0.3, motive: 0.8 },
+  { name: 'Suspect B', alibi: 0.9, motive: 0.2 }
+];
+
+analysis.loadDataset(suspectData, {
+  name: 'Case #47',
+  source: 'Mars Investigations'
+});
+
+// Build narrative investigation
+analysis
+  .theDeed('In dataset here is what happened: Laptop theft at Neptune High')
+  .theHappening('In dataset here something happened: Three suspects identified')
+  .theX('alibi_strength')
+  .theY('motive_level')
+  .addFinding('Suspect A has weak alibi but strong motive', { confidence: 0.85 })
+  .theGlory('Case solved: Evidence found in locker!');
+
+// Generate visualizations
+const plot = analysis.generatePlot('line', {
+  title: 'Investigation Timeline',
+  xLabel: 'Time',
+  yLabel: 'Suspicion'
+});
+console.log(plot);
+
+// Generate report
+console.log(analysis.generateReport('narrative'));  // Veronica Mars style
+console.log(analysis.generateReport('palantir'));   // Palantir Foundry style
+```
+
+See [lib/veronica-analysis/README.md](lib/veronica-analysis/README.md) for complete documentation and examples.
 
 
 linktr.ee/xaoex
