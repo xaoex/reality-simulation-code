@@ -100,6 +100,24 @@ Advanced entity creation system combining cryptographic encoding (Yoshi's Secret
 
 ---
 
+### Communication & Entity Management
+
+#### [genesys/](./genesys/)
+Entity demand management and communication system handling all demands toward entities and all communication with them.
+
+**Key Features:**
+- Relational algebra (mapping, selection, projection, join)
+- Group theory routing operations (request/response)
+- Ring theory load quantification and scaling
+- Multiple load balancing strategies
+- Entity utilization tracking
+- Demand processing metrics
+- System-wide analytics
+
+**Use Cases:** Microservices architecture, API gateway, message broker, load balancer, event system
+
+---
+
 ## Module Dependencies
 
 ```
@@ -109,9 +127,10 @@ young-field (extends young-ring)
     ↓
     ├── yoshis-secret (uses young-field for finite fields)
     ├── bae-mathematics (uses young-field for operations)
-    └── god-generator (uses yoshis-secret + bae-mathematics)
+    ├── god-generator (uses yoshis-secret + bae-mathematics)
+    └── genesys (uses young-field for normalization)
 
-young-situation (independent)
+young-situation (independent, can integrate with genesys)
 ```
 
 ## Architecture Principles
@@ -151,6 +170,7 @@ Each module is self-contained with its own:
 const { YoungSituation } = require('reality-simulation-code/lib/young-situation');
 const { YoungField } = require('reality-simulation-code/lib/young-field');
 const { YoshisSecret } = require('reality-simulation-code/lib/yoshis-secret');
+const { Genesys } = require('reality-simulation-code/lib/genesys');
 ```
 
 ### Main Package Import
@@ -161,7 +181,8 @@ const {
   YoungField,
   YoshisSecret,
   BaeMathematics,
-  GodGenerator
+  GodGenerator,
+  Genesys
 } = require('reality-simulation-code');
 ```
 
@@ -219,6 +240,7 @@ All existing tests pass after modularization (166 tests ✓).
 | YoshisSecret | O(n) encoding | O(n) | Linear in message size |
 | BaeMathematics | O(n³) centrality | O(n²) | Matrix-based metrics |
 | GodGenerator | O(n) generation | O(n + m) | Entities + edges |
+| Genesys | O(n) routing | O(n + m) | Entities + demands |
 
 ## References
 
@@ -227,6 +249,7 @@ All existing tests pass after modularization (166 tests ✓).
 - `YOUNG_SITUATION.md` - Young Situation usage guide
 - `YOUNG_FIELD.md` - Young Field usage guide
 - `YOSHIS_SECRET_BAE_MATH.md` - Advanced systems documentation
+- `GENESYS.md` - Genesys mathematical formalization
 
 ### Related Files
 - `/index.js` - Main entry point (re-exports all modules)
