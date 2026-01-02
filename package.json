@@ -7,9 +7,11 @@
     "realitycsems": "./realitycsems-cli.js"
   },
   "scripts": {
-    "test": "node test-young-field.js",
+    "test": "node test-young-field.js && node test-veronica-analysis.js",
+    "test:veronica": "node test-veronica-analysis.js",
     "build": "echo \"Build complete\" && exit 0",
     "demo": "node demo.js",
+    "demo:veronica": "node demo-veronica-analysis.js",
     "start": "node index.js",
     "csems:status": "node realitycsems-cli.js status",
     "csems:layers": "node realitycsems-cli.js layers",
