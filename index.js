@@ -26,6 +26,12 @@ const BaeMathematicsModule = require('./lib/bae-mathematics');
 const GodGeneratorModule = require('./lib/god-generator');
 
 // ============================================================================
+// Data Analysis Modules - Veronica Analysis
+// ============================================================================
+
+const VeronicaAnalysisModule = require('./lib/veronica-analysis');
+
+// ============================================================================
 // Reality CSEMS Integration
 // ============================================================================
 
@@ -170,6 +176,16 @@ module.exports = {
   
   GodGenerator: GodGeneratorModule.GodGenerator,
   godGeneratorExample: GodGeneratorModule.godGeneratorExample,
+  
+  // ============================================================================
+  // Veronica Analysis Module Exports
+  // ============================================================================
+  
+  VeronicaAnalysis: VeronicaAnalysisModule.VeronicaAnalysis,
+  PlotGenerator: VeronicaAnalysisModule.PlotGenerator,
+  veronicaAnalysisExample: VeronicaAnalysisModule.veronicaAnalysisExample,
+  createAnalysis: VeronicaAnalysisModule.createAnalysis,
+  quickPlot: VeronicaAnalysisModule.quickPlot,
   
   // ============================================================================
   // External System Exports
