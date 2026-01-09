@@ -1,69 +1,24 @@
-# Node.js
 node_modules
 npm-debug.log
-yarn-error.log
-package-lock.json
-yarn.lock
-
-# Git
 .git
 .gitignore
 .github
-
-# Documentation (we include specific ones in Dockerfile)
-# Keep essential documentation in the image
-# *.md files are handled in Dockerfile
-
-# macOS
 .DS_Store
-
-# Build artifacts
-dist
-build
-*.log
-
-# Test files
-test-young-field.js
-
-# Development configs (keep runtime configs)
+*.md
+people/
 .ar
 .gists
 .include
+.necessaries
 .oktaybahceci
+.online
 .osboost
 .osmax
 .qa
 .rasmusalpsjo
+.realtime
 .scripts
 .security
 .sim
 .vaoev
 .woke
-.electronatomjsxaoex
-.osxaoexdistpackageenterprise
-.xaoexphoneos
-.xxgrapheneos
-.younggeneration
-.yungsituation
-
-# Directories not needed in container
-people/
-xaoex.github.io/
-
-# Keep these for runtime
-# .realtime
-# .online
-# .necessaries
-
-# Docker files
-Dockerfile
-docker-compose.yml
-.dockerignore
-
-# C source files (not needed for Node runtime)
-*.c
-
-# Temporary files
-tmp/
-temp/
-*.tmp

@@ -6,121 +6,6 @@ simulation-codebase prev simsim-md
 
 SimSim Code & Contributions.
 
-## 📦 Complete xaoex Package
-
-This is the **comprehensive xaoex package** that includes all implementations in its entirety plus more in reality:
-
-- ✨ **Young Situation** - Dynamic enterprise modeling and optimization
-- 🔢 **Young Field** - Mathematical field operations with division
-- 💍 **Young Ring** - Abstract mathematical ring for dynamic enterprise
-- 🎯 **Reality CSEMS** - Git-like layer system with 100% maxopt injection
-- 🔮 **Anonymous Package** - Lambda calculus + BAES + COOLEMS for transformations
-
-**Package Features:**
-- 🚀 Available via npm (npmjs.org and GitHub Packages)
-- 🐳 Available as Docker container (GitHub Container Registry)
-- 📚 Complete documentation and examples
-- ✅ Production-ready with comprehensive tests
-- 🔄 Realtime enabled and always on
-- 🔒 Security-focused with CodeQL scanning
-- ⚡ 100% maxopt optimization always
-- 🧮 Lambda/Anonymous calculus for data transformations
-- 🎲 Bayesian common situations for pattern discovery
-
-For detailed package information, see [PACKAGE.md](PACKAGE.md).
-
-## 🏗️ Modular Architecture
-
-The codebase is now organized into maintainable, well-documented modules in the `/lib` directory:
-
-- 📁 **[lib/young-situation/](lib/young-situation/)** - Dynamic enterprise modeling and optimization
-- 📁 **[lib/young-ring/](lib/young-ring/)** - Abstract mathematical ring structure
-- 📁 **[lib/young-field/](lib/young-field/)** - Field operations with division and normalization
-
-Each module is self-contained with comprehensive documentation and examples. See [lib/README.md](lib/README.md) for complete architecture overview.
-
-## 🔮 Anonymous Package - Lambda Calculus + BAES + COOLEMS
-
-**Anonymous Package** provides anonymous/lambda calculus mapping tools with ETL transformations, Bayesian situations, and multi-language support:
-
-- **Anonymous Calculus** (`.anonymouscalc`): Lambda/Anonymous calculus for pure functional transformations
-- **BAES** (`.baes`): Bayesian common situations - use anything as tool for maximize+optimize+discover
-- **COOLEMS** (`.coolems`): Reality + CS integration with predictive models and Xcode situation
-
-### Quick Start
-
-```javascript
-const { etl, polypipes, logToCommonBayes, BAESSystem } = require('reality-simulation-code').AnonymousPackage;
-
-// ETL Transform
-const pipeline = etl(
-  data => data.filter(x => x > 0),  // Extract
-  data => data.map(x => x * 2),     // Transform
-  data => data.reduce((a, b) => a + b, 0)  // Load
-);
-const result = pipeline([1, -2, 3, -4, 5]); // 18
-
-// Polypipes - parallel pipelines
-const results = polypipes(
-  [x => x * 2, x => x + 1],
-  [x => x / 2]
-)([10]); // [[21], [5]]
-
-// BAES - Bayesian common situations
-const baes = new BAESSystem({ maxopt: true });
-const maximized = baes.maximize([1, 2, 3]); // [1.5, 3, 4.5]
-baes.logToCommonBayes({ experiment: 'test' });
-```
-
-For complete documentation, see [ANONYMOUS_PACKAGE.md](ANONYMOUS_PACKAGE.md).
-
-## 🎯 Reality CSEMS - Layer System
-
-**Reality CSEMS** (`.realitycsems`) is a git-like structure that actualizes everything as layers with 100% maximum optimization. It provides:
-
-- **Layer Management**: Git-like branches for reality layers (reality-base, reality-main, reality-production, reality-maxopt)
-- **Multi-Language Packages**: Native implementations in JavaScript, Python, C, C++, Rust, and Go
-- **Maxopt Injection**: Automatic 100% optimization for all code and systems
-- **Release Management**: Semantic versioning with layer-based releases
-- **Structured Organization**: Refs, objects, heads, tags like git
-
-### Quick Start
-
-```javascript
-// Auto-loads and initializes on require
-const realitySim = require('reality-simulation-code');
-
-// Check Reality CSEMS status
-const info = realitySim.info();
-console.log(info.realityCSEMS);  // Layer info and maxopt status
-
-// Use maxopt injector directly
-const { MaxoptInjector } = require('./.realitycsems/packages/maxopt-injector/javascript');
-const injector = new MaxoptInjector();
-console.log(injector.verify());  // ✓ 100% maxopt verified
-```
-
-### CLI Usage
-
-```bash
-# Show system status
-node realitycsems-cli.js status
-
-# List all layers
-node realitycsems-cli.js layers
-
-# Check maxopt status
-node realitycsems-cli.js maxopt
-
-# List packages
-node realitycsems-cli.js packages
-
-# Show help
-node realitycsems-cli.js help
-```
-
-For complete documentation, see [REALITYCSEMS.md](REALITYCSEMS.md) and [.realitycsems/README.md](.realitycsems/README.md).
-
 ## Installation
 
 ### npm (GitHub Packages)
@@ -157,33 +42,7 @@ Run the container:
 docker run ghcr.io/xaoex/reality-simulation-code:latest
 ```
 
-Or use Docker Compose for multi-container deployments:
-
-```bash
-# Start services
-docker-compose up -d
-
-# View logs
-docker-compose logs -f
-
-# Stop services
-docker-compose down
-```
-
-## 📤 Publishing Packages
-
-To publish updated packages to GitHub Packages, see [PUBLISHING.md](PUBLISHING.md) for detailed instructions.
-
-**Quick publish** (after merging to main/production):
-```bash
-./publish-packages.sh --trigger
-```
-
-Or manually trigger workflows from [GitHub Actions](https://github.com/xaoex/reality-simulation-code/actions).
-
 ## Usage
-
-### Basic Usage
 
 ```javascript
 const realitySim = require('@xaoex/reality-simulation-code');
@@ -197,64 +56,8 @@ realitySim.init();
 console.log(realitySim.info());
 ```
 
-### Young Situation Usage
-
-```javascript
-const { 
-  createCommonYoungSituation,
-  defineYoungArea,
-  youngSituationExample
-} = require('reality-simulation-code');
-
-// Create a common Young Situation
-const situation = createCommonYoungSituation();
-
-// Find optimal path
-const path = situation.findOptimalPath('initial');
-console.log(path.join(' -> '));  // initial -> planning -> optimizing -> optimal
-
-// Get area definition and metrics
-const area = defineYoungArea();
-console.log(area.stateCategories);
-
-// Run comprehensive example
-const result = youngSituationExample();
-console.log(result.optimalPath);
-console.log(result.pathValuations);
-```
-
-See [YOUNG_SITUATION.md](YOUNG_SITUATION.md) for complete documentation and examples.
-
-### Young Field Usage
-
-```javascript
-const { 
-  createRationalField, 
-  createFiniteField,
-  normalizedSituationExample 
-} = require('reality-simulation-code');
-
-// Create a rational field (ℚ)
-const field = createRationalField();
-console.log(field.divide(10, 3));  // 3.333...
-
-// Create a finite field (ℤ₇)
-const finiteField = createFiniteField(7);
-console.log(finiteField.divide(5, 2));  // 6 (mod 7)
-
-// Normalize situation valuations
-const result = normalizedSituationExample();
-console.log(result.normalized);  // [0.1, 0.2, 0.3, 0.4]
-```
-
-See [YOUNG_FIELD.md](YOUNG_FIELD.md) for complete documentation and examples.
-
-
 linktr.ee/xaoex
 linktr.ee/oktays
-
-**Organizations:**
-- github.com/xaoex - Main organization
 
 v1.31337dbp ok741s release
 
@@ -294,9 +97,6 @@ Release Notes
 * OS:es additions.
 * New Release + Deploy (MAX) +fixes all bullshit problems.
 * Introducing "young ring" an abstract mathematical ring that is defined for the first time by me (Oktay) for the purpose of creating a dynamic enterprise: entities/organizations/projects. young rings are defined by formation: combining relational algebra with the foundational definitions from group + ring theory.
-* **NEW: Young Situation White Paper** - See [WHITEPAPER_YOUNG_SITUATION.md](WHITEPAPER_YOUNG_SITUATION.md) for formal mathematical definitions of Young Situation, Family, Bound, Movement with sound mathematics, proofs, and induction in CS/Polytechnic style.
-* **NEW: Young Situation Implementation** - Complete implementation of Young Situation class with state-based modeling, optimal path finding, and area definitions. See [YOUNG_SITUATION.md](YOUNG_SITUATION.md) for usage guide and examples. Enables dynamic enterprise optimization, state transitions, and valuation-based decision making.
-* **NEW: Young Field Implementation** - Extension of Young Ring with multiplicative inverses and division operations. See [YOUNG_FIELD.md](YOUNG_FIELD.md) for complete usage guide and examples. Enables normalized situation valuations, probability distributions, and rate of change calculations.
 * General AI updates for psychs etc.
 * Make everything 100% Maxed out again.
 * P =! or == NP things from before + new finds.
