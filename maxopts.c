@@ -4,10 +4,11 @@
  */
 
 #include <stddef.h>
+#include <limits.h>
 
 int maxopts_everything_this_era(int *c, int size) {
     if (c == NULL || size <= 0) {
-        return 0;
+        return INT_MIN;  // Return error value for invalid input
     }
     
     int max = c[0];
