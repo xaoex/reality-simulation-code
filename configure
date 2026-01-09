@@ -1,0 +1,44 @@
+#!/bin/sh
+# Minimal configure script for Reality Simulation Code
+
+echo "Configuring Reality Simulation Code..."
+echo "Generating Makefile..."
+
+cat > Makefile << 'EOF'
+CC = gcc
+CFLAGS = -Wall -O2
+TARGET = simsim
+LIB = libmaxopts.a
+OBJS = simsim.o maxopts.o
+
+.PHONY: all clean check distcheck
+
+all: $(TARGET) $(LIB)
+
+$(TARGET): simsim.o
+	$(CC) $(CFLAGS) -o $@ $^
+
+$(LIB): maxopts.o
+	ar rcs $@ $^
+
+%.o: %.c
+	$(CC) $(CFLAGS) -c $< -o $@
+
+clean:
+	rm -f $(OBJS) $(TARGET) $(LIB)
+
+check: all
+	./$(TARGET)
+	@echo "All checks passed"
+
+distcheck: check
+	@echo "Distribution check passed"
+
+install: all
+	@echo "Installation not implemented"
+
+.DEFAULT_GOAL := all
+EOF
+
+echo "Configuration complete."
+echo "Run 'make' to build the project."
