@@ -9,7 +9,7 @@ npm-debug.log
 build/
 *.o
 *.a
-simsim
-maxopts
+/simsim
+/libmaxopts.a
 Makefile
 placeholder_build
