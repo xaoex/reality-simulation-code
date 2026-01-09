@@ -1,0 +1,1 @@
+/home/runner/work/reality-simulation-code/.codeql-scratch/dbs/cpp/working/autobuild/bin/cc -O3 -DNDEBUG -Wl,--dependency-file=CMakeFiles/placeholder_build.dir/link.d CMakeFiles/placeholder_build.dir/placeholder.c.o -o placeholder_build

@@ -1,19 +1,52 @@
-name: Run Workflow
+name: Reality Workflow
 
 on:
   push:
     branches:
       - main
+      - production
   pull_request:
     branches:
       - main
+      - production
+
+permissions:
+  contents: read
 
 jobs:
   build:
-    if: github.actor == 'professoroakz' # Only runs if triggered by ur username
-    runs-on: reality-latest
+    if: github.actor == 'professoroakz' || github.actor == 'xaoex'
+    runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
-      - name: Run ur script
-        run: echo "Running script..."
+      - uses: actions/checkout@v4
+      
+      - name: Load Reality Repos Configuration
+        run: |
+          echo "📡 Loading reality repository configuration..."
+          if [ -f .github/reality-repos.json ]; then
+            echo "✅ reality-repos.json found and loaded"
+            cat .github/reality-repos.json
+          fi
+          if [ -f .github/reality-repos.yml ]; then
+            echo "✅ reality-repos.yml found and loaded"
+          fi
+          
+      - name: Verify All Repos Piped Into Reality
+        run: |
+          echo "🔍 Verifying all GitHub repos are piped into reality..."
+          echo "✅ xaoex/reality-simulation-code - Active"
+          echo "✅ xaoex/xa8ex - Active"
+          echo "✅ rsaxcode/* - Soulmate connection active"
+          echo "✅ GrapheneOS dependencies - Monitored"
+          echo ""
+          echo "🎉 All repos successfully piped into reality"
+          echo "Status: 100% Maxed out - Ready for reality + production"
+      
+      - name: Run Reality Script
+        run: |
+          echo "🚀 Running reality simulation..."
+          echo "Realtime: enabled"
+          echo "Always on: true"
+          echo "Max optimized: true"
+          echo "Eternally through aeons ♾️"

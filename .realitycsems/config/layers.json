@@ -1,0 +1,90 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "title": "Reality CSEMS Layers",
+  "description": "Layer management for .realitycsems - Git-like branching for reality simulation",
+  "version": "1.0.0",
+  
+  "layers": {
+    "reality-base": {
+      "name": "reality-base",
+      "description": "Base reality layer - Foundation for all other layers",
+      "parent": null,
+      "status": "stable",
+      "protected": true,
+      "created": "2025-12-14T00:00:00Z"
+    },
+    
+    "reality-main": {
+      "name": "reality-main",
+      "description": "Main reality layer - Primary development layer",
+      "parent": "reality-base",
+      "status": "active",
+      "protected": true,
+      "created": "2025-12-14T00:00:00Z"
+    },
+    
+    "reality-dev": {
+      "name": "reality-dev",
+      "description": "Development reality layer - Testing and experimentation",
+      "parent": "reality-main",
+      "status": "active",
+      "protected": false,
+      "created": "2025-12-14T00:00:00Z"
+    },
+    
+    "reality-production": {
+      "name": "reality-production",
+      "description": "Production reality layer - Stable release layer",
+      "parent": "reality-main",
+      "status": "stable",
+      "protected": true,
+      "optimization": "100%",
+      "created": "2025-12-14T00:00:00Z"
+    },
+    
+    "reality-maxopt": {
+      "name": "reality-maxopt",
+      "description": "Maximum optimization layer - 100% maxopt always",
+      "parent": "reality-production",
+      "status": "maxopt",
+      "protected": true,
+      "optimization": "100%",
+      "created": "2025-12-14T00:00:00Z"
+    }
+  },
+  
+  "operations": {
+    "create": {
+      "enabled": true,
+      "requiresParent": true,
+      "validation": true
+    },
+    "merge": {
+      "enabled": true,
+      "strategy": "reality-merge",
+      "conflictResolution": "maxopt-priority"
+    },
+    "switch": {
+      "enabled": true,
+      "preserveState": true
+    },
+    "delete": {
+      "enabled": true,
+      "protectedCheck": true
+    }
+  },
+  
+  "hierarchy": {
+    "root": "reality-base",
+    "tree": {
+      "reality-base": {
+        "reality-main": {
+          "reality-dev": {},
+          "reality-production": {
+            "reality-maxopt": {}
+          }
+        }
+      }
+    }
+  }
+}
