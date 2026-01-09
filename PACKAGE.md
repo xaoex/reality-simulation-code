@@ -10,9 +10,6 @@ This comprehensive package includes:
 - **Young Situation** - Dynamic enterprise modeling and optimization framework
 - **Young Field** - Mathematical field operations with division and normalization
 - **Young Ring** - Abstract mathematical ring for dynamic enterprise
-- **Yoshi's Secret** - Cryptographic encoding framework using finite fields
-- **Bae Mathematics** - Relationship and connection modeling framework
-- **God Generator** - Advanced entity creation system
 
 ### Documentation
 - Complete API documentation in markdown format
@@ -132,12 +129,7 @@ const {
   createRationalField,
   createFiniteField,
   createSituationValuationField,
-  normalizedSituationExample,
-  
-  // Yoshi's Secret & Bae Mathematics
-  YoshisSecret,
-  BaeMathematics,
-  GodGenerator
+  normalizedSituationExample
 } = require('reality-simulation-code');
 
 // Create and use a Young Situation
@@ -148,18 +140,6 @@ console.log('Optimal path:', path.join(' -> '));
 // Use Young Field operations
 const field = createRationalField();
 console.log('Division:', field.divide(10, 3));
-
-// Cryptographic encoding with Yoshi's Secret
-const secret = new YoshisSecret(31337);
-const encoded = secret.encodeString('Hello World');
-const decoded = secret.decodeString(encoded);
-
-// Relationship modeling with Bae Mathematics
-const bae = new BaeMathematics();
-bae.addEntity('alice');
-bae.addEntity('bob');
-bae.connect('alice', 'bob', 0.9);
-console.log('Connection:', bae.getBaeIndex('alice'));
 ```
 
 ### Docker Usage
