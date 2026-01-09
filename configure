@@ -35,7 +35,8 @@ distcheck: check
 	@echo "Distribution check passed"
 
 install: all
-	@echo "Installation not implemented"
+	@echo "Error: Installation not implemented yet"
+	@exit 1
 
 .DEFAULT_GOAL := all
 EOF
