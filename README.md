@@ -31,5 +31,4 @@ console.log(info);
 - [oktays](https://linktr.ee/oktays)
 
 ## License
-
-MIT
+XAOEX
