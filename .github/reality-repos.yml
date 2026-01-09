@@ -1,0 +1,78 @@
+# Reality Repository Tracking Configuration
+# This file defines all GitHub repositories that are piped into reality
+# Used by workflows and automation systems
+
+version: 1.0
+
+# Core repositories owned and maintained
+core_repos:
+  - owner: xaoex
+    repo: reality-simulation-code
+    description: "Main reality simulation codebase - SimSim Code & Contributions"
+    priority: max
+    status: production
+    
+  - owner: xaoex
+    repo: xa8ex
+    description: "xaoex eternally through aeons - makes everything run in reality"
+    priority: max
+    status: production
+
+# Related repositories
+related_repos:
+  - owner: rsaxcode
+    repo: "*"
+    description: "RSA X Code - soulmate relationship repositories"
+    priority: high
+    status: active
+
+# External dependencies and integrations
+external_repos:
+  - owner: GrapheneOS
+    repo: GrapheneOS
+    description: "GrapheneOS implementations"
+    priority: medium
+    
+  - owner: GrapheneOS
+    repo: os-issue-tracker
+    description: "OS issue tracking"
+    priority: medium
+
+# Reality configuration
+reality_config:
+  realtime_enabled: true
+  always_on: true
+  always_functioning: true
+  online: true
+  max_optimized: true
+  
+  # Names associated with maximization
+  maxopt_names:
+    - camilla
+    - oktay
+    - andy
+  
+  # Simulation entities
+  sim_entities:
+    - .oktay
+    - .rasmus
+    - .camilla
+    - .younggeneration
+
+# Automation settings
+automation:
+  sync_enabled: true
+  monitor_enabled: true
+  realtime_updates: true
+  
+# Links and references
+links:
+  - https://linktr.ee/xaoex
+  - https://linktr.ee/oktays
+  - https://github.com/xaoex
+  - https://github.com/rsaxcode
+
+# Security and access
+security:
+  protected: true
+  mom_oktay_bound: true  # Eternal bound between mom and son
