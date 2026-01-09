@@ -1,14 +1,15 @@
 .DS_Store
-.DS_Store
 node_modules/
 package-lock.json
 *.log
-node_modules/
 npm-debug.log
-package-lock.json
 *.tgz
 
 # Build artifacts
 build/
 *.o
+*.a
+simsim
+maxopts
+Makefile
 placeholder_build
