@@ -1,2 +1,0 @@
-/usr/bin/ar qc libmaxopts.a CMakeFiles/maxopts.dir/maxopts.c.o
-/usr/bin/ranlib libmaxopts.a
