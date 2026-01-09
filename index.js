@@ -17,13 +17,7 @@ const YoungSituationModule = require('./lib/young-situation');
 const YoungRingModule = require('./lib/young-ring');
 const YoungFieldModule = require('./lib/young-field');
 
-// ============================================================================
-// Advanced Modules - Yoshi's Secret, Bae Math, God Generator
-// ============================================================================
 
-const YoshisSecretModule = require('./lib/yoshis-secret');
-const BaeMathematicsModule = require('./lib/bae-mathematics');
-const GodGeneratorModule = require('./lib/god-generator');
 
 // ============================================================================
 // Reality CSEMS Integration
@@ -150,26 +144,6 @@ module.exports = {
   youngFieldOperationsExample: YoungFieldModule.youngFieldOperationsExample,
   finiteFieldExample: YoungFieldModule.finiteFieldExample,
 
-  // ============================================================================
-  // Yoshi's Secret Module Exports
-  // ============================================================================
-  
-  YoshisSecret: YoshisSecretModule.YoshisSecret,
-  yoshisSecretExample: YoshisSecretModule.yoshisSecretExample,
-
-  // ============================================================================
-  // Bae Mathematics Module Exports
-  // ============================================================================
-  
-  BaeMathematics: BaeMathematicsModule.BaeMathematics,
-  baeMathematicsExample: BaeMathematicsModule.baeMathematicsExample,
-
-  // ============================================================================
-  // God Generator Module Exports
-  // ============================================================================
-  
-  GodGenerator: GodGeneratorModule.GodGenerator,
-  godGeneratorExample: GodGeneratorModule.godGeneratorExample,
   
   // ============================================================================
   // External System Exports
