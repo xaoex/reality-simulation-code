@@ -53,6 +53,9 @@
 .spiritualitymax --oktay --complete
 .gamemax --oktay --complete
 .aimax --oktay --complete
+.csmax --oktay --complete
+.polytechnicmax --oktay --complete
+.mathmax --oktay --complete
 .contentmax --oktay --complete
 .magicmax --oktay --complete
 .allmax --oktay --complete
