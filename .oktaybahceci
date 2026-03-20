@@ -53,5 +53,8 @@
 .spiritualitymax --oktay --complete
 .gamemax --oktay --complete
 .aimax --oktay --complete
+.contentmax --oktay --complete
+.magicmax --oktay --complete
+.allmax --oktay --complete
 .musicmax --oktay --complete
 .videomovietvshowmax --oktsy --complete
