@@ -8,6 +8,12 @@ Dockerfile
 docker-compose.yml
 .dockerignore
 
+# Publishing scripts
+publish-packages.sh
+
+# Implementation docs (not needed in npm package)
+IMPLEMENTATION_COMPLETE.md
+
 # C source files (not part of npm package)
 /*.c
 
