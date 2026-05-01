@@ -1,2 +1,22 @@
-- name: Issue to Markdown
-  uses: eunjae-lee/issue-to-markdown@v1.2.2
+name: Issue to Markdown
+
+on:
+  issues:
+    types: [opened, edited]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  issues: read
+
+jobs:
+  convert:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Issue to Markdown
+        uses: eunjae-lee/issue-to-markdown@v1.2.2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
