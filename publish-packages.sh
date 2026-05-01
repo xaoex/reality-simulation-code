@@ -1,82 +1,121 @@
 #!/bin/bash
-# Publish xaoex packages to GitHub Packages
-# This script helps publish npm and Docker packages to GitHub Packages
+# ===========================================================================
+# xaoex | reality-simulation-code | publish-packages.sh
+# Enterprise Package Publishing Script
+# Authorized operator: xaoex / professoroakz only
+# ===========================================================================
 
 set -e
 
-echo "======================================================================"
-echo "Publishing xaoex packages to GitHub Packages"
-echo "======================================================================"
-echo ""
-
-# Colors for output
+# ---------------------------------------------------------------------------
+# Colors
+# ---------------------------------------------------------------------------
 GREEN='\033[0;32m'
 BLUE='\033[0;34m'
 YELLOW='\033[1;33m'
-NC='\033[0m' # No Color
+RED='\033[0;31m'
+NC='\033[0m'
 
-# Get current directory
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd "$SCRIPT_DIR"
 
-echo -e "${BLUE}Current branch:${NC}"
-git branch --show-current
+echo ""
+echo "==========================================================================="
+echo "  xaoex :: reality-simulation-code :: publish-packages"
+echo "  Enterprise Package Publisher — v1.31337dbp ok741s release"
+echo "==========================================================================="
 echo ""
 
-echo -e "${BLUE}Package information:${NC}"
-echo "Name: $(node -p "require('./package.json').name")"
-echo "Version: $(node -p "require('./package.json').version")"
-echo ""
+# ---------------------------------------------------------------------------
+# Authorization check — only the repository owner may publish
+# ---------------------------------------------------------------------------
+AUTHORIZED_USERS=("professoroakz" "xaoex")
+CURRENT_GH_USER=""
 
-# Check if we're on main or production branch
-CURRENT_BRANCH=$(git branch --show-current)
-if [[ "$CURRENT_BRANCH" != "main" && "$CURRENT_BRANCH" != "production" ]]; then
-    echo -e "${YELLOW}Warning: Not on main or production branch${NC}"
-    echo "Current branch: $CURRENT_BRANCH"
-    echo ""
-    echo "To publish packages, u have three options:"
-    echo ""
-    echo -e "${GREEN}Option 1: Merge this PR to main/production${NC}"
-    echo "  - Merge the PR to main or production branch"
-    echo "  - Workflows will automatically publish packages on push"
-    echo ""
-    echo -e "${GREEN}Option 2: Create a release${NC}"
-    echo "  - Create a GitHub release with a version tag (e.g., v1.0.0)"
-    echo "  - Workflows will automatically publish packages"
-    echo ""
-    echo -e "${GREEN}Option 3: Manual workflow trigger${NC}"
-    echo "  - Go to Actions tab in GitHub"
-    echo "  - Select 'Publish npm to GitHub Packages' or 'Publish Docker Package'"
-    echo "  - Click 'Run workflow' and select ur branch"
-    echo ""
-    echo "Or run this script with --trigger flag to trigger workflows:"
-    echo "  ./publish-packages.sh --trigger"
-    exit 1
+if command -v gh &>/dev/null; then
+    CURRENT_GH_USER=$(gh api user --jq '.login' 2>/dev/null || true)
 fi
 
-# If --trigger flag is provided, trigger the workflows
+if [ -n "$CURRENT_GH_USER" ]; then
+    AUTHORIZED=false
+    for u in "${AUTHORIZED_USERS[@]}"; do
+        if [[ "$CURRENT_GH_USER" == "$u" ]]; then
+            AUTHORIZED=true
+            break
+        fi
+    done
+    if [ "$AUTHORIZED" = false ]; then
+        echo -e "${RED}[DENIED]  Unauthorized operator: $CURRENT_GH_USER${NC}"
+        echo ""
+        echo "  This script is restricted to the repository owner."
+        echo "  Authorized operators: ${AUTHORIZED_USERS[*]}"
+        echo ""
+        exit 1
+    fi
+    echo -e "${GREEN}[AUTH]    Operator authenticated: $CURRENT_GH_USER${NC}"
+fi
+
+# ---------------------------------------------------------------------------
+# Package info
+# ---------------------------------------------------------------------------
+PKG_NAME=$(node -p "require('./package.json').name")
+PKG_VERSION=$(node -p "require('./package.json').version")
+CURRENT_BRANCH=$(git branch --show-current)
+
+echo -e "${BLUE}[INFO]    Package  : $PKG_NAME${NC}"
+echo -e "${BLUE}[INFO]    Version  : $PKG_VERSION${NC}"
+echo -e "${BLUE}[INFO]    Branch   : $CURRENT_BRANCH${NC}"
+echo ""
+
+# ---------------------------------------------------------------------------
+# Branch check
+# ---------------------------------------------------------------------------
+if [[ "$CURRENT_BRANCH" != "main" && "$CURRENT_BRANCH" != "production" ]]; then
+    echo -e "${YELLOW}[WARN]    Not on main or production branch.${NC}"
+    echo ""
+    echo "  Publishing options:"
+    echo ""
+    echo -e "  ${GREEN}1. Merge PR to main/production${NC}"
+    echo "     Workflows publish automatically on push."
+    echo ""
+    echo -e "  ${GREEN}2. Create a GitHub release${NC}"
+    echo "     gh release create v$PKG_VERSION"
+    echo ""
+    echo -e "  ${GREEN}3. Manual workflow dispatch${NC}"
+    echo "     ./publish-packages.sh --trigger"
+    echo ""
+    if [[ "$1" != "--trigger" ]]; then
+        exit 1
+    fi
+fi
+
+# ---------------------------------------------------------------------------
+# Trigger workflows
+# ---------------------------------------------------------------------------
 if [[ "$1" == "--trigger" ]]; then
-    echo -e "${GREEN}Triggering package publishing workflows...${NC}"
+    echo -e "${GREEN}[TRIGGER] Dispatching package publishing workflows...${NC}"
     echo ""
 
-    echo "Triggering npm GitHub Packages workflow..."
+    echo -e "${BLUE}[npm]     Triggering: npm-github-packages.yml${NC}"
     gh workflow run npm-github-packages.yml
 
-    echo "Triggering Docker publish workflow..."
+    echo -e "${BLUE}[Docker]  Triggering: dockergithubpackage.yml${NC}"
     gh workflow run dockergithubpackage.yml
 
     echo ""
-    echo -e "${GREEN}✓ Workflows triggered successfully!${NC}"
+    echo -e "${GREEN}[OK]      Workflows dispatched successfully.${NC}"
     echo ""
-    echo "Check workflow status:"
-    echo "  gh run list --workflow=npm-github-packages.yml"
-    echo "  gh run list --workflow=dockergithubpackage.yml"
+    echo "  Monitor status:"
+    echo "    gh run list --workflow=npm-github-packages.yml"
+    echo "    gh run list --workflow=dockergithubpackage.yml"
     echo ""
-    echo "Or visit: https://github.com/xaoex/reality-simulation-code/actions"
+    echo "  Actions: https://github.com/xaoex/reality-simulation-code/actions"
+    echo ""
     exit 0
 fi
 
-echo -e "${GREEN}Ready to publish packages!${NC}"
+echo -e "${GREEN}[READY]   Package publishing ready.${NC}"
 echo ""
-echo "Run with --trigger flag to trigger workflows:"
-echo "  ./publish-packages.sh --trigger"
+echo "  Run with --trigger to dispatch workflows:"
+echo "    ./publish-packages.sh --trigger"
+echo ""
