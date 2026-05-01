@@ -1,11 +1,17 @@
 {
   "name": "reality-simulation-code",
   "version": "1.0.0",
-  "description": "Reality Simulation Codebase - SimSim Code & Contributions by xaoex",
+  "description": "Reality Simulation Codebase - SimSim Code & Contributions by xaoex - Comprehensive package including Young Situation, Young Field, Yoshi's Secret, and Bae Mathematics",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Tests passed\" && exit 0",
-    "build": "echo \"Build complete\" && exit 0"
+    "build": "echo \"Build complete\" && exit 0",
+    "sandbox-alpha-s": "node sandbox-alpha-s.js",
+    "start": "node index.js",
+    "docker:build": "docker build -t xaoex/reality-simulation-code:latest .",
+    "docker:run": "docker run xaoex/reality-simulation-code:latest",
+    "docker:publish": "docker push xaoex/reality-simulation-code:latest",
+    "package": "npm pack"
   },
   "repository": {
     "type": "git",
@@ -15,9 +21,31 @@
     "reality",
     "simulation",
     "simsim",
-    "xaoex"
+    "xaoex",
+    "ung-situation",
+    "ung-field",
+    "ung-ring",
+    "shis-secret",
+    "bae-mathematics",
+    "cryptography",
+    "mathematics",
+    "dynamic-enterprise",
+    "optimization",
+    "graph-theory",
+    "field-theory",
+    "xa8ex",
+    "eternal"
   ],
-  "author": "xaoex",
+  "author": {
+    "name": "xaoex",
+    "url": "https://linktr.ee/xaoex"
+  },
+  "contributors": [
+    {
+      "name": "Oktay",
+      "url": "https://linktr.ee/oktays"
+    }
+  ],
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/xaoex/reality-simulation-code/issues"
@@ -25,5 +53,16 @@
   "homepage": "https://github.com/xaoex/reality-simulation-code#readme",
   "publishConfig": {
     "access": "public"
-  }
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "files": [
+    "index.js",
+    "sandbox-alpha-s.js",
+    "README.md",
+    "PACKAGE.md",
+    "RELEASE_NOTES.md",
+    "PUBLISHING.md"
+  ]
 }

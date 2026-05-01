@@ -8,6 +8,12 @@ Dockerfile
 docker-compose.yml
 .dockerignore
 
+# Publishing scripts
+publish-packages.sh
+
+# Implementation docs (not needed in npm package)
+IMPLEMENTATION_COMPLETE.md
+
 # C source files (not part of npm package)
 /*.c
 
@@ -57,6 +63,5 @@ tmp/
 # WHITEPAPER_YOUNG_SITUATION.md
 # IMPLEMENTATION_SUMMARY.md
 # index.js
-# demo.js
-# test-ung-field.js (included for testing)
+# sandbox-alpha-s.js
 # LICENSE
