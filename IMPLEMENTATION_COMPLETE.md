@@ -34,7 +34,7 @@ Successfully created the **xaoex reality-simulation-code package** for both Dock
 7. **.dockerignore** - Configured for optimal builds
 8. **.npmignore** - Configured for clean packages
 9. **docker-compose.yml** - Multi-container support (NEW)
-10. **demo.js** - Demonstration script (NEW)
+10. **sandbox-alpha-s.js** - Enterprise sandbox script (NEW)
 
 ## 🚀 Distribution Channels
 
@@ -72,7 +72,7 @@ docker-compose up -d
 ### package.json
 - Comprehensive metadata and keywords
 - Docker-related scripts (build, run, publish)
-- Package scripts (start, test, demo, build)
+- Package scripts (start, test, sandbox-alpha-s, build)
 - Node.js 18+ engine requirement
 - MIT license
 - Files array for controlled distribution

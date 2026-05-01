@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Tests passed\" && exit 0",
     "build": "echo \"Build complete\" && exit 0",
-    "demo": "node demo.js",
+    "sandbox-alpha-s": "node sandbox-alpha-s.js",
     "start": "node index.js",
     "docker:build": "docker build -t xaoex/reality-simulation-code:latest .",
     "docker:run": "docker run xaoex/reality-simulation-code:latest",
@@ -59,7 +59,7 @@
   },
   "files": [
     "index.js",
-    "demo.js",
+    "sandbox-alpha-s.js",
     "README.md",
     "PACKAGE.md",
     "RELEASE_NOTES.md",
