@@ -131,8 +131,8 @@ console.log('Links:', info.links);
 The Docker container runs `node index.js` by default. You can:
 
 ```bash
-# Run demo
-docker run ghcr.io/xaoex/reality-simulation-code:latest node demo.js
+# Run sandbox-alpha-s
+docker run ghcr.io/xaoex/reality-simulation-code:latest node sandbox-alpha-s.js
 
 # Run tests
 docker run ghcr.io/xaoex/reality-simulation-code:latest npm test
@@ -146,14 +146,14 @@ docker run -it ghcr.io/xaoex/reality-simulation-code:latest sh
 The package includes several npm scripts:
 
 ```bash
-npm start              # Run main application
-npm test               # Run test suite
-npm run demo           # Run demonstration
-npm run build          # Build package
-npm run package        # Create tarball
-npm run docker:build   # Build Docker image
-npm run docker:run     # Run Docker container
-npm run docker:publish # Publish Docker image
+npm start                    # Run main application
+npm test                     # Run test suite
+npm run sandbox-alpha-s      # Run enterprise sandbox environment
+npm run build                # Build package
+npm run package              # Create tarball
+npm run docker:build         # Build Docker image
+npm run docker:run           # Run Docker container
+npm run docker:publish       # Publish Docker image
 ```
 
 ## Versioning
