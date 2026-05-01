@@ -1,7 +1,7 @@
 {
   "name": "reality-simulation-code",
-  "version": "1.0.0",
-  "description": "Reality Simulation Codebase - SimSim Code & Contributions by xaoex - Comprehensive package including Young Situation, Young Field, Yoshi's Secret, and Bae Mathematics",
+  "version": "0.0.1",
+  "description": "Reality Simulation Codebase - SimSim Code & Contributions by xaoex - Collection Organizer Calced 3feems - Comprehensive package including Young Situation, Young Field, Yoshi's Secret, and Bae Mathematics",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Tests passed\" && exit 0",
@@ -34,7 +34,10 @@
     "graph-theory",
     "field-theory",
     "xa8ex",
-    "eternal"
+    "eternal",
+    "collection-organizer",
+    "calced",
+    "3feems"
   ],
   "author": {
     "name": "xaoex",
