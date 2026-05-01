@@ -142,8 +142,8 @@ Before publishing, ensure:
    # Run container
    docker run --rm ghcr.io/xaoex/reality-simulation-code:latest
    
-   # Run demo
-   docker run --rm ghcr.io/xaoex/reality-simulation-code:latest node demo.js
+   # Run sandbox-alpha-s
+   docker run --rm ghcr.io/xaoex/reality-simulation-code:latest node sandbox-alpha-s.js
    ```
 
 ## 🔄 Updating Packages
@@ -232,7 +232,7 @@ npm pack --dry-run
 
 # Test Docker build locally
 docker build -t xaoex/reality-simulation-code:test .
-docker run --rm xaoex/reality-simulation-code:test node demo.js
+docker run --rm xaoex/reality-simulation-code:test node sandbox-alpha-s.js
 ```
 
 ---
