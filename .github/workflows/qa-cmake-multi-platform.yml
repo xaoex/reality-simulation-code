@@ -4,7 +4,7 @@ name: CMake on multiple platforms +all +qa
 
 on:
   push:
-    branches: [ "production" ]
+    branches: [ "production", "copilot/**" ]
   pull_request:
     branches: [ "production" ]
 
