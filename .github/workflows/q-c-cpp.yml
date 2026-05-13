@@ -2,9 +2,12 @@ name: C/C++ CI
 
 on:
   push:
-    branches: [ "production" ]
+    branches: [ "production", "copilot/**" ]
   pull_request:
     branches: [ "production" ]
+
+permissions:
+  contents: read
 
 jobs:
   build:
