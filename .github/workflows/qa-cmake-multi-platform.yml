@@ -4,9 +4,12 @@ name: CMake on multiple platforms +all +qa
 
 on:
   push:
-    branches: [ "production" ]
+    branches: [ "production", "copilot/**" ]
   pull_request:
     branches: [ "production" ]
+
+permissions:
+  contents: read
 
 jobs:
   build:
@@ -36,12 +39,19 @@ jobs:
           - os: ubuntu-latest
             c_compiler: clang
             cpp_compiler: clang++
+          - os: macos-latest
+            c_compiler: clang
+            cpp_compiler: clang++
         exclude:
           - os: windows-latest
             c_compiler: gcc
           - os: windows-latest
             c_compiler: clang
           - os: ubuntu-latest
+            c_compiler: cl
+          - os: macos-latest
+            c_compiler: gcc
+          - os: macos-latest
             c_compiler: cl
 
     steps:
