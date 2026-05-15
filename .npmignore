@@ -2,6 +2,12 @@
 # Exclude only transient/local artifacts.
 .git
 .github/
+.env
+.env.*
+*.pem
+*.key
+*.p12
+*.crt
 node_modules/
 build/
 dist/
