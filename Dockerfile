@@ -2,7 +2,7 @@
 # xaoex/reality-simulation-code
 # Production package with full repository contents
 
-FROM node:20-alpine
+FROM node:26-alpine
 
 # Metadata labels
 LABEL org.opencontainers.image.source="https://github.com/xaoex/reality-simulation-code"
