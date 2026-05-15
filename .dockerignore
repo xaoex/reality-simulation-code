@@ -3,6 +3,12 @@ build/
 dist/
 .git
 .github/
+.env
+.env.*
+*.pem
+*.key
+*.p12
+*.crt
 npm-debug.log
 yarn-error.log
 *.log
