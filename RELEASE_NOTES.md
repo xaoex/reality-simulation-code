@@ -2,7 +2,7 @@
 
 ## Version 0.0.1 - Lights + Shower + Dynamical Updates Pre-Release
 
-This pre-release is the **release-v.0.0.1-dynamical-updates-!?.-w-f3eems-etc** package for both npm and Docker distribution.
+This pre-release is the **release-v.0.0.1-dynamical-updates-w-f3eems-etc** package for both npm and Docker distribution.
 
 Plus graphs ky43n shi.
 
@@ -71,7 +71,7 @@ npm run docker:publish       # Publish Docker image
 
 - **Name**: reality-simulation-code
 - **Version**: 0.0.1
-- **Release**: release-v.0.0.1-dynamical-updates-!?.-w-f3eems-etc (pre-release)
+- **Release**: release-v.0.0.1-dynamical-updates-w-f3eems-etc (pre-release)
 - **License**: MIT
 - **Author**: xaoex
 - **Contributors**: Oktay

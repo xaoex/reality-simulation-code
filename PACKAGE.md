@@ -164,7 +164,7 @@ This package follows semantic versioning (semver):
 - **Minor version**: New features, backward compatible
 - **Patch version**: Bug fixes, backward compatible
 
-Current version: `0.0.1` (`release-v.0.0.1-dynamical-updates-!?.-w-f3eems-etc`, pre-release)
+Current version: `0.0.1` (`release-v.0.0.1-dynamical-updates-w-f3eems-etc`, pre-release)
 
 ## Related Repositories
 
@@ -240,6 +240,6 @@ MIT License - see LICENSE file for details
 
 ---
 
-Version: v0.0.1 - release-v.0.0.1-dynamical-updates-!?.-w-f3eems-etc (pre-release)  
+Version: v0.0.1 - release-v.0.0.1-dynamical-updates-w-f3eems-etc (pre-release)  
 Status: Ready for reality + production  
 Motto: Everything is 100% maxed out
