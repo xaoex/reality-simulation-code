@@ -33,7 +33,7 @@ Or add to your `package.json`:
 ```json
 {
   "dependencies": {
-    "reality-simulation-code": "^0.0.1"
+    "reality-simulation-code": "^0.0.2"
   }
 }
 ```
@@ -164,7 +164,7 @@ This package follows semantic versioning (semver):
 - **Minor version**: New features, backward compatible
 - **Patch version**: Bug fixes, backward compatible
 
-Current version: `0.0.1` (`release-v.0.0.1-dynamical-updates-w-f3eems-etc`, pre-release)
+Current version: `0.0.2` (`v0.0.2`)
 
 ## Related Repositories
 
@@ -188,7 +188,7 @@ The package includes reality configuration files:
 
 ```bash
 NODE_ENV=production              # Environment mode
-REALITY_SIMULATION_VERSION=1.0.0 # Package version
+REALITY_SIMULATION_VERSION=0.0.2 # Package version
 ```
 
 ## Publishing
@@ -240,6 +240,6 @@ MIT License - see LICENSE file for details
 
 ---
 
-Version: v0.0.1 - release-v.0.0.1-dynamical-updates-w-f3eems-etc (pre-release)  
+Version: v0.0.2  
 Status: Ready for reality + production  
 Motto: Everything is 100% maxed out

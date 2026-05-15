@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.10)
-project(RealitySimulationCode VERSION 1.0.0 LANGUAGES C)
+project(RealitySimulationCode VERSION 0.0.2 LANGUAGES C)
 
 # Set C standard
 set(CMAKE_C_STANDARD 99)

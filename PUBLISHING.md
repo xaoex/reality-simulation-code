@@ -43,10 +43,10 @@ Create a GitHub release to trigger package publishing with semantic versioning.
 1. **Create a Pre-Release**:
     ```bash
     # Using gh CLI
-    gh release create release-v.0.0.1-dynamical-updates-w-f3eems-etc --title "release-v.0.0.1-dynamical-updates-w-f3eems-etc" --notes "Pre-release for lights + shower + dynamical updates" --prerelease
+    gh release create v0.0.2 --title "v0.0.2" --notes "Package release for npm and Docker" --prerelease
    
    # Or on GitHub:
-   # Go to Releases → Draft a new release → Create tag v1.0.0
+   # Go to Releases → Draft a new release → Create tag v0.0.2
    ```
 
 2. **Automatic Publishing**:
@@ -55,7 +55,7 @@ Create a GitHub release to trigger package publishing with semantic versioning.
    - Packages are published with the release version
 
 3. **Version Tags**:
-   - Use semantic versioning: `v1.0.0`, `v1.1.0`, `v2.0.0`
+   - Use semantic versioning: `v0.0.2`, `v0.1.0`, `v1.0.0`
    - Can also use: `release-1.0`, `release-2.0`
 
 ### Method 3: Manual Workflow Trigger
@@ -152,9 +152,9 @@ To update packages with new changes:
 
 1. **Update version** in `package.json`:
    ```bash
-   npm version patch  # 1.0.0 → 1.0.1
-   npm version minor  # 1.0.0 → 1.1.0
-   npm version major  # 1.0.0 → 2.0.0
+   npm version patch  # 0.0.2 → 0.0.3
+   npm version minor  # 0.0.2 → 0.1.0
+   npm version major  # 0.0.2 → 1.0.0
    ```
 
 2. **Commit and push**:
@@ -199,7 +199,7 @@ To update packages with new changes:
 
 - **npm Package**: 
   - Name: `@xaoex/reality-simulation-code`
-  - Version: 1.0.0
+  - Version: 0.0.2
   - Location: https://github.com/orgs/xaoex/packages
 
 - **Docker Image**:

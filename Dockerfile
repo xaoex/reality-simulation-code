@@ -17,7 +17,7 @@ LABEL org.opencontainers.image.vendor="xaoex"
 # Set environment variables
 ENV NODE_ENV=production \
     NPM_CONFIG_LOGLEVEL=warn \
-    REALITY_SIMULATION_VERSION=0.0.1
+    REALITY_SIMULATION_VERSION=0.0.2
 
 WORKDIR /app
 

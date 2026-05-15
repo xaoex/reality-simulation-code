@@ -4,7 +4,7 @@
  * Authorized execution: xaoex / professoroakz only
  *
  * @author xaoex
- * @version 1.0.0
+ * @version 0.0.2
  * @see https://linktr.ee/xaoex
  * @see https://linktr.ee/oktays
  */
@@ -40,4 +40,3 @@ console.log('[STATUS]  Sandbox Alpha S — runtime nominal.');
 console.log('[STATUS]  Reality simulation ready for production. Everything maxed out.');
 console.log('');
 console.log('======================================================================');
-
