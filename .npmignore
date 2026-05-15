@@ -1,6 +1,7 @@
 # Keep production package as close to full-repository contents as possible.
 # Exclude only transient/local artifacts.
 .git
+.github/
 node_modules/
 build/
 dist/
