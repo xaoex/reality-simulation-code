@@ -1,7 +1,7 @@
 {
   "name": "reality-simulation-code",
   "version": "0.0.1",
-  "description": "Reality Simulation Codebase - SimSim Code & Contributions by xaoex - Collection Organizer Calced 3feems - Comprehensive package including Young Situation, Young Field, Yoshi's Secret, and Bae Mathematics",
+  "description": "Reality Simulation Codebase - SimSim Code & Contributions by xaoex - Lights + Shower + Dynamical Updates + 3feems - Comprehensive package including Young Situation, Young Field, Yoshi's Secret, and Bae Mathematics",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Tests passed\" && exit 0",
@@ -35,7 +35,9 @@
     "field-theory",
     "xa8ex",
     "eternal",
-    "collection-organizer",
+    "lights",
+    "shower",
+    "dynamical-updates",
     "calced",
     "3feems"
   ],
@@ -59,13 +61,5 @@
   },
   "engines": {
     "node": ">=18.0.0"
-  },
-  "files": [
-    "index.js",
-    "sandbox-alpha-s.js",
-    "README.md",
-    "PACKAGE.md",
-    "RELEASE_NOTES.md",
-    "PUBLISHING.md"
-  ]
+  }
 }
