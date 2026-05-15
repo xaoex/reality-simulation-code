@@ -1,67 +1,12 @@
-# Git and GitHub
+# Keep production package as close to full-repository contents as possible.
+# Exclude only transient/local artifacts.
 .git
-.github
-.gitignore
-
-# Docker (exclude from npm, include in Docker)
-Dockerfile
-docker-compose.yml
-.dockerignore
-
-# Publishing scripts
-publish-packages.sh
-
-# Implementation docs (not needed in npm package)
-IMPLEMENTATION_COMPLETE.md
-
-# C source files (not part of npm package)
-/*.c
-
-# Build artifacts and logs
-node_modules
+node_modules/
+build/
+dist/
+tmp/
+temp/
 npm-debug.log
 yarn-error.log
 *.log
-
-# Development and configuration files (not needed in npm package)
 .DS_Store
-.ar
-.gists
-.include
-.oktaybahceci
-.osboost
-.osmax
-.qa
-.rasmusalpsjo
-.scripts
-.security
-.sim
-.vaoev
-.woke
-.electronatomjsxaoex
-.osxaoexdistpackageenterprise
-.xaoexphoneos
-.xxgrapheneos
-.unggeneration
-.yungsituation
-.necessaries
-.online
-.realtime
-
-# Directories not needed in npm package
-people/
-xaoex.github.io/
-data/
-tmp/
-
-# Keep these in the package:
-# README.md
-# PACKAGE.md
-# YOUNG_SITUATION.md
-# YOUNG_FIELD.md
-# YOSHIS_SECRET_BAE_MATH.md
-# WHITEPAPER_YOUNG_SITUATION.md
-# IMPLEMENTATION_SUMMARY.md
-# index.js
-# sandbox-alpha-s.js
-# LICENSE
