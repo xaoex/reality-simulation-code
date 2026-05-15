@@ -1,6 +1,6 @@
 # Reality Simulation Code Docker Image
 # xaoex/reality-simulation-code
-# Minimal package with core simulation code
+# Production package with full repository contents
 
 FROM node:20-alpine
 
@@ -17,7 +17,7 @@ LABEL org.opencontainers.image.vendor="xaoex"
 # Set environment variables
 ENV NODE_ENV=production \
     NPM_CONFIG_LOGLEVEL=warn \
-    REALITY_SIMULATION_VERSION=1.0.0
+    REALITY_SIMULATION_VERSION=0.0.1
 
 WORKDIR /app
 
@@ -28,10 +28,8 @@ COPY package.json ./
 RUN npm install --omit=dev --omit=optional --ignore-scripts && \
     npm cache clean --force
 
-# Copy application files
-COPY index.js ./
-COPY README.md ./
-COPY SECURITY.md ./
+# Copy full repository content for production package parity
+COPY . ./
 
 # Create a non-root user for security
 RUN addgroup -g 31337 xaoex 2>/dev/null || addgroup xaoex && \

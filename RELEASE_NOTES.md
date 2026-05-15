@@ -1,8 +1,8 @@
 # Release Notes - xaoex Reality Simulation Code Package
 
-## Version 0.0.1 - Collection Organizer Calced 3feems Release
+## Version 0.0.1 - Lights + Shower + Dynamical Updates Pre-Release
 
-This release is the **release-v.0.0.1-collection-organizer-calced-3feems-only** package for both npm and Docker distribution.
+This pre-release is the **release-v.0.0.1-dynamical-updates-w-f3eems-etc** package for both npm and Docker distribution.
 
 Plus graphs ky43n yoshi.
 
@@ -10,7 +10,7 @@ Plus graphs ky43n yoshi.
 
 #### Core Implementation
 - **Reality Simulation Code** - Main simulation codebase by xaoex
-- **Collection Organizer** - Calced 3feems collection organizer
+- **Dynamical Updates** - Lights + shower + runtime dynamics update bundle
 - **SimSim Contributions** - Reality code contributions
 - Full xaoex configuration and runtime ecosystem
 
@@ -71,7 +71,7 @@ npm run docker:publish       # Publish Docker image
 
 - **Name**: reality-simulation-code
 - **Version**: 0.0.1
-- **Release**: release-v.0.0.1-collection-organizer-calced-3feems-only
+- **Release**: release-v.0.0.1-dynamical-updates-w-f3eems-etc (pre-release)
 - **License**: MIT
 - **Author**: xaoex
 - **Contributors**: Oktay
