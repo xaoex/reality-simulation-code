@@ -10,7 +10,7 @@
 module.exports = {
   name: 'reality-simulation-code',
   version: '0.0.1',
-  description: 'Reality Simulation Codebase - SimSim Code & Contributions - Collection Organizer Calced 3feems',
+  description: 'Reality Simulation Codebase - SimSim Code & Contributions - Lights + Shower + Dynamical Updates + 3feems',
   author: 'xaoex',
   
   /**
