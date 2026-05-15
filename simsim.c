@@ -15,7 +15,7 @@
 
 int main(int argc, char *argv[]) {
     printf("Reality Simulation Code - SimSim\n");
-    printf("Version: 1.0.0\n");
+    printf("Version: 0.0.2\n");
     printf("Author: xaoex\n");
     return 0;
 }
