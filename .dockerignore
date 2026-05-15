@@ -2,6 +2,7 @@ node_modules/
 build/
 dist/
 .git
+.github/
 npm-debug.log
 yarn-error.log
 *.log
