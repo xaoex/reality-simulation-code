@@ -36,21 +36,21 @@ The easiest way to publish packages is to merge to the `main` or `production` br
    - npm: https://github.com/orgs/xaoex/packages?repo_name=reality-simulation-code
    - Docker: https://github.com/xaoex/reality-simulation-code/pkgs/container/reality-simulation-code
 
-### Method 2: Create a Release
+### Method 2: Create a Pre-Release (Recommended for staging)
 
 Create a GitHub release to trigger package publishing with semantic versioning.
 
-1. **Create a Release**:
-   ```bash
-   # Using gh CLI
-   gh release create v1.0.0 --title "v1.0.0 - Complete xaoex Package" --notes "Release of xaoex package"
+1. **Create a Pre-Release**:
+    ```bash
+    # Using gh CLI
+    gh release create release-v.0.0.1-dynamical-updates-\!\?.-w-f3eems-etc --title "release-v.0.0.1-dynamical-updates-!?.-w-f3eems-etc" --notes "Pre-release for lights + shower + dynamical updates" --prerelease
    
    # Or on GitHub:
    # Go to Releases → Draft a new release → Create tag v1.0.0
    ```
 
 2. **Automatic Publishing**:
-   - Both npm and Docker workflows trigger on release
+    - Both npm and Docker workflows trigger on release and pre-release
    - Version is automatically set from the release tag
    - Packages are published with the release version
 
