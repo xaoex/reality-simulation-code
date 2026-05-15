@@ -9,7 +9,7 @@
 
 module.exports = {
   name: 'reality-simulation-code',
-  version: '0.0.1',
+  version: '1.0.0',
   description: 'Reality Simulation Codebase - SimSim Code & Contributions - Lights + Shower + Dynamical Updates + 3feems',
   author: 'xaoex',
   

@@ -33,7 +33,7 @@ Or add to your `package.json`:
 ```json
 {
   "dependencies": {
-    "reality-simulation-code": "^0.0.1"
+    "reality-simulation-code": "^1.0.0"
   }
 }
 ```
@@ -164,7 +164,7 @@ This package follows semantic versioning (semver):
 - **Minor version**: New features, backward compatible
 - **Patch version**: Bug fixes, backward compatible
 
-Current version: `0.0.1` (`release-v.0.0.1-dynamical-updates-w-f3eems-etc`, pre-release)
+Current version: `1.0.0` (`v1.0.0`, stable release)
 
 ## Related Repositories
 
@@ -240,6 +240,6 @@ MIT License - see LICENSE file for details
 
 ---
 
-Version: v0.0.1 - release-v.0.0.1-dynamical-updates-w-f3eems-etc (pre-release)  
+Version: v1.0.0 - stable release  
 Status: Ready for reality + production  
 Motto: Everything is 100% maxed out

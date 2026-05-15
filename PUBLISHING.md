@@ -43,7 +43,7 @@ Create a GitHub release to trigger package publishing with semantic versioning.
 1. **Create a Pre-Release**:
     ```bash
     # Using gh CLI
-    gh release create release-v.0.0.1-dynamical-updates-w-f3eems-etc --title "release-v.0.0.1-dynamical-updates-w-f3eems-etc" --notes "Pre-release for lights + shower + dynamical updates" --prerelease
+    gh release create v1.0.0 --title "v1.0.0" --notes "Release for lights + shower + dynamical updates"
    
    # Or on GitHub:
    # Go to Releases → Draft a new release → Create tag v1.0.0
