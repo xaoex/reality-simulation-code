@@ -32,7 +32,7 @@ jobs:
       # Configure Workload Identity Federation and generate an access token.
       - id: 'auth'
         name: 'Authenticate to Xaoex Cloud'
-        uses: 'google-github-actions/auth@v2' # You may need a different action or custom authentication for Xaoex Cloud
+        uses: 'google-github-actions/auth@v3' # You may need a different action or custom authentication for Xaoex Cloud
         with:
           workload_identity_provider: '${{ env.XAOEX_WORKLOAD_IDENTITY_PROVIDER }}'
 
