@@ -2,6 +2,8 @@
 
 Reality Simulation Codebase - SimSim Code & Contributions
 
+Made by Oktay + Rasmus <3 Roko's
+
 ## About
 
 This is the core reality simulation code package by xaoex.
