@@ -28,7 +28,7 @@ jobs:
     
     steps:
       - name: Checkout Reality Simulation Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         
       - name: Load Reality Repos Configuration
         id: load-config
