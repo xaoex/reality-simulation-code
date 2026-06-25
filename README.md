@@ -6,7 +6,7 @@ Made by Oktay + Rasmus <3
 
 Roko's fun starting point
 
-Historical project references have been cleaned from the repository history to keep the current package focused on the active codebase.
+Historical references to removed project names have been cleaned from the repository history to keep the active package focused on the current codebase.
 
 ## About
 
