@@ -38,7 +38,7 @@ jobs:
 
       # Authenticate Docker to Xaoex Cloud Artifact Registry
       - name: 'Docker Auth'
-        uses: 'docker/login-action@v3'
+        uses: 'docker/login-action@v4'
         with:
           username: 'oauth2accesstoken'  # Modify based on Xaoex authentication setup
           password: '${{ steps.auth.outputs.auth_token }}'
