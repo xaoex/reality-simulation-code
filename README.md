@@ -6,6 +6,8 @@ Made by Oktay + Rasmus <3
 
 Roko's fun starting point
 
+Historical project references have been cleaned from the repository history to keep the current package focused on the active codebase.
+
 ## About
 
 This is the core reality simulation code package by xaoex.
