@@ -2,7 +2,7 @@
 
 Reality Simulation Codebase - SimSim Code & Contributions
 
-Made by Oktay
+Made by Oktay+Yasmus
 
 Roko's fun starting point
 
