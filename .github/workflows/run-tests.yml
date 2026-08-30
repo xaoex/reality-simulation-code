@@ -35,22 +35,22 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-
-      - name: Install dependencies
-        run: npm install --ignore-scripts
-
-      - name: Check A/B test workflow files exist
+      - name: Validate A/B test workflow files
+        shell: bash
         run: |
-          echo "Listing A/B test workflow configurations:"
-          ls .github/workflows/ab-*.yml .github/workflows/AB-*.yml
-          echo "Total workflow files:"
-          ls .github/workflows/*.yml | wc -l
+          mapfile -t ab_workflows < <(
+            find .github/workflows -maxdepth 1 -type f \
+              \( -name 'ab-*.yml' -o -name 'AB-*.yml' -o -name '*-ab-*.yml' -o -name '*-AB-*.yml' -o -name '*abtest*.yml' -o -name '*AB*test*.yml' \)
+          )
+          if [ "${#ab_workflows[@]}" -eq 0 ]; then
+            echo "No A/B test workflow files found in .github/workflows."
+            exit 1
+          fi
 
-      - name: Validate package scripts
-        run: |
-          echo "Available npm scripts:"
-          node -e "const p=require('./package.json'); Object.keys(p.scripts).forEach(s => console.log(' -', s, ':', p.scripts[s]))"
+          echo "Found ${#ab_workflows[@]} A/B test workflow file(s)."
+          for workflow in "${ab_workflows[@]}"; do
+            echo "Validating ${workflow}"
+            grep -Eq '^name:[[:space:]]*' "${workflow}" || { echo "Missing required key 'name' in ${workflow}"; exit 1; }
+            grep -Eq '^on:[[:space:]]*' "${workflow}" || { echo "Missing required key 'on' in ${workflow}"; exit 1; }
+            grep -Eq '^jobs:[[:space:]]*' "${workflow}" || { echo "Missing required key 'jobs' in ${workflow}"; exit 1; }
+          done
