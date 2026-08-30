@@ -28,6 +28,7 @@ jobs:
 
   ab-test-configurations:
     name: Verify A/B test configurations
+    needs: test
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -36,12 +37,16 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm install --ignore-scripts
 
       - name: Check A/B test workflow files exist
         run: |
           echo "Listing A/B test workflow configurations:"
-          ls .github/workflows/ab-*.yml .github/workflows/AB-*.yml 2>/dev/null || echo "No A/B test workflows found"
-          echo "All workflow files:"
+          ls .github/workflows/ab-*.yml .github/workflows/AB-*.yml
+          echo "Total workflow files:"
           ls .github/workflows/*.yml | wc -l
 
       - name: Validate package scripts
