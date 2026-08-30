@@ -35,20 +35,21 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-
-      - name: Install dependencies
-        run: npm install --ignore-scripts
-
-      - name: Check A/B test workflow files exist
+      - name: Validate A/B test workflow files
         run: |
-          echo "Listing A/B test workflow configurations:"
-          ls .github/workflows/ab-*.yml .github/workflows/AB-*.yml
-          echo "Total workflow files:"
-          ls .github/workflows/*.yml | wc -l
+          mapfile -t ab_workflows < <(find .github/workflows -maxdepth 1 -type f -name '*.yml' | grep -Ei '/[^/]*ab[^/]*\.yml$' || true)
+          if [ "${#ab_workflows[@]}" -eq 0 ]; then
+            echo "No A/B test workflow files found in .github/workflows."
+            exit 1
+          fi
+
+          echo "Found ${#ab_workflows[@]} A/B test workflow file(s)."
+          for workflow in "${ab_workflows[@]}"; do
+            echo "Validating ${workflow}"
+            grep -Eq '^[[:space:]]*name:' "${workflow}"
+            grep -Eq '^[[:space:]]*on:' "${workflow}"
+            grep -Eq '^[[:space:]]*jobs:' "${workflow}"
+          done
 
       - name: Validate package scripts
         run: |
