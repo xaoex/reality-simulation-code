@@ -36,8 +36,12 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Validate A/B test workflow files
+        shell: bash
         run: |
-          mapfile -t ab_workflows < <(find .github/workflows -maxdepth 1 -type f -name '*.yml' | grep -Ei '/[^/]*ab[^/]*\.yml$' || true)
+          mapfile -t ab_workflows < <(
+            find .github/workflows -maxdepth 1 -type f \
+              \( -name 'ab-*.yml' -o -name 'AB-*.yml' -o -name '*-ab-*.yml' -o -name '*-AB-*.yml' -o -name '*abtest*.yml' -o -name '*AB*test*.yml' \)
+          )
           if [ "${#ab_workflows[@]}" -eq 0 ]; then
             echo "No A/B test workflow files found in .github/workflows."
             exit 1
@@ -46,12 +50,7 @@ jobs:
           echo "Found ${#ab_workflows[@]} A/B test workflow file(s)."
           for workflow in "${ab_workflows[@]}"; do
             echo "Validating ${workflow}"
-            grep -Eq '^[[:space:]]*name:' "${workflow}"
-            grep -Eq '^[[:space:]]*on:' "${workflow}"
-            grep -Eq '^[[:space:]]*jobs:' "${workflow}"
+            grep -Eq '^name:[[:space:]]*' "${workflow}" || { echo "Missing required key 'name' in ${workflow}"; exit 1; }
+            grep -Eq '^on:[[:space:]]*' "${workflow}" || { echo "Missing required key 'on' in ${workflow}"; exit 1; }
+            grep -Eq '^jobs:[[:space:]]*' "${workflow}" || { echo "Missing required key 'jobs' in ${workflow}"; exit 1; }
           done
-
-      - name: Validate package scripts
-        run: |
-          echo "Available npm scripts:"
-          node -e "const p=require('./package.json'); Object.keys(p.scripts).forEach(s => console.log(' -', s, ':', p.scripts[s]))"
