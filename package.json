@@ -4,7 +4,7 @@
   "description": "Reality Simulation Codebase - SimSim Code & Contributions by xaoex - Lights + Shower + Dynamical Updates + 3feems - Comprehensive package including Young Situation, Young Field, Yoshi's Secret, and Bae Mathematics",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Tests passed\" && exit 0",
+    "test": "node tests/test_index.js",
     "build": "echo \"Build complete\" && exit 0",
     "sandbox-alpha-s": "node sandbox-alpha-s.js",
     "start": "node index.js",

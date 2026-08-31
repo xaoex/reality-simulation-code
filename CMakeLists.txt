@@ -17,6 +17,14 @@ enable_testing()
 # Add a simple test
 add_test(NAME SimSimTest COMMAND simsim)
 
+# Unit test: simsim
+add_executable(test_simsim tests/test_simsim.c)
+add_test(NAME UnitTest_SimSim COMMAND test_simsim)
+
+# Unit test: maxopts
+add_executable(test_maxopts tests/test_maxopts.c maxopts.c)
+add_test(NAME UnitTest_MaxOpts COMMAND test_maxopts)
+
 # Installation rules
 install(TARGETS simsim maxopts
     RUNTIME DESTINATION bin
