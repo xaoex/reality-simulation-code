@@ -22,6 +22,7 @@ jobs:
     outputs:
       ab_matrix: ${{ steps.discover.outputs.ab_matrix }}
       ab_count: ${{ steps.discover.outputs.ab_count }}
+      max_parallel_ab_jobs: ${{ steps.discover.outputs.max_parallel_ab_jobs }}
     steps:
       - uses: actions/checkout@v4
 
@@ -31,6 +32,8 @@ jobs:
       - name: Discover workflow files
         id: discover
         shell: bash
+        env:
+          MAX_PARALLEL_INPUT: ${{ inputs.max_parallel_ab_jobs }}
         run: |
           python - <<'PY' >> "$GITHUB_OUTPUT"
           import fnmatch
@@ -54,6 +57,10 @@ jobs:
           if not workflows:
               raise SystemExit('No A/B workflow files found in .github/workflows.')
 
+          max_parallel = int(os.environ["MAX_PARALLEL_INPUT"].strip())
+          if max_parallel <= 0:
+              raise SystemExit('max_parallel_ab_jobs must be greater than zero.')
+
           matrix_entries = []
           for workflow_name in workflows:
               workflow_path = os.path.join('.github', 'workflows', workflow_name)
@@ -71,6 +78,12 @@ jobs:
                   job_env = job.get('env', {})
                   run_defaults = job.get('defaults', {}).get('run', {})
                   for step in job.get('steps', []):
+                      if 'uses' in step:
+                          if step['uses'] not in ('actions/checkout@v4', 'actions/checkout@v3', 'actions/checkout@v2'):
+                              raise SystemExit(
+                                  f"{workflow_name} contains unsupported uses step for full-load replay: {step['uses']}"
+                              )
+                          continue
                       if 'run' not in step:
                           continue
                       step_env = dict(job_env)
@@ -103,6 +116,7 @@ jobs:
               )
 
           print(f"ab_count={len(workflows)}")
+          print(f"max_parallel_ab_jobs={max_parallel}")
           print(f"ab_matrix={json.dumps(matrix_entries)}")
           PY
 
@@ -137,6 +151,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Bootstrap autotools
+        id: bootstrap
         shell: bash
         run: |
           if [ -x ./autogen.sh ]; then
@@ -144,17 +159,26 @@ jobs:
           elif [ ! -x ./configure ] && { [ -f configure.ac ] || [ -f configure.in ] || [ -f Makefile.am ]; }; then
             autoreconf -fi
           fi
+          if [ -x ./configure ]; then
+            echo "has_configure=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_configure=false" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Configure
+        if: ${{ steps.bootstrap.outputs.has_configure == 'true' }}
         run: ./configure
 
       - name: Build
+        if: ${{ steps.bootstrap.outputs.has_configure == 'true' }}
         run: make
 
       - name: Check
+        if: ${{ steps.bootstrap.outputs.has_configure == 'true' }}
         run: make check
 
       - name: Distcheck
+        if: ${{ steps.bootstrap.outputs.has_configure == 'true' }}
         run: make distcheck
 
   cmake-suite:
@@ -181,7 +205,7 @@ jobs:
     runs-on: ${{ fromJSON(inputs.runner_labels) }}
     strategy:
       fail-fast: false
-      max-parallel: ${{ fromJSON(inputs.max_parallel_ab_jobs) }}
+      max-parallel: ${{ fromJSON(needs.discover-ab-workflows.outputs.max_parallel_ab_jobs) }}
       matrix:
         include: ${{ fromJSON(needs.discover-ab-workflows.outputs.ab_matrix) }}
     steps:
@@ -231,7 +255,11 @@ jobs:
                   handle.write("\n")
                   script_path = handle.name
 
-              if "{0}" in shell_tokens:
+              if shell_name in ("bash", ""):
+                  command = ["bash", "--noprofile", "--norc", "-eo", "pipefail", script_path]
+              elif shell_name == "sh":
+                  command = ["sh", "-e", script_path]
+              elif "{0}" in shell_tokens:
                   command = [script_path if token == "{0}" else token for token in shell_tokens]
               else:
                   command = shell_tokens + [script_path]
