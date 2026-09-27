@@ -1,0 +1,249 @@
+name: NVMe full-load A/B test suite
+
+on:
+  workflow_dispatch:
+    inputs:
+      runner_labels:
+        description: JSON array of runner labels, e.g. ["self-hosted","linux","x64","nvme"]
+        required: false
+        default: '["ubuntu-latest"]'
+      max_parallel_ab_jobs:
+        description: Maximum number of parallel A/B workflow jobs
+        required: false
+        default: "4"
+
+permissions:
+  contents: read
+
+jobs:
+  discover-ab-workflows:
+    name: Discover A/B workflows
+    runs-on: ubuntu-latest
+    outputs:
+      ab_matrix: ${{ steps.discover.outputs.ab_matrix }}
+      ab_count: ${{ steps.discover.outputs.ab_count }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install workflow parsing dependency
+        run: python3 -m pip install pyyaml
+
+      - name: Discover workflow files
+        id: discover
+        shell: bash
+        run: |
+          python - <<'PY' >> "$GITHUB_OUTPUT"
+          import fnmatch
+          import json
+          import os
+          import yaml
+
+          patterns = [
+              'ab-*.yml',
+              'AB-*.yml',
+              '*-ab-*.yml',
+              '*-AB-*.yml',
+              '*abtest*.yml',
+              '*AB*test*.yml',
+          ]
+          workflows = sorted(
+              file_name
+              for file_name in os.listdir('.github/workflows')
+              if any(fnmatch.fnmatch(file_name, pattern) for pattern in patterns)
+          )
+          if not workflows:
+              raise SystemExit('No A/B workflow files found in .github/workflows.')
+
+          matrix_entries = []
+          for workflow_name in workflows:
+              workflow_path = os.path.join('.github', 'workflows', workflow_name)
+              with open(workflow_path, 'r', encoding='utf-8') as handle:
+                  workflow = yaml.safe_load(handle)
+              if 'on' not in workflow and True in workflow:
+                  workflow['on'] = workflow[True]
+
+              for required_key in ('name', 'on', 'jobs'):
+                  if required_key not in workflow:
+                      raise SystemExit(f"Missing required key '{required_key}' in {workflow_name}")
+
+              replay_steps = []
+              for job in workflow.get('jobs', {}).values():
+                  job_env = job.get('env', {})
+                  run_defaults = job.get('defaults', {}).get('run', {})
+                  for step in job.get('steps', []):
+                      if 'run' not in step:
+                          continue
+                      step_env = dict(job_env)
+                      step_env.update(step.get('env', {}))
+                      replay_steps.append(
+                          {
+                              'name': step.get('name', 'run'),
+                              'run': step['run'].rstrip(),
+                              'env': step_env,
+                              'working_directory': step.get('working-directory', run_defaults.get('working-directory', '')),
+                              'shell': step.get('shell', run_defaults.get('shell', '')),
+                          }
+                      )
+
+              if not replay_steps:
+                  raise SystemExit(f'No run commands found in {workflow_name}')
+
+              needs_autotools = any(
+                  step['run'].strip().startswith('./configure')
+                  or step['run'].strip().startswith('make')
+                  or 'distcheck' in step['run']
+                  for step in replay_steps
+              )
+              matrix_entries.append(
+                  {
+                      'workflow': workflow_name,
+                      'steps_json': json.dumps(replay_steps),
+                      'needs_autotools': needs_autotools,
+                  }
+              )
+
+          print(f"ab_count={len(workflows)}")
+          print(f"ab_matrix={json.dumps(matrix_entries)}")
+          PY
+
+  npm-suite:
+    name: npm test + build
+    needs: discover-ab-workflows
+    if: ${{ hashFiles('package.json') != '' }}
+    runs-on: ${{ fromJSON(inputs.runner_labels) }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        run: npm install --ignore-scripts
+
+      - name: Run tests
+        run: npm test
+
+      - name: Build
+        run: npm run build
+
+  autotools-suite:
+    name: configure + make + check + distcheck
+    needs: discover-ab-workflows
+    if: ${{ hashFiles('configure', 'configure.ac', 'configure.in', 'Makefile.am') != '' }}
+    runs-on: ${{ fromJSON(inputs.runner_labels) }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Bootstrap autotools
+        shell: bash
+        run: |
+          if [ -x ./autogen.sh ]; then
+            ./autogen.sh
+          elif [ ! -x ./configure ] && { [ -f configure.ac ] || [ -f configure.in ] || [ -f Makefile.am ]; }; then
+            autoreconf -fi
+          fi
+
+      - name: Configure
+        run: ./configure
+
+      - name: Build
+        run: make
+
+      - name: Check
+        run: make check
+
+      - name: Distcheck
+        run: make distcheck
+
+  cmake-suite:
+    name: CMake configure + build + test
+    needs: discover-ab-workflows
+    if: ${{ hashFiles('CMakeLists.txt') != '' }}
+    runs-on: ${{ fromJSON(inputs.runner_labels) }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure CMake
+        run: cmake -S "${{ github.workspace }}" -B "${{ github.workspace }}/build"
+
+      - name: Build
+        run: cmake --build "${{ github.workspace }}/build"
+
+      - name: Test
+        run: ctest --test-dir "${{ github.workspace }}/build" --output-on-failure
+
+  ab-workflow-load:
+    name: A/B workflow full load
+    needs:
+      - discover-ab-workflows
+    runs-on: ${{ fromJSON(inputs.runner_labels) }}
+    strategy:
+      fail-fast: false
+      max-parallel: ${{ fromJSON(inputs.max_parallel_ab_jobs) }}
+      matrix:
+        include: ${{ fromJSON(needs.discover-ab-workflows.outputs.ab_matrix) }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Show workflow under load
+        run: echo "Running full-load validation for ${{ matrix.workflow }}"
+
+      - name: Bootstrap autotools if needed
+        if: ${{ matrix.needs_autotools }}
+        shell: bash
+        run: |
+          if [ -x ./autogen.sh ]; then
+            ./autogen.sh
+          elif [ ! -x ./configure ] && { [ -f configure.ac ] || [ -f configure.in ] || [ -f Makefile.am ]; }; then
+            autoreconf -fi
+          fi
+
+      - name: Execute workflow load commands
+        env:
+          WORKFLOW_NAME: ${{ matrix.workflow }}
+          STEPS_JSON: ${{ matrix.steps_json }}
+        run: |
+          python - <<'PY'
+          import json
+          import os
+          import shlex
+          import subprocess
+          import tempfile
+
+          workflow_name = os.environ["WORKFLOW_NAME"]
+          steps = json.loads(os.environ["STEPS_JSON"])
+          workspace = os.environ["GITHUB_WORKSPACE"]
+
+          for index, step in enumerate(steps, start=1):
+              print(f"Executing run step {index} ({step['name']}) from {workflow_name}")
+              env = os.environ.copy()
+              env.update(step.get("env") or {})
+              working_directory = step.get("working_directory") or workspace
+              if not os.path.isabs(working_directory):
+                  working_directory = os.path.join(workspace, working_directory)
+
+              shell_name = step.get("shell") or "bash"
+              shell_tokens = shlex.split(shell_name)
+              with tempfile.NamedTemporaryFile("w", delete=False, dir="/tmp", suffix=".replay") as handle:
+                  handle.write(step["run"])
+                  handle.write("\n")
+                  script_path = handle.name
+
+              if "{0}" in shell_tokens:
+                  command = [script_path if token == "{0}" else token for token in shell_tokens]
+              else:
+                  command = shell_tokens + [script_path]
+
+              try:
+                  subprocess.run(
+                      command,
+                      cwd=working_directory,
+                      env=env,
+                      check=True,
+                  )
+              finally:
+                  if os.path.exists(script_path):
+                      os.unlink(script_path)
+          PY
