@@ -68,16 +68,20 @@ jobs:
 
               replay_steps = []
               for job in workflow.get('jobs', {}).values():
+                  job_env = job.get('env', {})
+                  run_defaults = job.get('defaults', {}).get('run', {})
                   for step in job.get('steps', []):
                       if 'run' not in step:
                           continue
+                      step_env = dict(job_env)
+                      step_env.update(step.get('env', {}))
                       replay_steps.append(
                           {
                               'name': step.get('name', 'run'),
                               'run': step['run'].rstrip(),
-                              'env': step.get('env', {}),
-                              'working_directory': step.get('working-directory', ''),
-                              'shell': step.get('shell', ''),
+                              'env': step_env,
+                              'working_directory': step.get('working-directory', run_defaults.get('working-directory', '')),
+                              'shell': step.get('shell', run_defaults.get('shell', '')),
                           }
                       )
 
@@ -105,6 +109,7 @@ jobs:
   npm-suite:
     name: npm test + build
     needs: discover-ab-workflows
+    if: ${{ hashFiles('package.json') != '' }}
     runs-on: ${{ fromJSON(inputs.runner_labels) }}
     steps:
       - uses: actions/checkout@v4
@@ -173,7 +178,6 @@ jobs:
     name: A/B workflow full load
     needs:
       - discover-ab-workflows
-      - npm-suite
     runs-on: ${{ fromJSON(inputs.runner_labels) }}
     strategy:
       fail-fast: false
@@ -205,8 +209,8 @@ jobs:
           import json
           import os
           import shlex
-          import shutil
           import subprocess
+          import tempfile
 
           workflow_name = os.environ["WORKFLOW_NAME"]
           steps = json.loads(os.environ["STEPS_JSON"])
@@ -222,25 +226,24 @@ jobs:
 
               shell_name = step.get("shell") or "bash"
               shell_tokens = shlex.split(shell_name)
-              executable = shell_tokens[0]
+              with tempfile.NamedTemporaryFile("w", delete=False, dir="/tmp", suffix=".replay") as handle:
+                  handle.write(step["run"])
+                  handle.write("\n")
+                  script_path = handle.name
 
-              if executable in ("bash", "sh"):
-                  resolved_executable = shutil.which(executable)
-                  if not resolved_executable:
-                      raise SystemExit(f"Shell '{executable}' is not available for {workflow_name}")
-                  subprocess.run(
-                      step["run"],
-                      shell=True,
-                      executable=resolved_executable,
-                      cwd=working_directory,
-                      env=env,
-                      check=True,
-                  )
+              if "{0}" in shell_tokens:
+                  command = [script_path if token == "{0}" else token for token in shell_tokens]
               else:
+                  command = shell_tokens + [script_path]
+
+              try:
                   subprocess.run(
-                      shell_tokens + ["-c", step["run"]],
+                      command,
                       cwd=working_directory,
                       env=env,
                       check=True,
                   )
+              finally:
+                  if os.path.exists(script_path):
+                      os.unlink(script_path)
           PY
