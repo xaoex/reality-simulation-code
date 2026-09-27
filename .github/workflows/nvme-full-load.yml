@@ -20,10 +20,13 @@ jobs:
     name: Discover A/B workflows
     runs-on: ubuntu-latest
     outputs:
-      ab_workflows: ${{ steps.discover.outputs.ab_workflows }}
+      ab_matrix: ${{ steps.discover.outputs.ab_matrix }}
       ab_count: ${{ steps.discover.outputs.ab_count }}
     steps:
       - uses: actions/checkout@v4
+
+      - name: Install workflow parsing dependency
+        run: python3 -m pip install pyyaml
 
       - name: Discover workflow files
         id: discover
@@ -33,6 +36,7 @@ jobs:
           import fnmatch
           import json
           import os
+          import yaml
 
           patterns = [
               'ab-*.yml',
@@ -50,26 +54,48 @@ jobs:
           if not workflows:
               raise SystemExit('No A/B workflow files found in .github/workflows.')
 
+          matrix_entries = []
+          for workflow_name in workflows:
+              workflow_path = os.path.join('.github', 'workflows', workflow_name)
+              with open(workflow_path, 'r', encoding='utf-8') as handle:
+                  workflow = yaml.load(handle, Loader=yaml.BaseLoader)
+
+              for required_key in ('name', 'on', 'jobs'):
+                  if required_key not in workflow:
+                      raise SystemExit(f"Missing required key '{required_key}' in {workflow_name}")
+
+              commands = []
+              for job in workflow.get('jobs', {}).values():
+                  for step in job.get('steps', []):
+                      if 'run' not in step:
+                          continue
+                      unsupported_keys = [key for key in ('env', 'working-directory', 'shell') if key in step]
+                      if unsupported_keys:
+                          raise SystemExit(
+                              f"{workflow_name} contains unsupported run-step keys for full-load replay: {', '.join(unsupported_keys)}"
+                          )
+                      commands.append(step['run'].rstrip())
+
+              if not commands:
+                  raise SystemExit(f'No run commands found in {workflow_name}')
+
+              needs_autotools = any(
+                  command.strip().startswith('./configure')
+                  or command.strip().startswith('make')
+                  or 'distcheck' in command
+                  for command in commands
+              )
+              matrix_entries.append(
+                  {
+                      'workflow': workflow_name,
+                      'commands_json': json.dumps(commands),
+                      'needs_autotools': needs_autotools,
+                  }
+              )
+
           print(f"ab_count={len(workflows)}")
-          print(f"ab_workflows={json.dumps(workflows)}")
-          PY
-
-      - name: Validate discovered workflow files
-        shell: bash
-        run: |
-          echo "Found ${{ steps.discover.outputs.ab_count }} A/B workflow file(s)."
-          python - <<'PY' > /tmp/ab-workflows.txt
-          import json
-          for workflow in json.loads("""${{ steps.discover.outputs.ab_workflows }}"""):
-              print(workflow)
-          PY
-
-          while IFS= read -r workflow; do
-            echo "Validating ${workflow}"
-            grep -Eq '^[[:space:]]*name:[[:space:]]*' ".github/workflows/${workflow}" || { echo "Missing required key 'name' in ${workflow}"; exit 1; }
-            grep -Eq '^[[:space:]]*on:[[:space:]]*' ".github/workflows/${workflow}" || { echo "Missing required key 'on' in ${workflow}"; exit 1; }
-            grep -Eq '^[[:space:]]*jobs:[[:space:]]*' ".github/workflows/${workflow}" || { echo "Missing required key 'jobs' in ${workflow}"; exit 1; }
-          done < /tmp/ab-workflows.txt
+          print(f"ab_matrix={json.dumps(matrix_entries)}")
+          PY < /tmp/ab-workflows.txt
 
   npm-suite:
     name: npm test + build
@@ -148,22 +174,15 @@ jobs:
       fail-fast: false
       max-parallel: ${{ fromJSON(inputs.max_parallel_ab_jobs) }}
       matrix:
-        workflow: ${{ fromJSON(needs.discover-ab-workflows.outputs.ab_workflows) }}
+        include: ${{ fromJSON(needs.discover-ab-workflows.outputs.ab_matrix) }}
     steps:
       - uses: actions/checkout@v4
 
       - name: Show workflow under load
         run: echo "Running full-load validation for ${{ matrix.workflow }}"
 
-      - name: Validate workflow structure
-        shell: bash
-        run: |
-          workflow=".github/workflows/${{ matrix.workflow }}"
-          grep -Eq '^[[:space:]]*name:[[:space:]]*' "${workflow}" || { echo "Missing required key 'name' in ${workflow}"; exit 1; }
-          grep -Eq '^[[:space:]]*on:[[:space:]]*' "${workflow}" || { echo "Missing required key 'on' in ${workflow}"; exit 1; }
-          grep -Eq '^[[:space:]]*jobs:[[:space:]]*' "${workflow}" || { echo "Missing required key 'jobs' in ${workflow}"; exit 1; }
-
       - name: Bootstrap autotools if needed
+        if: ${{ matrix.needs_autotools }}
         shell: bash
         run: |
           if [ -x ./autogen.sh ]; then
@@ -175,29 +194,18 @@ jobs:
       - name: Execute workflow load commands
         shell: bash
         env:
-          WORKFLOW_PATH: .github/workflows/${{ matrix.workflow }}
+          WORKFLOW_NAME: ${{ matrix.workflow }}
+          COMMANDS_JSON: ${{ matrix.commands_json }}
         run: |
           python - <<'PY' > /tmp/ab-workflow-load.sh
+          import json
           import os
-          import yaml
-
-          workflow_path = os.environ["WORKFLOW_PATH"]
-          with open(workflow_path, "r", encoding="utf-8") as handle:
-              workflow = yaml.safe_load(handle)
-
-          commands = []
-          for job in workflow.get("jobs", {}).values():
-              for step in job.get("steps", []):
-                  command = step.get("run")
-                  if command:
-                      commands.append(command.rstrip())
-
-          if not commands:
-              raise SystemExit(f"No run commands found in {workflow_path}")
+          workflow_name = os.environ["WORKFLOW_NAME"]
+          commands = json.loads(os.environ["COMMANDS_JSON"])
 
           print("set -euo pipefail")
           for index, command in enumerate(commands, start=1):
-              print(f"echo \"Executing run step {index} from {workflow_path}\"")
+              print(f"echo \"Executing run step {index} from {workflow_name}\"")
               print(command)
           PY
 
