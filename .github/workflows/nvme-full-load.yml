@@ -99,6 +99,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Bootstrap autotools
+        shell: bash
+        run: |
+          if [ -x ./autogen.sh ]; then
+            ./autogen.sh
+          elif [ ! -x ./configure ] && { [ -f configure.ac ] || [ -f configure.in ] || [ -f Makefile.am ]; }; then
+            autoreconf -fi
+          fi
+
       - name: Configure
         run: ./configure
 
@@ -154,14 +163,42 @@ jobs:
           grep -Eq '^[[:space:]]*on:[[:space:]]*' "${workflow}" || { echo "Missing required key 'on' in ${workflow}"; exit 1; }
           grep -Eq '^[[:space:]]*jobs:[[:space:]]*' "${workflow}" || { echo "Missing required key 'jobs' in ${workflow}"; exit 1; }
 
-      - name: Run configure
-        run: ./configure
+      - name: Bootstrap autotools if needed
+        shell: bash
+        run: |
+          if [ -x ./autogen.sh ]; then
+            ./autogen.sh
+          elif [ ! -x ./configure ] && { [ -f configure.ac ] || [ -f configure.in ] || [ -f Makefile.am ]; }; then
+            autoreconf -fi
+          fi
 
-      - name: Run make
-        run: make
+      - name: Execute workflow load commands
+        shell: bash
+        env:
+          WORKFLOW_PATH: .github/workflows/${{ matrix.workflow }}
+        run: |
+          python - <<'PY' > /tmp/ab-workflow-load.sh
+          import os
+          import yaml
 
-      - name: Run make check
-        run: make check
+          workflow_path = os.environ["WORKFLOW_PATH"]
+          with open(workflow_path, "r", encoding="utf-8") as handle:
+              workflow = yaml.safe_load(handle)
 
-      - name: Run make distcheck
-        run: make distcheck
+          commands = []
+          for job in workflow.get("jobs", {}).values():
+              for step in job.get("steps", []):
+                  command = step.get("run")
+                  if command:
+                      commands.append(command.rstrip())
+
+          if not commands:
+              raise SystemExit(f"No run commands found in {workflow_path}")
+
+          print("set -euo pipefail")
+          for index, command in enumerate(commands, start=1):
+              print(f"echo \"Executing run step {index} from {workflow_path}\"")
+              print(command)
+          PY
+
+          bash /tmp/ab-workflow-load.sh
