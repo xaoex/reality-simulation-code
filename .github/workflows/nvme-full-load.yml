@@ -1,0 +1,165 @@
+name: NVMe full-load A/B test suite
+
+on:
+  workflow_dispatch:
+    inputs:
+      runner_labels:
+        description: JSON array of runner labels, e.g. ["self-hosted","linux","x64","nvme"]
+        required: false
+        default: '["ubuntu-latest"]'
+      max_parallel_ab_jobs:
+        description: Maximum number of parallel A/B workflow jobs
+        required: false
+        default: "4"
+
+permissions:
+  contents: read
+
+jobs:
+  discover-ab-workflows:
+    name: Discover A/B workflows
+    runs-on: ubuntu-latest
+    outputs:
+      ab_workflows: ${{ steps.discover.outputs.ab_workflows }}
+      ab_count: ${{ steps.discover.outputs.ab_count }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Discover workflow files
+        id: discover
+        shell: bash
+        run: |
+          python - <<'PY' >> "$GITHUB_OUTPUT"
+          import fnmatch
+          import json
+          import os
+
+          patterns = [
+              'ab-*.yml',
+              'AB-*.yml',
+              '*-ab-*.yml',
+              '*-AB-*.yml',
+              '*abtest*.yml',
+              '*AB*test*.yml',
+          ]
+          workflows = sorted(
+              file_name
+              for file_name in os.listdir('.github/workflows')
+              if any(fnmatch.fnmatch(file_name, pattern) for pattern in patterns)
+          )
+          if not workflows:
+              raise SystemExit('No A/B workflow files found in .github/workflows.')
+
+          print(f"ab_count={len(workflows)}")
+          print(f"ab_workflows={json.dumps(workflows)}")
+          PY
+
+      - name: Validate discovered workflow files
+        shell: bash
+        run: |
+          echo "Found ${{ steps.discover.outputs.ab_count }} A/B workflow file(s)."
+          for workflow in $(python - <<'PY'
+          import json
+          print(" ".join(json.loads("""${{ steps.discover.outputs.ab_workflows }}""")))
+          PY
+          ); do
+            echo "Validating ${workflow}"
+            grep -Eq '^name:[[:space:]]*' ".github/workflows/${workflow}" || { echo "Missing required key 'name' in ${workflow}"; exit 1; }
+            grep -Eq '^on:[[:space:]]*' ".github/workflows/${workflow}" || { echo "Missing required key 'on' in ${workflow}"; exit 1; }
+            grep -Eq '^jobs:[[:space:]]*' ".github/workflows/${workflow}" || { echo "Missing required key 'jobs' in ${workflow}"; exit 1; }
+          done
+
+  npm-suite:
+    name: npm test + build
+    needs: discover-ab-workflows
+    runs-on: ${{ fromJSON(inputs.runner_labels) }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        run: npm install --ignore-scripts
+
+      - name: Run tests
+        run: npm test
+
+      - name: Build
+        run: npm run build
+
+  autotools-suite:
+    name: configure + make + check + distcheck
+    needs: discover-ab-workflows
+    runs-on: ${{ fromJSON(inputs.runner_labels) }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure
+        run: ./configure
+
+      - name: Build
+        run: make
+
+      - name: Check
+        run: make check
+
+      - name: Distcheck
+        run: make distcheck
+
+  cmake-suite:
+    name: CMake configure + build + test
+    needs: discover-ab-workflows
+    runs-on: ${{ fromJSON(inputs.runner_labels) }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure CMake
+        run: cmake -S "${{ github.workspace }}" -B "${{ github.workspace }}/build"
+
+      - name: Build
+        run: cmake --build "${{ github.workspace }}/build"
+
+      - name: Test
+        run: ctest --test-dir "${{ github.workspace }}/build" --output-on-failure
+
+  ab-workflow-load:
+    name: A/B workflow full load
+    needs:
+      - discover-ab-workflows
+      - npm-suite
+      - autotools-suite
+      - cmake-suite
+    runs-on: ${{ fromJSON(inputs.runner_labels) }}
+    strategy:
+      fail-fast: false
+      max-parallel: ${{ fromJSON(inputs.max_parallel_ab_jobs) }}
+      matrix:
+        workflow: ${{ fromJSON(needs.discover-ab-workflows.outputs.ab_workflows) }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Show workflow under load
+        run: echo "Running full-load validation for ${{ matrix.workflow }}"
+
+      - name: Validate workflow structure
+        shell: bash
+        run: |
+          workflow=".github/workflows/${{ matrix.workflow }}"
+          grep -Eq '^name:[[:space:]]*' "${workflow}" || { echo "Missing required key 'name' in ${workflow}"; exit 1; }
+          grep -Eq '^on:[[:space:]]*' "${workflow}" || { echo "Missing required key 'on' in ${workflow}"; exit 1; }
+          grep -Eq '^jobs:[[:space:]]*' "${workflow}" || { echo "Missing required key 'jobs' in ${workflow}"; exit 1; }
+
+      - name: Run configure
+        run: ./configure
+
+      - name: Run make
+        run: make
+
+      - name: Run make check
+        run: make check
+
+      - name: Run make distcheck
+        run: make distcheck
