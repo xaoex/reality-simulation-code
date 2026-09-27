@@ -58,44 +58,49 @@ jobs:
           for workflow_name in workflows:
               workflow_path = os.path.join('.github', 'workflows', workflow_name)
               with open(workflow_path, 'r', encoding='utf-8') as handle:
-                  workflow = yaml.load(handle, Loader=yaml.BaseLoader)
+                  workflow = yaml.safe_load(handle)
+              if 'on' not in workflow and True in workflow:
+                  workflow['on'] = workflow[True]
 
               for required_key in ('name', 'on', 'jobs'):
                   if required_key not in workflow:
                       raise SystemExit(f"Missing required key '{required_key}' in {workflow_name}")
 
-              commands = []
+              replay_steps = []
               for job in workflow.get('jobs', {}).values():
                   for step in job.get('steps', []):
                       if 'run' not in step:
                           continue
-                      unsupported_keys = [key for key in ('env', 'working-directory', 'shell') if key in step]
-                      if unsupported_keys:
-                          raise SystemExit(
-                              f"{workflow_name} contains unsupported run-step keys for full-load replay: {', '.join(unsupported_keys)}"
-                          )
-                      commands.append(step['run'].rstrip())
+                      replay_steps.append(
+                          {
+                              'name': step.get('name', 'run'),
+                              'run': step['run'].rstrip(),
+                              'env': step.get('env', {}),
+                              'working_directory': step.get('working-directory', ''),
+                              'shell': step.get('shell', ''),
+                          }
+                      )
 
-              if not commands:
+              if not replay_steps:
                   raise SystemExit(f'No run commands found in {workflow_name}')
 
               needs_autotools = any(
-                  command.strip().startswith('./configure')
-                  or command.strip().startswith('make')
-                  or 'distcheck' in command
-                  for command in commands
+                  step['run'].strip().startswith('./configure')
+                  or step['run'].strip().startswith('make')
+                  or 'distcheck' in step['run']
+                  for step in replay_steps
               )
               matrix_entries.append(
                   {
                       'workflow': workflow_name,
-                      'commands_json': json.dumps(commands),
+                      'steps_json': json.dumps(replay_steps),
                       'needs_autotools': needs_autotools,
                   }
               )
 
           print(f"ab_count={len(workflows)}")
           print(f"ab_matrix={json.dumps(matrix_entries)}")
-          PY < /tmp/ab-workflows.txt
+          PY
 
   npm-suite:
     name: npm test + build
@@ -121,6 +126,7 @@ jobs:
   autotools-suite:
     name: configure + make + check + distcheck
     needs: discover-ab-workflows
+    if: ${{ hashFiles('configure', 'configure.ac', 'configure.in', 'Makefile.am') != '' }}
     runs-on: ${{ fromJSON(inputs.runner_labels) }}
     steps:
       - uses: actions/checkout@v4
@@ -149,6 +155,7 @@ jobs:
   cmake-suite:
     name: CMake configure + build + test
     needs: discover-ab-workflows
+    if: ${{ hashFiles('CMakeLists.txt') != '' }}
     runs-on: ${{ fromJSON(inputs.runner_labels) }}
     steps:
       - uses: actions/checkout@v4
@@ -167,8 +174,6 @@ jobs:
     needs:
       - discover-ab-workflows
       - npm-suite
-      - autotools-suite
-      - cmake-suite
     runs-on: ${{ fromJSON(inputs.runner_labels) }}
     strategy:
       fail-fast: false
@@ -192,21 +197,50 @@ jobs:
           fi
 
       - name: Execute workflow load commands
-        shell: bash
         env:
           WORKFLOW_NAME: ${{ matrix.workflow }}
-          COMMANDS_JSON: ${{ matrix.commands_json }}
+          STEPS_JSON: ${{ matrix.steps_json }}
         run: |
-          python - <<'PY' > /tmp/ab-workflow-load.sh
+          python - <<'PY'
           import json
           import os
+          import shlex
+          import shutil
+          import subprocess
+
           workflow_name = os.environ["WORKFLOW_NAME"]
-          commands = json.loads(os.environ["COMMANDS_JSON"])
+          steps = json.loads(os.environ["STEPS_JSON"])
+          workspace = os.environ["GITHUB_WORKSPACE"]
 
-          print("set -euo pipefail")
-          for index, command in enumerate(commands, start=1):
-              print(f"echo \"Executing run step {index} from {workflow_name}\"")
-              print(command)
+          for index, step in enumerate(steps, start=1):
+              print(f"Executing run step {index} ({step['name']}) from {workflow_name}")
+              env = os.environ.copy()
+              env.update(step.get("env") or {})
+              working_directory = step.get("working_directory") or workspace
+              if not os.path.isabs(working_directory):
+                  working_directory = os.path.join(workspace, working_directory)
+
+              shell_name = step.get("shell") or "bash"
+              shell_tokens = shlex.split(shell_name)
+              executable = shell_tokens[0]
+
+              if executable in ("bash", "sh"):
+                  resolved_executable = shutil.which(executable)
+                  if not resolved_executable:
+                      raise SystemExit(f"Shell '{executable}' is not available for {workflow_name}")
+                  subprocess.run(
+                      step["run"],
+                      shell=True,
+                      executable=resolved_executable,
+                      cwd=working_directory,
+                      env=env,
+                      check=True,
+                  )
+              else:
+                  subprocess.run(
+                      shell_tokens + ["-c", step["run"]],
+                      cwd=working_directory,
+                      env=env,
+                      check=True,
+                  )
           PY
-
-          bash /tmp/ab-workflow-load.sh
