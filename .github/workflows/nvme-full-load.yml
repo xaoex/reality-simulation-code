@@ -58,16 +58,18 @@ jobs:
         shell: bash
         run: |
           echo "Found ${{ steps.discover.outputs.ab_count }} A/B workflow file(s)."
-          for workflow in $(python - <<'PY'
+          python - <<'PY' > /tmp/ab-workflows.txt
           import json
-          print(" ".join(json.loads("""${{ steps.discover.outputs.ab_workflows }}""")))
+          for workflow in json.loads("""${{ steps.discover.outputs.ab_workflows }}"""):
+              print(workflow)
           PY
-          ); do
+
+          while IFS= read -r workflow; do
             echo "Validating ${workflow}"
-            grep -Eq '^name:[[:space:]]*' ".github/workflows/${workflow}" || { echo "Missing required key 'name' in ${workflow}"; exit 1; }
-            grep -Eq '^on:[[:space:]]*' ".github/workflows/${workflow}" || { echo "Missing required key 'on' in ${workflow}"; exit 1; }
-            grep -Eq '^jobs:[[:space:]]*' ".github/workflows/${workflow}" || { echo "Missing required key 'jobs' in ${workflow}"; exit 1; }
-          done
+            grep -Eq '^[[:space:]]*name:[[:space:]]*' ".github/workflows/${workflow}" || { echo "Missing required key 'name' in ${workflow}"; exit 1; }
+            grep -Eq '^[[:space:]]*on:[[:space:]]*' ".github/workflows/${workflow}" || { echo "Missing required key 'on' in ${workflow}"; exit 1; }
+            grep -Eq '^[[:space:]]*jobs:[[:space:]]*' ".github/workflows/${workflow}" || { echo "Missing required key 'jobs' in ${workflow}"; exit 1; }
+          done < /tmp/ab-workflows.txt
 
   npm-suite:
     name: npm test + build
@@ -148,9 +150,9 @@ jobs:
         shell: bash
         run: |
           workflow=".github/workflows/${{ matrix.workflow }}"
-          grep -Eq '^name:[[:space:]]*' "${workflow}" || { echo "Missing required key 'name' in ${workflow}"; exit 1; }
-          grep -Eq '^on:[[:space:]]*' "${workflow}" || { echo "Missing required key 'on' in ${workflow}"; exit 1; }
-          grep -Eq '^jobs:[[:space:]]*' "${workflow}" || { echo "Missing required key 'jobs' in ${workflow}"; exit 1; }
+          grep -Eq '^[[:space:]]*name:[[:space:]]*' "${workflow}" || { echo "Missing required key 'name' in ${workflow}"; exit 1; }
+          grep -Eq '^[[:space:]]*on:[[:space:]]*' "${workflow}" || { echo "Missing required key 'on' in ${workflow}"; exit 1; }
+          grep -Eq '^[[:space:]]*jobs:[[:space:]]*' "${workflow}" || { echo "Missing required key 'jobs' in ${workflow}"; exit 1; }
 
       - name: Run configure
         run: ./configure
