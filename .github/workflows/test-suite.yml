@@ -1,0 +1,113 @@
+name: Test Suite
+
+on:
+  push:
+    branches: [ "prod", "main", "production" ]
+  pull_request:
+    branches: [ "prod", "main", "production" ]
+  workflow_dispatch:
+
+jobs:
+  # ── JavaScript tests ───────────────────────────────────────────────────────
+  js-tests:
+    name: JavaScript Tests (Node ${{ matrix.node-version }})
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: ["18", "20", "22"]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Run JS test suite
+        run: node tests/test_index.js
+
+      - name: Run npm test script
+        run: npm test
+
+  # ── C/CMake tests ──────────────────────────────────────────────────────────
+  cmake-tests:
+    name: CMake Tests (${{ matrix.os }} / ${{ matrix.c_compiler }})
+    runs-on: ${{ matrix.os }}
+    permissions:
+      contents: read
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            c_compiler: gcc
+          - os: ubuntu-latest
+            c_compiler: clang
+    env:
+      BUILD_TYPE: Release
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Configure CMake
+        run: >
+          cmake -B ${{ github.workspace }}/build
+          -DCMAKE_C_COMPILER=${{ matrix.c_compiler }}
+          -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }}
+          -S ${{ github.workspace }}
+
+      - name: Build
+        run: cmake --build ${{ github.workspace }}/build --config ${{ env.BUILD_TYPE }}
+
+      - name: Run CTest (all tests)
+        working-directory: ${{ github.workspace }}/build
+        run: ctest -C ${{ env.BUILD_TYPE }} --output-on-failure -V
+
+  # ── Raw C compile + run (no CMake) ─────────────────────────────────────────
+  c-unit-tests:
+    name: C Unit Tests (direct gcc/clang)
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build & run test_simsim (gcc)
+        run: |
+          gcc -std=c99 -Wall -Wextra -o /tmp/test_simsim tests/test_simsim.c
+          /tmp/test_simsim
+
+      - name: Build & run test_maxopts (gcc)
+        run: |
+          gcc -std=c99 -Wall -Wextra -o /tmp/test_maxopts tests/test_maxopts.c maxopts.c
+          /tmp/test_maxopts
+
+      - name: Build & run test_simsim (clang)
+        run: |
+          clang -std=c99 -Wall -Wextra -o /tmp/test_simsim_clang tests/test_simsim.c
+          /tmp/test_simsim_clang
+
+      - name: Build & run test_maxopts (clang)
+        run: |
+          clang -std=c99 -Wall -Wextra -o /tmp/test_maxopts_clang tests/test_maxopts.c maxopts.c
+          /tmp/test_maxopts_clang
+
+  # ── Summary gate ───────────────────────────────────────────────────────────
+  all-tests-passed:
+    name: All Tests Passed
+    needs: [js-tests, cmake-tests, c-unit-tests]
+    runs-on: ubuntu-latest
+    permissions: {}
+    if: always()
+    steps:
+      - name: Check all jobs succeeded
+        run: |
+          if [[ "${{ needs.js-tests.result }}" != "success" ||
+                "${{ needs.cmake-tests.result }}" != "success" ||
+                "${{ needs.c-unit-tests.result }}" != "success" ]]; then
+            echo "One or more test jobs failed."
+            exit 1
+          fi
+          echo "All test jobs passed ✓"
