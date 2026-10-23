@@ -59,19 +59,19 @@ For this failing run, GitHub Actions API currently reports no jobs for the run (
 
 ## Re-running the current configuration
 
-The NVMe full-load workflow is manually dispatched. The default uses GitHub-hosted Ubuntu runners and is a hardware-independent fallback:
-
-```sh
-gh workflow run nvme-full-load.yml \
-  -f runner_labels='["ubuntu-latest"]' \
-  -f max_parallel_ab_jobs=4
-```
-
-To run on a registered NVMe-capable self-hosted runner, provide its labels instead, for example:
+The NVMe full-load workflow is manually dispatched. By default, the test jobs require a registered self-hosted runner with the `self-hosted`, `linux`, `x64`, and `nvme` labels:
 
 ```sh
 gh workflow run nvme-full-load.yml \
   -f runner_labels='["self-hosted","linux","x64","nvme"]' \
+  -f max_parallel_ab_jobs=4
+```
+
+To run without the NVMe runner, explicitly select GitHub-hosted Ubuntu runners:
+
+```sh
+gh workflow run nvme-full-load.yml \
+  -f runner_labels='["ubuntu-latest"]' \
   -f max_parallel_ab_jobs=4
 ```
 
@@ -86,6 +86,6 @@ cmake --build /tmp/reality-simulation-build
 ctest --test-dir /tmp/reality-simulation-build --output-on-failure
 ```
 
-These workflows do not perform NVMe device I/O or benchmark storage hardware. The `runner_labels` input only selects where the workflow runs; the Ubuntu default keeps configuration and build checks runnable without NVMe hardware. A real storage benchmark would need a separate, explicitly designed hardware test.
+These workflows do not perform NVMe device I/O or benchmark storage hardware. The `runner_labels` input selects where the workflow runs; the default requires an NVMe-labelled self-hosted runner, while the Ubuntu override runs the same configuration and build checks without NVMe hardware. A real storage benchmark would need a separate, explicitly designed hardware test.
 
 The full-load workflow also runs its npm, autotools, and CMake suites unconditionally because all three configurations are present in this repository. Job-level conditions must not use `hashFiles()`, which is unavailable in that context.
