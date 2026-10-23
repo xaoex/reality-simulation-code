@@ -25,10 +25,15 @@ $(LIB): maxopts.o
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm -f $(OBJS) $(TARGET) $(LIB)
+	rm -f $(OBJS) test_maxopts.o test_maxopts $(TARGET) $(LIB)
 
-check: all
+test_maxopts: test_maxopts.o $(LIB)
+	$(CC) $(CFLAGS) -o $@ test_maxopts.o $(LIB)
+
+check: all test_maxopts
 	./$(TARGET)
+	./test_maxopts
+	sh ./test_simsim.sh ./$(TARGET)
 	@echo "All checks passed"
 
 distcheck: check

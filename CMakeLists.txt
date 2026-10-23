@@ -17,6 +17,11 @@ enable_testing()
 # Add a simple test
 add_test(NAME SimSimTest COMMAND simsim)
 
+add_executable(test_maxopts test_maxopts.c)
+target_link_libraries(test_maxopts maxopts)
+add_test(NAME MaxoptsTest COMMAND test_maxopts)
+add_test(NAME SimSimOutputTest COMMAND sh ${CMAKE_SOURCE_DIR}/test_simsim.sh $<TARGET_FILE:simsim>)
+
 # Installation rules
 install(TARGETS simsim maxopts
     RUNTIME DESTINATION bin
