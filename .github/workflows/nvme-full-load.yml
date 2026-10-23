@@ -18,11 +18,6 @@ on:
 permissions:
   contents: read
 
-env:
-  # inputs.* is empty on non-dispatch events (push/pull_request); fromJSON('') fails,
-  # so every use below falls back to these defaults.
-  DEFAULT_RUNNER_LABELS: '["self-hosted","linux","x64","nvme"]'
-
 jobs:
   discover-ab-workflows:
     name: Discover A/B workflows
@@ -119,7 +114,7 @@ jobs:
   npm-suite:
     name: npm test + build
     needs: discover-ab-workflows
-    runs-on: ${{ fromJSON(inputs.runner_labels || env.DEFAULT_RUNNER_LABELS) }}
+    runs-on: ${{ fromJSON(inputs.runner_labels || '["self-hosted","linux","x64","nvme"]') }}
     steps:
       - uses: actions/checkout@v4
 
@@ -140,7 +135,7 @@ jobs:
   autotools-suite:
     name: configure + make + check + distcheck
     needs: discover-ab-workflows
-    runs-on: ${{ fromJSON(inputs.runner_labels || env.DEFAULT_RUNNER_LABELS) }}
+    runs-on: ${{ fromJSON(inputs.runner_labels || '["self-hosted","linux","x64","nvme"]') }}
     steps:
       - uses: actions/checkout@v4
 
@@ -169,7 +164,7 @@ jobs:
   cmake-suite:
     name: CMake configure + build + test
     needs: discover-ab-workflows
-    runs-on: ${{ fromJSON(inputs.runner_labels || env.DEFAULT_RUNNER_LABELS) }}
+    runs-on: ${{ fromJSON(inputs.runner_labels || '["self-hosted","linux","x64","nvme"]') }}
     steps:
       - uses: actions/checkout@v4
 
@@ -186,7 +181,7 @@ jobs:
     name: A/B workflow full load
     needs:
       - discover-ab-workflows
-    runs-on: ${{ fromJSON(inputs.runner_labels || env.DEFAULT_RUNNER_LABELS) }}
+    runs-on: ${{ fromJSON(inputs.runner_labels || '["self-hosted","linux","x64","nvme"]') }}
     strategy:
       fail-fast: false
       max-parallel: ${{ fromJSON(inputs.max_parallel_ab_jobs || '4') }}
