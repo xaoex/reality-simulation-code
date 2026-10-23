@@ -109,7 +109,6 @@ jobs:
   npm-suite:
     name: npm test + build
     needs: discover-ab-workflows
-    if: ${{ hashFiles('package.json') != '' }}
     runs-on: ${{ fromJSON(inputs.runner_labels) }}
     steps:
       - uses: actions/checkout@v4
@@ -131,7 +130,6 @@ jobs:
   autotools-suite:
     name: configure + make + check + distcheck
     needs: discover-ab-workflows
-    if: ${{ hashFiles('configure', 'configure.ac', 'configure.in', 'Makefile.am') != '' }}
     runs-on: ${{ fromJSON(inputs.runner_labels) }}
     steps:
       - uses: actions/checkout@v4
@@ -160,7 +158,6 @@ jobs:
   cmake-suite:
     name: CMake configure + build + test
     needs: discover-ab-workflows
-    if: ${{ hashFiles('CMakeLists.txt') != '' }}
     runs-on: ${{ fromJSON(inputs.runner_labels) }}
     steps:
       - uses: actions/checkout@v4
