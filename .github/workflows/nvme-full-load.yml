@@ -6,7 +6,7 @@ on:
       runner_labels:
         description: JSON array of runner labels, e.g. ["self-hosted","linux","x64","nvme"]
         required: false
-        default: '["ubuntu-latest"]'
+        default: '["self-hosted","linux","x64","nvme"]'
       max_parallel_ab_jobs:
         description: Maximum number of parallel A/B workflow jobs
         required: false
