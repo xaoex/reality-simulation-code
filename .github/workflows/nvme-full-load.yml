@@ -11,9 +11,17 @@ on:
         description: Maximum number of parallel A/B workflow jobs
         required: false
         default: "4"
+  pull_request:
+    paths:
+      - ".github/workflows/nvme-full-load.yml"
 
 permissions:
   contents: read
+
+env:
+  # inputs.* is empty on non-dispatch events (push/pull_request); fromJSON('') fails,
+  # so every use below falls back to these defaults.
+  DEFAULT_RUNNER_LABELS: '["ubuntu-latest"]'
 
 jobs:
   discover-ab-workflows:
@@ -32,12 +40,13 @@ jobs:
         id: discover
         shell: bash
         run: |
-          python - <<'PY' >> "$GITHUB_OUTPUT"
+          python3 - <<'PY' >> "$GITHUB_OUTPUT"
           import fnmatch
           import json
           import os
           import yaml
 
+          self_name = 'nvme-full-load.yml'
           patterns = [
               'ab-*.yml',
               'AB-*.yml',
@@ -49,7 +58,8 @@ jobs:
           workflows = sorted(
               file_name
               for file_name in os.listdir('.github/workflows')
-              if any(fnmatch.fnmatch(file_name, pattern) for pattern in patterns)
+              if file_name != self_name
+              and any(fnmatch.fnmatch(file_name, pattern) for pattern in patterns)
           )
           if not workflows:
               raise SystemExit('No A/B workflow files found in .github/workflows.')
@@ -79,7 +89,7 @@ jobs:
                           {
                               'name': step.get('name', 'run'),
                               'run': step['run'].rstrip(),
-                              'env': step_env,
+                              'env': {k: str(v) for k, v in step_env.items()},
                               'working_directory': step.get('working-directory', run_defaults.get('working-directory', '')),
                               'shell': step.get('shell', run_defaults.get('shell', '')),
                           }
@@ -109,7 +119,7 @@ jobs:
   npm-suite:
     name: npm test + build
     needs: discover-ab-workflows
-    runs-on: ${{ fromJSON(inputs.runner_labels) }}
+    runs-on: ${{ fromJSON(inputs.runner_labels || env.DEFAULT_RUNNER_LABELS) }}
     steps:
       - uses: actions/checkout@v4
 
@@ -130,7 +140,7 @@ jobs:
   autotools-suite:
     name: configure + make + check + distcheck
     needs: discover-ab-workflows
-    runs-on: ${{ fromJSON(inputs.runner_labels) }}
+    runs-on: ${{ fromJSON(inputs.runner_labels || env.DEFAULT_RUNNER_LABELS) }}
     steps:
       - uses: actions/checkout@v4
 
@@ -142,6 +152,7 @@ jobs:
           elif [ ! -x ./configure ] && { [ -f configure.ac ] || [ -f configure.in ] || [ -f Makefile.am ]; }; then
             autoreconf -fi
           fi
+          [ -f ./configure ] && chmod +x ./configure || true
 
       - name: Configure
         run: ./configure
@@ -158,7 +169,7 @@ jobs:
   cmake-suite:
     name: CMake configure + build + test
     needs: discover-ab-workflows
-    runs-on: ${{ fromJSON(inputs.runner_labels) }}
+    runs-on: ${{ fromJSON(inputs.runner_labels || env.DEFAULT_RUNNER_LABELS) }}
     steps:
       - uses: actions/checkout@v4
 
@@ -175,10 +186,10 @@ jobs:
     name: A/B workflow full load
     needs:
       - discover-ab-workflows
-    runs-on: ${{ fromJSON(inputs.runner_labels) }}
+    runs-on: ${{ fromJSON(inputs.runner_labels || env.DEFAULT_RUNNER_LABELS) }}
     strategy:
       fail-fast: false
-      max-parallel: ${{ fromJSON(inputs.max_parallel_ab_jobs) }}
+      max-parallel: ${{ fromJSON(inputs.max_parallel_ab_jobs || '4') }}
       matrix:
         include: ${{ fromJSON(needs.discover-ab-workflows.outputs.ab_matrix) }}
     steps:
@@ -196,13 +207,14 @@ jobs:
           elif [ ! -x ./configure ] && { [ -f configure.ac ] || [ -f configure.in ] || [ -f Makefile.am ]; }; then
             autoreconf -fi
           fi
+          [ -f ./configure ] && chmod +x ./configure || true
 
       - name: Execute workflow load commands
         env:
           WORKFLOW_NAME: ${{ matrix.workflow }}
           STEPS_JSON: ${{ matrix.steps_json }}
         run: |
-          python - <<'PY'
+          python3 - <<'PY'
           import json
           import os
           import shlex
@@ -221,7 +233,7 @@ jobs:
               if not os.path.isabs(working_directory):
                   working_directory = os.path.join(workspace, working_directory)
 
-              shell_name = step.get("shell") or "bash"
+              shell_name = step.get("shell") or "bash -e {0}"
               shell_tokens = shlex.split(shell_name)
               with tempfile.NamedTemporaryFile("w", delete=False, dir="/tmp", suffix=".replay") as handle:
                   handle.write(step["run"])
