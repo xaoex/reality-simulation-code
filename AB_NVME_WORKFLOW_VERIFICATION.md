@@ -56,3 +56,36 @@ Known failing run:
   https://github.com/xaoex/reality-simulation-code/actions/runs/36334903698
 
 For this failing run, GitHub Actions API currently reports no jobs for the run (`total_count = 0`) and therefore no failed job logs were available through the API response.
+
+## Re-running the current configuration
+
+The NVMe full-load workflow is manually dispatched. The default uses GitHub-hosted Ubuntu runners and is a hardware-independent fallback:
+
+```sh
+gh workflow run nvme-full-load.yml \
+  -f runner_labels='["ubuntu-latest"]' \
+  -f max_parallel_ab_jobs=4
+```
+
+To run on a registered NVMe-capable self-hosted runner, provide its labels instead, for example:
+
+```sh
+gh workflow run nvme-full-load.yml \
+  -f runner_labels='["self-hosted","linux","x64","nvme"]' \
+  -f max_parallel_ab_jobs=4
+```
+
+The runner must have Node.js 20, Python 3 with pip, CMake, and a C compiler/build tools installed. The workflow discovers all A/B-named workflows and replays their `run` steps; the current 13 A/B workflows all execute the same autotools commands. The companion checks can also be run locally:
+
+```sh
+npm test
+npm run build
+./configure && make && make check && make distcheck
+cmake -S . -B /tmp/reality-simulation-build
+cmake --build /tmp/reality-simulation-build
+ctest --test-dir /tmp/reality-simulation-build --output-on-failure
+```
+
+These workflows do not perform NVMe device I/O or benchmark storage hardware. The `runner_labels` input only selects where the workflow runs; the Ubuntu default keeps configuration and build checks runnable without NVMe hardware. A real storage benchmark would need a separate, explicitly designed hardware test.
+
+The full-load workflow also runs its npm, autotools, and CMake suites unconditionally because all three configurations are present in this repository. Job-level conditions must not use `hashFiles()`, which is unavailable in that context.

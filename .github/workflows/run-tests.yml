@@ -148,3 +148,15 @@ jobs:
             grep -Eq '^on:[[:space:]]*' "${workflow}" || { echo "Missing required key 'on' in ${workflow}"; exit 1; }
             grep -Eq '^jobs:[[:space:]]*' "${workflow}" || { echo "Missing required key 'jobs' in ${workflow}"; exit 1; }
           done
+
+      - name: Validate NVMe full-load job wiring
+        shell: bash
+        run: |
+          workflow=".github/workflows/nvme-full-load.yml"
+          if grep -Eq '^    if:.*hashFiles' "${workflow}"; then
+            echo "hashFiles is not available in job-level if conditions."
+            exit 1
+          fi
+          for job in discover-ab-workflows npm-suite autotools-suite cmake-suite ab-workflow-load; do
+            grep -Eq "^  ${job}:" "${workflow}" || { echo "Missing required job '${job}' in ${workflow}"; exit 1; }
+          done
