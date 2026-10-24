@@ -18,6 +18,11 @@ on:
 permissions:
   contents: read
 
+env:
+  # inputs.* is empty on non-dispatch events (push/pull_request); fromJSON('') fails,
+  # so every use below falls back to these defaults.
+  DEFAULT_RUNNER_LABELS: '["self-hosted","linux","x64","nvme"]'
+  
 jobs:
   discover-ab-workflows:
     name: Discover A/B workflows
