@@ -1,4 +1,4 @@
-# This workflow will build a docker container, publish it to IBM Container Registry, and deploy it to IKS when there is a push to the "main" branch.
+# This workflow builds a Docker container, publishes it to IBM Container Registry, and deploys it to IKS when manually dispatched.
 #
 # To configure this workflow:
 #
@@ -9,8 +9,7 @@
 name: Build and Deploy to IKS
 
 on:
-  push:
-    branches: [ "main" ]
+  workflow_dispatch:
 
 # Environment variables available to all jobs and steps in this workflow
 env:

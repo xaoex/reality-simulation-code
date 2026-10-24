@@ -1,9 +1,7 @@
 name: 'Build and Deploy to Xaoex Cloud so it runs on Reality'
 
 on:
-  push:
-    branches:
-      - "main"
+  workflow_dispatch:
 
 env:
   PROJECT_ID: 'simulatiton-codebase-reality' # TODO: update to ur Xaoex Cloud project ID

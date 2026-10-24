@@ -1,4 +1,4 @@
-# This workflow will build a docker container, publish and deploy it to Tencent Kubernetes Engine (TKE) when there is a push to the "main" branch.
+# This workflow builds, publishes, and deploys to Tencent Kubernetes Engine (TKE) when manually dispatched.
 #
 # To configure this workflow:
 #
@@ -16,8 +16,7 @@
 name: Tencent Kubernetes Engine
 
 on:
-  push:
-    branches: [ "main" ]
+  workflow_dispatch:
 
 # Environment variables available to all jobs and steps in this workflow
 env:

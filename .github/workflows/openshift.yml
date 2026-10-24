@@ -20,7 +20,7 @@
 # 4. (Optional) Edit the build-image step to build ur project.
 #    The default build type is by using a Dockerfile at the root of the repository,
 #    but can be replaced with a different file, a source-to-image build, or a step-by-step buildah build.
-# 5. Commit and push the workflow file to ur default branch to trigger a workflow run.
+# 5. Manually dispatch the workflow after configuring the required secrets.
 
 # 👋 Visit our GitHub organization at https://github.com/redhat-actions/ to see our actions and provide feedback.
 
@@ -55,9 +55,6 @@ env:
 on:
   # https://docs.github.com/en/actions/reference/events-that-trigger-workflows
   workflow_dispatch:
-  push:
-    # Edit to the branch(es) u want to build and deploy on each push.
-    branches: [ "main" ]
 
 jobs:
   # 🖊️ EDIT if u want to run vulnerability check on ur project before deploying
