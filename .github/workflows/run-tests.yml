@@ -160,3 +160,7 @@ jobs:
           for job in discover-ab-workflows npm-suite autotools-suite cmake-suite ab-workflow-load; do
             grep -Eq "^  ${job}:" "${workflow}" || { echo "Missing required job '${job}' in ${workflow}"; exit 1; }
           done
+          grep -Fq 'RUNNER_LABELS: ${{ inputs.runner_labels ||' "${workflow}" || { echo "Missing runner-label configuration validation input"; exit 1; }
+          grep -Fq 'MAX_PARALLEL_AB_JOBS: ${{ inputs.max_parallel_ab_jobs ||' "${workflow}" || { echo "Missing A/B parallelism configuration validation input"; exit 1; }
+          grep -Fq 'fromJSON(needs.discover-ab-workflows.outputs.runner_labels)' "${workflow}" || { echo "Test jobs must use validated runner labels"; exit 1; }
+          grep -Fq 'fromJSON(needs.discover-ab-workflows.outputs.max_parallel_ab_jobs)' "${workflow}" || { echo "A/B matrix must use validated parallelism"; exit 1; }
