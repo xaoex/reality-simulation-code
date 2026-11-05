@@ -58,15 +58,7 @@ Known failing run:
 For this failing run, GitHub Actions API currently reports no jobs for the run (`total_count = 0`) and therefore no failed job logs were available through the API response.
 
 ## Re-running the current configuration
-The NVMe full-load workflow is manually dispatched. By default, its test suites and A/B replay jobs run on a self-hosted runner with the `self-hosted`, `linux`, `x64`, and `nvme` labels. The discovery job remains on GitHub-hosted Ubuntu. The runner must be online and have the required labels and tools installed.
-
-```sh
-gh workflow run nvme-full-load.yml \
-  -f max_parallel_ab_jobs=4
-```
-
-To override the default and use GitHub-hosted Ubuntu runners:
-The NVMe full-load workflow is manually dispatched. By default, the test jobs require a registered self-hosted runner with the `self-hosted`, `linux`, `x64`, and `nvme` labels:
+The NVMe full-load workflow can be manually dispatched and also runs when its workflow file changes in a pull request. By default, its test jobs require a registered self-hosted runner with the `self-hosted`, `linux`, `x64`, and `nvme` labels. The discovery job runs on GitHub-hosted Ubuntu.
 
 ```sh
 gh workflow run nvme-full-load.yml \
@@ -83,6 +75,8 @@ gh workflow run nvme-full-load.yml \
 ```
 
 The runner must have Node.js 20, Python 3 with pip, CMake, and a C compiler/build tools installed. The workflow discovers all A/B-named workflows and replays their `run` steps; the current 13 A/B workflows all execute the same autotools commands. The companion checks can also be run locally:
+
+The discovery job validates `runner_labels` as a non-empty JSON array of non-empty strings and `max_parallel_ab_jobs` as a positive integer before using either setting for test jobs. Invalid values fail in the hosted discovery job instead of failing later during runner selection or matrix setup.
 
 ```sh
 npm test
